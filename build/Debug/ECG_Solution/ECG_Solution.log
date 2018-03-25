@@ -1,2 +1,4 @@
 ﻿  Main.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(160): warning C4101: 'mouse_x': unreferenced local variable
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(160): warning C4101: 'mouse_y': unreferenced local variable
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

@@ -4,23 +4,16 @@
 * This file is part of the ECG Lab Framework and must not be redistributed.
 */
 #pragma once
-
-
 #include <vector>
 #include <memory>
 #include <GL\glew.h>
-
 #include <glm\glm.hpp>
 #include <glm\gtc\constants.hpp>
-
-
-
 
 struct GeometryData {
 	std::vector<glm::vec3> positions;
 	std::vector<unsigned int> indices;
 };
-
 
 class Geometry
 {
@@ -33,10 +26,8 @@ protected:
 
 public:
 	Geometry(GeometryData& data);
-
 	~Geometry();
 	void draw();
-
 
 	static GeometryData createTestObject(float width, float height, float depth);
 };

@@ -169,11 +169,11 @@ int main(int argc, char** argv)
 			glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(projection * glm::inverse(camera)));
 
 			// Render
-			glUniformMatrix4fv(gtransformation, 1, GL_FALSE, glm::value_ptr(cube_transf));
+			glUniformMatrix4fv(gtransformation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0)));
 			glUniform3f(1, 0.0, 1.0, 0.0);
 
 			// Update camera
-			glfwGetCursorPos(window, &mouse_x, &mouse_y);
+			//glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
 			tester.draw();
 

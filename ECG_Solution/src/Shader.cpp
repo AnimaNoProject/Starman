@@ -1,41 +1,5 @@
 #include "Shader.h"
 
-/*
-GLuint Shader::getShader() {
-	return shader;
-}*/
-
-/*
-const char* Shader::loadShaderSource(std::string &filename)
-{
-	std::ifstream file;
-	std::string source;
-
-	file.open(filename.c_str());
-
-	if (!file.good())
-	{
-		std::cout << "Failed to open file: " << filename << std::endl;
-		exit(-1);
-	}
-
-	// Create a string stream
-	std::stringstream stream;
-
-	// Dump the contents of the file into it
-	stream << file.rdbuf();
-
-	// Close the file
-	file.close();
-
-	// Convert the StringStream into a string
-	source = stream.str();
-
-	// Get the source string as a pointer to an array of characters
-	//return source.c_str();
-	return source.c_str();
-} */
-
 std::string Shader::readFile(const char *filePath) {
 	std::string content;
 	std::ifstream fileStream(filePath, std::ios::in);

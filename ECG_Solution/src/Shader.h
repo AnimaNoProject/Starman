@@ -12,19 +12,12 @@ class Shader
 {
 	protected: 
 		GLuint vertexShader, fragmentShader, shader;
-		/*
-		const char *vertexShaderSource;
-		const char *fragmentShaderSource; */
 		const GLchar* vertex_shader_source;
 		const GLchar* fragment_shader_source;
-
 
 	public:
 		Shader();
 		~Shader();
-		/*void createShader();
-		GLuint getShader();
-		const char* loadShaderSource(std::string &filename);*/
 		std::string readFile(const char *filePath);
 		GLuint LoadShader(const char *vertex_path, const char *fragment_path);
 };
