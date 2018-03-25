@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="src\Camera.h" />
-    <ClCompile Include="src\Geometry.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
     <ClInclude Include="src\Geometry.h" />
     <ClInclude Include="src\INIReader.h" />
-    <ClInclude Include="src\Light.h" />
+    <ClCompile Include="src\Geometry.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Material.cpp" />
-    <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup Label="ProjectConfigurations">

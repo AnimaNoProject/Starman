@@ -6,19 +6,12 @@
 
 
 #include "Utils.h"
-
 #include <sstream>
-
-#include "Geometry.h"
-
-#include "Camera.h"
 #include "Shader.h"
-
-#include "Material.h"
-#include "Light.h"
-
-#include "Texture.h"
-
+#include "Geometry.h"
+#include <glm\glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /* --------------------------------------------- */
 // Prototypes
@@ -30,7 +23,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-void setPerFrameUniforms(Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL);
+void setPerFrameUniforms();
 
 
 /* --------------------------------------------- */
@@ -42,7 +35,18 @@ static bool _culling = true;
 static bool _dragging = false;
 static bool _strafing = false;
 static float _zoom = 12.0f;
+float cameraRadius = 6.0;
+float cameraX;
+float cameraY;
+glm::mat4 camera;
+bool firstMouse = true;
+float fov = 45.0f;
+float yaw = 0;
+float pitch = 0;
 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 /* --------------------------------------------- */
 // Main
@@ -62,10 +66,11 @@ int main(int argc, char** argv)
 
 	int window_width = reader.GetInteger("window", "width", 800);
 	int window_height = reader.GetInteger("window", "height", 800);
-	std::string window_title = reader.Get("window", "title", "ECG");
+	std::string window_title = reader.Get("window", "title", "Starman");
 	float fov = float(reader.GetReal("camera", "fov", 60.0f));
 	float nearZ = float(reader.GetReal("camera", "near", 0.1f));
 	float farZ = float(reader.GetReal("camera", "far", 100.0f));
+	bool fullscreen = bool(reader.GetBoolean("window", "fullscree", false));
 
 	/* --------------------------------------------- */
 	// Create context
@@ -81,8 +86,9 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);  // Create an OpenGL debug context 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Prevent window resizing because viewport would have to resize as well (-> not needed in this course)
 	
-	// Open window
-	GLFWwindow* window = glfwCreateWindow(window_width, window_height, window_title.c_str(), nullptr, nullptr);
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
+	GLFWwindow* window = glfwCreateWindow(window_width, window_height, window_title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 
 	if (!window) {
 		glfwTerminate();
@@ -129,36 +135,27 @@ int main(int argc, char** argv)
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
+	// Create Shader
+	Shader shader = Shader();
+	GLuint program = shader.LoadShader("assets/shader/texture.vert", "assets/shader/texture.frag");
+	glUseProgram(program);
+
+	// Create Testobject
+	Geometry tester = Geometry(Geometry::createTestObject(0.8f, 0.8f, 0.8f));
+
+	glm::mat4 projection = glm::perspective(fov * glm::pi<float>() / 180, (float)window_width / window_height, nearZ, farZ);
+
+	int view_projection = glGetUniformLocation(program, "view_projection");
+	int gtransformation = glGetUniformLocation(program, "gTransformation");
+
+	camera = glm::mat4(1.0f);
+	camera = glm::translate(camera, { 0.0f, 0.0f, cameraRadius });
+	glm::mat4 cube_transf = glm::rotate(glm::mat4(1.0), glm::radians(45.0f), { 0,1,0 });
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
 	{
-		std::shared_ptr<Shader> textureShader = std::make_shared<Shader>("texture.vert", "texture.frag");
-		std::shared_ptr<Texture> sunTexture = std::make_shared<Texture>("sun.dds");
-		std::shared_ptr<Texture> moonTexture = std::make_shared<Texture>("moon.dds");
-		std::shared_ptr<Texture> earthTexture = std::make_shared<Texture>("earth.dds");
-
-
-		// Create materials
-		std::shared_ptr<Material> sunMaterial = std::make_shared<TextureMaterial>(textureShader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, sunTexture);
-		std::shared_ptr<Material> earthMaterial = std::make_shared<TextureMaterial>(textureShader, glm::vec3(0.05f, 0.9f, 0.1f), 5.0f, earthTexture);
-		std::shared_ptr<Material> moonMaterial = std::make_shared<TextureMaterial>(textureShader, glm::vec3(0.05f, 0.9f, 0.05f), 2.0f, moonTexture);
-
-		// Create geometry
-		Geometry sun = Geometry(glm::mat4(1.0f), Geometry::createSphereGeometry(64, 32, 2.0f), sunMaterial);
-		Geometry* earth = sun.addChild(std::make_unique<Geometry>(glm::mat4(1.0f), Geometry::createSphereGeometry(64, 32, 1.0f), earthMaterial));
-		earth->setTransformMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(12, 0, 0)));
-		Geometry* moon = earth->addChild(std::make_unique<Geometry>(glm::mat4(1.0f), Geometry::createSphereGeometry(64, 32, 0.5f), moonMaterial));
-		moon->setTransformMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(3, 0, 0)));
-
-		// Initialize camera
-		Camera camera(fov, float(window_width) / float(window_height), nearZ, farZ);
-
-		PointLight pointL(glm::vec3(1, 1, 1), glm::vec3(0), glm::vec3(1, 0, 0));
-		DirectionalLight dirL(glm::vec3(0), glm::vec3(0));
-
-
 		// Render loop
 		double mouse_x, mouse_y;
 		float t = float(glfwGetTime());
@@ -168,20 +165,17 @@ int main(int argc, char** argv)
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			// Update camera
-			glfwGetCursorPos(window, &mouse_x, &mouse_y);
-			camera.update(int(mouse_x), int(mouse_y), _zoom, _dragging, _strafing);
-
-			// Set per-frame uniforms
-			setPerFrameUniforms(textureShader.get(), camera, dirL, pointL);
-
-			// Hierarchical animation
-			sun.transform(glm::rotate(glm::mat4(1.0f), glm::radians(15.0f) * dt, glm::vec3(0, 1, 0)));
-			earth->transform(glm::rotate(glm::mat4(1.0f), glm::radians(-45.0f) * dt, glm::vec3(0, 1, 0)));
-			moon->transform(glm::rotate(glm::mat4(1.0f), glm::radians(60.0f) * dt, glm::vec3(0, 1, 0)));
+			// camera
+			glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(projection * glm::inverse(camera)));
 
 			// Render
-			sun.draw();
+			glUniformMatrix4fv(gtransformation, 1, GL_FALSE, glm::value_ptr(cube_transf));
+			glUniform3f(1, 0.0, 1.0, 0.0);
+
+			// Update camera
+			glfwGetCursorPos(window, &mouse_x, &mouse_y);
+
+			tester.draw();
 
 			// Compute frame time
 			dt = t;
@@ -199,7 +193,6 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Destroy framework
 	/* --------------------------------------------- */
-
 	destroyFramework();
 
 
@@ -213,17 +206,8 @@ int main(int argc, char** argv)
 }
 
 
-void setPerFrameUniforms(Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL)
+void setPerFrameUniforms()
 {
-	shader->use();
-	shader->setUniform("viewProjMatrix", camera.getViewProjectionMatrix());
-	shader->setUniform("camera_world", camera.getPosition());
-
-	shader->setUniform("dirL.color", dirL.color);
-	shader->setUniform("dirL.direction", dirL.direction);
-	shader->setUniform("pointL.color", pointL.color);
-	shader->setUniform("pointL.position", pointL.position);
-	shader->setUniform("pointL.attenuation", pointL.attenuation);
 }
 
 
@@ -242,7 +226,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	_zoom -= float(yoffset) * 0.5f;
+	camera = glm::translate(camera, { 0.0f, 0.0f, ((yoffset * -1)) });
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
