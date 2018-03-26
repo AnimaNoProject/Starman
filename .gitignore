@@ -366,3 +366,5 @@ ASALocalRun/
 *.exe
 *.ilk
 *.pdb
+*.ipch
+.vs/ECG_Solution/v15/*
