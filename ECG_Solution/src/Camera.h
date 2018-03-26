@@ -15,5 +15,6 @@ public:
 	Camera(float fov, float aspect, float nearZ, float farZ);
 	~Camera();
 	glm::mat4 getViewProjectionMatrix();
+	void move(glm::mat4 transformation);
 };
 

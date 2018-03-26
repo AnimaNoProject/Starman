@@ -14,3 +14,8 @@ glm::mat4 Camera::getViewProjectionMatrix()
 {
 	return glm::mat4(_projMatrix * glm::inverse(_viewMatrix));
 }
+
+void Camera::move(glm::mat4 transformation)
+{
+	_viewMatrix = transformation * _viewMatrix;
+}

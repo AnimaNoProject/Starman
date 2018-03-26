@@ -14,10 +14,12 @@ class Shader
 		GLuint vertexShader, fragmentShader, shader;
 		const GLchar* vertex_shader_source;
 		const GLchar* fragment_shader_source;
+		void LoadShader(const char *vertex_path, const char *fragment_path);
 
 	public:
-		Shader();
+		Shader(const char *vertex_path, const char *fragment_path);
 		~Shader();
 		std::string readFile(const char *filePath);
-		GLuint LoadShader(const char *vertex_path, const char *fragment_path);
+		GLuint getShader();
+		void use();
 };

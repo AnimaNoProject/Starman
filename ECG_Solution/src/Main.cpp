@@ -24,18 +24,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-void setPerFrameUniforms(GLuint program, Camera& camera);
+void setPerFrameUniforms(Shader& program, Camera& camera);
 
 
 /* --------------------------------------------- */
 // Global variables
 /* --------------------------------------------- */
-
 static bool _wireframe = false;
 static bool _culling = true;
-
-float cameraRadius = 12.0;
-glm::mat4 camera;
 
 /* --------------------------------------------- */
 // Main
@@ -74,9 +70,6 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // Request core profile													  
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);  // Create an OpenGL debug context 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-	// Enable antialiasing (4xMSAA) to make edges smoother (this is optional!)
-	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, window_title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
@@ -126,15 +119,13 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 
 	// Create Shader
-	Shader shader = Shader();
-	GLuint program = shader.LoadShader("assets/shader/texture.vert", "assets/shader/texture.frag");
-
-	glUseProgram(program);
+	Shader shader("assets/shader/texture.vert", "assets/shader/texture.frag");
 
 	// Create Testobject
-	Geometry tester = Geometry(Geometry::createTestObject(0.8f, 0.8f, 0.8f));
+	Geometry tester(Geometry::createTestObject(2.0f, 2.0f, 2.0f));
 
 	Camera camera(fov * glm::pi<float>() / 180, (float)window_width / window_height, nearZ, farZ);
+	camera.move(glm::translate(glm::mat4(1), glm::vec3(0, 0, 7)));
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -144,7 +135,7 @@ int main(int argc, char** argv)
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			setPerFrameUniforms(program, camera);
+			setPerFrameUniforms(shader, camera);
 			tester.draw();
 
 			// Poll events and swap buffers
@@ -163,20 +154,19 @@ int main(int argc, char** argv)
 	// Destroy context and exit
 	/* --------------------------------------------- */
 	glfwTerminate();
-	std::cout << "hello";
+
 	return EXIT_SUCCESS;
 }
 
 
-void setPerFrameUniforms(GLuint program, Camera& camera)
+void setPerFrameUniforms(Shader& shader, Camera& camera)
 {
-	int view_projection = glGetUniformLocation(program, "view_projection");
-	int gtransformation = glGetUniformLocation(program, "gTransformation");
+	int view_projection = glGetUniformLocation(shader.getShader(), "view_projection");
+
+	shader.use();
+
 	// camera
 	glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(camera.getViewProjectionMatrix()));
-	// Render
-	glUniformMatrix4fv(gtransformation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0)));
-	glUniform3f(1, 1.0, 0.0, 0.0);
 }
 
 

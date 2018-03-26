@@ -13,14 +13,20 @@ std::string Shader::readFile(const char *filePath) {
 	while (!fileStream.eof()) {
 		std::getline(fileStream, line);
 		content.append(line + "\n");
-	}
 
+	}
 	fileStream.close();
 	return content;
 }
 
+Shader::Shader(const char *vertex_path, const char *fragment_path)
+{
+	LoadShader(vertex_path, fragment_path);
+}
 
-GLuint Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
+
+void Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
+
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -35,7 +41,7 @@ GLuint Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 
 	// Compile vertex shader
 	std::cout << "Compiling vertex shader." << std::endl;
-	glShaderSource(vertShader, 1, &vertShaderSrc, NULL);
+	glShaderSource(vertShader, 1, (const GLchar**) &vertShaderSrc, 0);
 	glCompileShader(vertShader);
 
 	// Check vertex shader
@@ -48,7 +54,7 @@ GLuint Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 
 	// Compile fragment shader
 	std::cout << "Compiling fragment shader." << std::endl;
-	glShaderSource(fragShader, 1, &fragShaderSrc, NULL);
+	glShaderSource(fragShader, 1, (const GLchar**) &fragShaderSrc, 0);
 	glCompileShader(fragShader);
 
 	// Check fragment shader
@@ -60,23 +66,34 @@ GLuint Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 	}
 
 	std::cout << "Linking program" << std::endl;
-	GLuint program = glCreateProgram();
-	glAttachShader(program, vertShader);
-	glAttachShader(program, fragShader);
+	shader = glCreateProgram();
+	glAttachShader(shader, vertShader);
+	glAttachShader(shader, fragShader);
 
-	glBindAttribLocation(program, 0, "in_Position");
+	glBindAttribLocation(shader, 0, "in_Position");
 
-	glLinkProgram(program);
+	glLinkProgram(shader);
 
-	glGetProgramiv(program, GL_LINK_STATUS, &success);
+	glGetProgramiv(shader, GL_LINK_STATUS, &success);
 	if (success == 0) {
 		GLchar ErrorLog[1024];
-		glGetProgramInfoLog(program, sizeof(ErrorLog), NULL, ErrorLog);
+		glGetProgramInfoLog(shader, sizeof(ErrorLog), NULL, ErrorLog);
 		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+
+		glDeleteShader(fragmentShader);
+		glDeleteShader(vertexShader);
 	}
 
-	glDeleteShader(vertShader);
-	glDeleteShader(fragShader);
+	//glDetachShader(shader, fragmentShader);
+	//glDetachShader(shader, vertexShader);
+}
 
-	return program;
+GLuint Shader::getShader()
+{
+	return shader;
+}
+
+void Shader::use()
+{
+	glUseProgram(shader);
 }
