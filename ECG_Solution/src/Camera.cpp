@@ -34,8 +34,6 @@ Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_heig
 	_window_height = window_height;
 	_window_width = window_width;
 	_fov = fov;
-	_speed = 3.0f;
-	_mouse_speed = 0.005f;
 	_position = glm::vec3(0.0, 0.0, 4.0f);
 	_viewMatrix = glm::translate(_viewMatrix, _position);
 	_yaw = 3.0f;

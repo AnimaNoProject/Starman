@@ -178,8 +178,6 @@ void setPerFrameUniforms(_Shader& shader, Camera& camera)
 	// mouse position
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
-	xpos = xpos - window_width / 2;
-	ypos = ypos - window_height / 2;
 	glfwSetCursorPos(window, window_height * 0.5, window_width * 0.5);
 	camera.update(xpos, ypos, deltaTime);
 	// shader

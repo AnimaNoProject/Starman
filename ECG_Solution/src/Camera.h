@@ -11,11 +11,11 @@ class Camera
 protected:
 	glm::mat4 _viewMatrix, _projMatrix;
 	int  _window_height, _window_width;
-	float _fov, _speed, _mouse_speed;
+	float _fov;
 	float _pitch, _yaw;
 
-	const float speed = 3.0f;
-	const float mouseSpeed = 0.005f;
+	const float _speed = 1.0f;
+	const float _mouse_speed = 1.0f;
 
 	glm::vec3 _position;
 	glm::mat4 lookAt(glm::vec3  const & eye, glm::vec3  const & center, glm::vec3  const & up);
