@@ -7,7 +7,7 @@
 
 #include "Utils.h"
 #include <sstream>
-#include "Shader.h"
+#include "_Shader.h"
 #include "Geometry.h"
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,7 +24,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-void setPerFrameUniforms(Shader& program, Camera& camera);
+void setPerFrameUniforms(_Shader& program, Camera& camera);
 
 
 /* --------------------------------------------- */
@@ -32,6 +32,11 @@ void setPerFrameUniforms(Shader& program, Camera& camera);
 /* --------------------------------------------- */
 static bool _wireframe = false;
 static bool _culling = true;
+static int window_width;
+static int window_height;
+static GLFWwindow* window;
+static double currentTime;
+static double lastTime;
 
 /* --------------------------------------------- */
 // Main
@@ -49,8 +54,8 @@ int main(int argc, char** argv)
 		EXIT_WITH_ERROR("Failed to load 'settings.ini'")
 	}
 
-	int window_width = reader.GetInteger("window", "width", 800);
-	int window_height = reader.GetInteger("window", "height", 800);
+	window_width = reader.GetInteger("window", "width", 800);
+	window_height = reader.GetInteger("window", "height", 800);
 	std::string window_title = reader.Get("window", "title", "Starman");
 	float fov = float(reader.GetReal("camera", "fov", 60.0f));
 	float nearZ = float(reader.GetReal("camera", "near", 0.1f));
@@ -71,7 +76,7 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);  // Create an OpenGL debug context 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(window_width, window_height, window_title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	window = glfwCreateWindow(window_width, window_height, window_title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!window) {
 		glfwTerminate();
@@ -119,13 +124,13 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 
 	// Create Shader
-	Shader shader("assets/shader/texture.vert", "assets/shader/texture.frag");
+	_Shader shader("assets/shader/texture.vert", "assets/shader/texture.frag");
 
 	// Create Testobject
 	Geometry tester(Geometry::createTestObject(2.0f, 2.0f, 2.0f));
 
-	Camera camera(fov * glm::pi<float>() / 180, (float)window_width / window_height, nearZ, farZ);
-	camera.move(glm::translate(glm::mat4(1), glm::vec3(0, 0, 7)));
+	Camera camera(fov * glm::pi<float>() / 180, (float)window_width / window_height, nearZ, farZ, window_height, window_width);
+	lastTime = glfwGetTime();
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -134,7 +139,6 @@ int main(int argc, char** argv)
 		while (!glfwWindowShouldClose(window)) {
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 			setPerFrameUniforms(shader, camera);
 			tester.draw();
 
@@ -159,13 +163,25 @@ int main(int argc, char** argv)
 }
 
 
-void setPerFrameUniforms(Shader& shader, Camera& camera)
+void setPerFrameUniforms(_Shader& shader, Camera& camera)
 {
+	// time
+	float deltaTime;
+	currentTime = glfwGetTime();
+	deltaTime = (float)(currentTime - lastTime);
+	lastTime = currentTime;
+
+	// uniform location
 	int view_projection = glGetUniformLocation(shader.getShader(), "view_projection");
 
-	shader.use();
+	// mouse position
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+	glfwSetWindowPos(window, window_height * 0.5, window_width * 0.5);
 
-	// camera
+
+	// shader
+	shader.use();
 	glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(camera.getViewProjectionMatrix()));
 }
 
@@ -199,6 +215,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			_culling = !_culling;
 			if (_culling) glEnable(GL_CULL_FACE);
 			else glDisable(GL_CULL_FACE);
+			break;
+		case GLFW_KEY_RIGHT:
+			// STRAFE RIGHT
+			break;
+		case GLFW_KEY_LEFT:
+			// STRAFE LEFT
+			break;
+		case GLFW_KEY_UP:
+			// FORWARD (ACCELERATE)
+			break;
+		case GLFW_KEY_DOWN:
+			// BACKWARD (DECELERATE)
 			break;
 	}
 }

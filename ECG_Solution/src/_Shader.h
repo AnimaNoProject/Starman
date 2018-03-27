@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm>
 
-class Shader
+class _Shader
 {
 	protected: 
 		GLuint vertexShader, fragmentShader, shader;
@@ -17,8 +17,8 @@ class Shader
 		void LoadShader(const char *vertex_path, const char *fragment_path);
 
 	public:
-		Shader(const char *vertex_path, const char *fragment_path);
-		~Shader();
+		_Shader(const char *vertex_path, const char *fragment_path);
+		~_Shader();
 		std::string readFile(const char *filePath);
 		GLuint getShader();
 		void use();

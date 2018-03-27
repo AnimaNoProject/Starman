@@ -1,6 +1,6 @@
-#include "Shader.h"
+#include "_Shader.h"
 
-std::string Shader::readFile(const char *filePath) {
+std::string _Shader::readFile(const char *filePath) {
 	std::string content;
 	std::ifstream fileStream(filePath, std::ios::in);
 
@@ -19,13 +19,16 @@ std::string Shader::readFile(const char *filePath) {
 	return content;
 }
 
-Shader::Shader(const char *vertex_path, const char *fragment_path)
+_Shader::_Shader(const char *vertex_path, const char *fragment_path)
 {
 	LoadShader(vertex_path, fragment_path);
 }
 
+_Shader::~_Shader()
+{
+}
 
-void Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
+void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -88,12 +91,12 @@ void Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 	//glDetachShader(shader, vertexShader);
 }
 
-GLuint Shader::getShader()
+GLuint _Shader::getShader()
 {
 	return shader;
 }
 
-void Shader::use()
+void _Shader::use()
 {
 	glUseProgram(shader);
 }
