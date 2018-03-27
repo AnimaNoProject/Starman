@@ -117,6 +117,7 @@ int main(int argc, char** argv)
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// set some GL defaults
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -177,9 +178,10 @@ void setPerFrameUniforms(_Shader& shader, Camera& camera)
 	// mouse position
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
-	glfwSetWindowPos(window, window_height * 0.5, window_width * 0.5);
-
-
+	xpos = xpos - window_width / 2;
+	ypos = ypos - window_height / 2;
+	glfwSetCursorPos(window, window_height * 0.5, window_width * 0.5);
+	camera.update(xpos, ypos, deltaTime);
 	// shader
 	shader.use();
 	glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(camera.getViewProjectionMatrix()));

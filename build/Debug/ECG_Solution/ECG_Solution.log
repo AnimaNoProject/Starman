@@ -1,6 +1,2 @@
-﻿  Main.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(180): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  _Shader.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\_shader.cpp(43): warning C4101: 'logLength': unreferenced local variable
-  Generating Code...
+﻿  Camera.cpp
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
