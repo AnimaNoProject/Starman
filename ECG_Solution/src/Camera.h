@@ -23,6 +23,6 @@ public:
 	Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width);
 	~Camera();
 	glm::mat4 getViewProjectionMatrix();
-	void update(float xpos, float ypos, bool up, bool down, bool left, bool right, float deltaTime);
+	void update(float x, float y, bool up, bool down, bool left, bool right, float deltaTime);
 };
 

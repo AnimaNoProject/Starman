@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <sstream>
 
 Camera::~Camera()
 {
@@ -27,7 +28,7 @@ glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::v
 	return result;
 }
 
-Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width) : _position(0.0, 0.0, 3.0f), _yaw(3.0f), _pitch(0.0f), _viewMatrix(1)
+Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width) : _position(0.0, 0.0, -3.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
 {
 	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
 	_window_height = window_height;
@@ -37,30 +38,28 @@ Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_heig
 
 glm::mat4 Camera::getViewProjectionMatrix()
 {
-	return glm::mat4(_projMatrix * _viewMatrix);
+	return _projMatrix * _viewMatrix;
 }
 
-void Camera::update(float xpos, float ypos, bool up, bool down, bool left, bool right, float deltaTime)
+void Camera::update(float x, float y, bool up, bool down, bool left, bool right, float deltaTime)
 {
-	//_pitch += _mouse_speed * deltaTime * float((_window_width / 2) - xpos);
-	_pitch += _mouse_speed * deltaTime * float(xpos - (_window_width /2));
-	_yaw += _mouse_speed * deltaTime * float(_window_height / 2 - ypos);
+	_yaw += _mouse_speed * deltaTime * x;
+	_pitch += _mouse_speed * deltaTime * y;
 
 	glm::vec3 v_dir(
-		cos(_yaw) * sin(_pitch),
-		sin(_yaw),
-		cos(_yaw) * cos(_pitch)
+		cos(_pitch) * sin(_yaw),
+		sin(_pitch),
+		cos(_pitch) * cos(_yaw)
 	);
 
 	glm::vec3 v_right(
-		sin(_pitch - glm::pi<float>() * 0.5f),
+		sin(_yaw - glm::pi<float>() / 2),
 		0,
-		cos(_pitch - glm::pi<float>() * 0.5f)
+		cos(_yaw - glm::pi<float>() / 2)
 	);
 
 	glm::vec3 v_up(glm::cross(v_right, v_dir));
 
-	
 	if (up)
 		_position += v_dir * deltaTime * _speed;
 	if (down)

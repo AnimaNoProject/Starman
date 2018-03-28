@@ -24,7 +24,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-void setPerFrameUniforms(_Shader& program, Camera& camera, float time);
+void setPerFrameUniforms(_Shader& program, Camera& camera);
 
 
 /* --------------------------------------------- */
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 	_lastTime = glfwGetTime();
 
 	auto t_start = glfwGetTime();
-
+	double x, y;
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
@@ -148,8 +148,12 @@ int main(int argc, char** argv)
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			auto t_now = glfwGetTime();
+			glfwGetCursorPos(_window, &x, &y);
+			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
+			camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_now - t_start);
+			setPerFrameUniforms(shader, camera);
 
-			setPerFrameUniforms(shader, camera, t_now - t_start);
+			// Render
 			tester.draw();
 
 			// Poll events and swap buffers
@@ -173,17 +177,10 @@ int main(int argc, char** argv)
 }
 
 
-void setPerFrameUniforms(_Shader& shader, Camera& camera, float time)
+void setPerFrameUniforms(_Shader& shader, Camera& camera)
 {
-	double xpos, ypos;
-
 	// uniform location
 	int view_projection = glGetUniformLocation(shader.getShader(), "view_projection");
-
-	// camera update
-	glfwGetCursorPos(_window, &xpos, &ypos);
-	glfwSetCursorPos(_window, _window_height * 0.5, _window_width * 0.5);
-	camera.update(xpos, ypos, _up, _down, _left, _right, time);
 
 	// shader
 	shader.use();
