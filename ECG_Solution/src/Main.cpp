@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 	// Create Testobject
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
 	Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(2.0f, 2.0f, 2.0f), testMaterial);
-	RUnit testobject(testerGeometry);
+	RUnit testobject(&testerGeometry);
 
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ, _window_height, _window_width);
 	_lastTime = glfwGetTime();

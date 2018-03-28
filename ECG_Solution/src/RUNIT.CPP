@@ -1,5 +1,5 @@
 #include "GameObjects\RUnit.h"
 
-RUnit::RUnit(Geometry geom)
+RUnit::RUnit(Geometry* geom)
 {
 }
