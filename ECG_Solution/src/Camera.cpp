@@ -27,17 +27,12 @@ glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::v
 	return result;
 }
 
-Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width)
+Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width) : _position(0.0, 0.0, 3.0f), _yaw(3.0f), _pitch(0.0f), _viewMatrix(1)
 {
-	_viewMatrix = glm::mat4(1);
 	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
 	_window_height = window_height;
 	_window_width = window_width;
 	_fov = fov;
-	_position = glm::vec3(0.0, 0.0, 4.0f);
-	_viewMatrix = glm::translate(_viewMatrix, _position);
-	_yaw = 3.0f;
-	_pitch = 0.0f;
 }
 
 glm::mat4 Camera::getViewProjectionMatrix()
@@ -45,23 +40,35 @@ glm::mat4 Camera::getViewProjectionMatrix()
 	return glm::mat4(_projMatrix * _viewMatrix);
 }
 
-void Camera::update(float xpos, float ypos, float deltaTime)
+void Camera::update(float xpos, float ypos, bool up, bool down, bool left, bool right, float deltaTime)
 {
-	_pitch += _mouse_speed * deltaTime * float(_window_width / 2 - xpos);
+	//_pitch += _mouse_speed * deltaTime * float((_window_width / 2) - xpos);
+	_pitch += _mouse_speed * deltaTime * float(xpos - (_window_width /2));
 	_yaw += _mouse_speed * deltaTime * float(_window_height / 2 - ypos);
-	glm::vec3 direction(
+
+	glm::vec3 v_dir(
 		cos(_yaw) * sin(_pitch),
 		sin(_yaw),
 		cos(_yaw) * cos(_pitch)
 	);
 
-	glm::vec3 right = glm::vec3(
-		sin(_pitch - 3.14f / 2.0f),
+	glm::vec3 v_right(
+		sin(_pitch - glm::pi<float>() * 0.5f),
 		0,
-		cos(_pitch - 3.14f / 2.0f)
+		cos(_pitch - glm::pi<float>() * 0.5f)
 	);
 
-	glm::vec3 up = glm::cross(right, direction);
+	glm::vec3 v_up(glm::cross(v_right, v_dir));
 
-	_viewMatrix = lookAt(_position, _position + direction, up);
+	
+	if (up)
+		_position += v_dir * deltaTime * _speed;
+	if (down)
+		_position -= v_dir * deltaTime * _speed;
+	if (right)
+		_position += v_right * deltaTime * _speed;
+	if (left)
+		_position -= v_right * deltaTime * _speed;
+
+	_viewMatrix = lookAt(_position, _position + v_dir, v_up);
 }

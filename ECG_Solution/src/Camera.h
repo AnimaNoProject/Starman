@@ -11,11 +11,10 @@ class Camera
 protected:
 	glm::mat4 _viewMatrix, _projMatrix;
 	int  _window_height, _window_width;
-	float _fov;
-	float _pitch, _yaw;
+	float _pitch, _yaw, _fov;
 
-	const float _speed = 1.0f;
-	const float _mouse_speed = 1.0f;
+	const float _speed = 0.0005f;
+	const float _mouse_speed = 0.0005f;
 
 	glm::vec3 _position;
 	glm::mat4 lookAt(glm::vec3  const & eye, glm::vec3  const & center, glm::vec3  const & up);
@@ -24,6 +23,6 @@ public:
 	Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width);
 	~Camera();
 	glm::mat4 getViewProjectionMatrix();
-	void update(float xpos, float ypos, float deltaTime);
+	void update(float xpos, float ypos, bool up, bool down, bool left, bool right, float deltaTime);
 };
 

@@ -24,7 +24,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-void setPerFrameUniforms(_Shader& program, Camera& camera);
+void setPerFrameUniforms(_Shader& program, Camera& camera, float time);
 
 
 /* --------------------------------------------- */
@@ -32,11 +32,15 @@ void setPerFrameUniforms(_Shader& program, Camera& camera);
 /* --------------------------------------------- */
 static bool _wireframe = false;
 static bool _culling = true;
-static int window_width;
-static int window_height;
-static GLFWwindow* window;
-static double currentTime;
-static double lastTime;
+static int _window_width;
+static int _window_height;
+static GLFWwindow* _window;
+static double _currentTime;
+static double _lastTime;
+static bool _right = false;
+static bool _left = false;
+static bool _up = false;
+static bool _down = false;
 
 /* --------------------------------------------- */
 // Main
@@ -54,8 +58,8 @@ int main(int argc, char** argv)
 		EXIT_WITH_ERROR("Failed to load 'settings.ini'")
 	}
 
-	window_width = reader.GetInteger("window", "width", 800);
-	window_height = reader.GetInteger("window", "height", 800);
+	_window_width = reader.GetInteger("window", "width", 800);
+	_window_height = reader.GetInteger("window", "height", 800);
 	std::string window_title = reader.Get("window", "title", "Starman");
 	float fov = float(reader.GetReal("camera", "fov", 60.0f));
 	float nearZ = float(reader.GetReal("camera", "near", 0.1f));
@@ -76,15 +80,15 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);  // Create an OpenGL debug context 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	window = glfwCreateWindow(window_width, window_height, window_title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	_window = glfwCreateWindow(_window_width, _window_height, window_title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
-	if (!window) {
+	if (!_window) {
 		glfwTerminate();
 		EXIT_WITH_ERROR("Failed to create window")
 	}
 
 	// This function makes the context of the specified window current on the calling thread. 
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(_window);
 
 	// Initialize GLEW
 	glewExperimental = true;
@@ -114,10 +118,10 @@ int main(int argc, char** argv)
 	}
 
 	// set callbacks
-	glfwSetKeyCallback(window, key_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
-	glfwSetScrollCallback(window, scroll_callback);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetKeyCallback(_window, key_callback);
+	glfwSetMouseButtonCallback(_window, mouse_button_callback);
+	glfwSetScrollCallback(_window, scroll_callback);
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// set some GL defaults
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -130,22 +134,27 @@ int main(int argc, char** argv)
 	// Create Testobject
 	Geometry tester(Geometry::createTestObject(2.0f, 2.0f, 2.0f));
 
-	Camera camera(fov * glm::pi<float>() / 180, (float)window_width / window_height, nearZ, farZ, window_height, window_width);
-	lastTime = glfwGetTime();
+	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ, _window_height, _window_width);
+	_lastTime = glfwGetTime();
+
+	auto t_start = glfwGetTime();
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
 	{
-		while (!glfwWindowShouldClose(window)) {
+		while (!glfwWindowShouldClose(_window)) {
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			setPerFrameUniforms(shader, camera);
+
+			auto t_now = glfwGetTime();
+
+			setPerFrameUniforms(shader, camera, t_now - t_start);
 			tester.draw();
 
 			// Poll events and swap buffers
 			glfwPollEvents();
-			glfwSwapBuffers(window);
+			glfwSwapBuffers(_window);
 		}
 	}
 
@@ -164,22 +173,18 @@ int main(int argc, char** argv)
 }
 
 
-void setPerFrameUniforms(_Shader& shader, Camera& camera)
+void setPerFrameUniforms(_Shader& shader, Camera& camera, float time)
 {
-	// time
-	float deltaTime;
-	currentTime = glfwGetTime();
-	deltaTime = (float)(currentTime - lastTime);
-	lastTime = currentTime;
+	double xpos, ypos;
 
 	// uniform location
 	int view_projection = glGetUniformLocation(shader.getShader(), "view_projection");
 
-	// mouse position
-	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
-	glfwSetCursorPos(window, window_height * 0.5, window_width * 0.5);
-	camera.update(xpos, ypos, deltaTime);
+	// camera update
+	glfwGetCursorPos(_window, &xpos, &ypos);
+	glfwSetCursorPos(_window, _window_height * 0.5, _window_width * 0.5);
+	camera.update(xpos, ypos, _up, _down, _left, _right, time);
+
 	// shader
 	shader.use();
 	glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(camera.getViewProjectionMatrix()));
@@ -196,38 +201,53 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	// F1 - Wireframe
-	// F2 - Culling
-	// Esc - Exit
-
-	if (action != GLFW_RELEASE) return;
-
-	switch (key)
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
 	{
-		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(window, true);
-			break;
-		case GLFW_KEY_F1:
-			_wireframe = !_wireframe;
-			glPolygonMode(GL_FRONT_AND_BACK, _wireframe ? GL_LINE : GL_FILL);
-			break;
-		case GLFW_KEY_F2:
-			_culling = !_culling;
-			if (_culling) glEnable(GL_CULL_FACE);
-			else glDisable(GL_CULL_FACE);
-			break;
-		case GLFW_KEY_RIGHT:
-			// STRAFE RIGHT
-			break;
-		case GLFW_KEY_LEFT:
-			// STRAFE LEFT
-			break;
-		case GLFW_KEY_UP:
-			// FORWARD (ACCELERATE)
-			break;
-		case GLFW_KEY_DOWN:
-			// BACKWARD (DECELERATE)
-			break;
+		glfwSetWindowShouldClose(window, true);
+	}
+	else if (key == GLFW_KEY_F1 && action == GLFW_RELEASE)
+	{
+		_wireframe = !_wireframe;
+		glPolygonMode(GL_FRONT_AND_BACK, _wireframe ? GL_LINE : GL_FILL);
+	}
+	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
+	{
+		_culling = !_culling;
+		if (_culling) glEnable(GL_CULL_FACE);
+		else glDisable(GL_CULL_FACE);
+	}
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	{
+		_right = true;
+	}
+	else if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+	{
+		_right = false;
+	}
+	if (key == GLFW_KEY_A && action == GLFW_PRESS)
+	{
+		_left = true;
+	}
+	else if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+	{
+		_left = false;
+	}
+	if (key == GLFW_KEY_W && action == GLFW_PRESS)
+	{
+		_up = true;
+	}
+	else if (key == GLFW_KEY_W && action == GLFW_RELEASE)
+	{
+		_up = false;
+	}
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		_down = true;
+	}
+	else if (key == GLFW_KEY_S && action == GLFW_RELEASE)
+	{
+		_down = false;
 	}
 }
 
