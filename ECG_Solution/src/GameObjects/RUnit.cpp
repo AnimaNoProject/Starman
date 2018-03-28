@@ -1,8 +1,8 @@
 #include "RUnit.h"
 
-RUnit::RUnit()
+RUnit::RUnit(Geometry geom)
 {
-	mesh = Geometry(glm::mat4(1), Geometry::createTestObject(2.0f, 2.0f, 2.0f));
+	mesh = geom;
 }
 
 RUnit::~RUnit()

@@ -4,8 +4,8 @@ Geometry::Geometry()
 {
 }
 
-Geometry::Geometry(glm::mat4 modelMatrix, GeometryData& data)
-	: _elements(data.indices.size())
+Geometry::Geometry(glm::mat4 modelMatrix, GeometryData& data, std::shared_ptr<Material> material)
+	: _elements(data.indices.size()), _material(material), _modelMatrix(modelMatrix)
 {
 	// create VAO
 	glGenVertexArrays(1, &_vao);
@@ -19,10 +19,6 @@ Geometry::Geometry(glm::mat4 modelMatrix, GeometryData& data)
 	// bind positions to location 0
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	// bin color attributes
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 
 	// create and bind indices VBO
 	glGenBuffers(1, &_vboIndices);
@@ -42,6 +38,13 @@ Geometry::~Geometry()
 
 void Geometry::draw()
 {
+	glm::mat4 accumModel = _transformMatrix * _modelMatrix;
+	_Shader* shader = _material->getShader();
+	shader->use();
+
+	shader->setUniform("modelMatrix", accumModel);
+	_material->setUniforms();
+
 	glBindVertexArray(_vao);
 	glDrawElements(GL_TRIANGLES, _elements, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

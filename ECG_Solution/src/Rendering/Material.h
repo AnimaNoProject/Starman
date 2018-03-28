@@ -23,3 +23,7 @@ public:
 	_Shader* getShader();
 	virtual void setUniforms();
 };
+
+/* --------------------------------------------- */
+// Texture material
+/* --------------------------------------------- */

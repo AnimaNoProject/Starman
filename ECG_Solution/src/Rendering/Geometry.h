@@ -28,13 +28,15 @@ protected:
 	GLuint _vboIndices;
 	unsigned int _elements;
 
+	std::shared_ptr<Material> _material;
+
 	glm::mat4 _modelMatrix;
 	glm::mat4 _transformMatrix;
 
 
 public:
 	Geometry();
-	Geometry(glm::mat4 modelMatrix, GeometryData& data);
+	Geometry(glm::mat4 modelMatrix, GeometryData& data, std::shared_ptr<Material> material);
 	~Geometry();
 
 	void draw();
