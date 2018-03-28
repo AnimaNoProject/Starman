@@ -1,15 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\Rendering\Material.cpp" />
+    <ClCompile Include="src\GameObjects\RObject.cpp" />
+    <ClCompile Include="src\GameObjects\RUnit.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\_Shader.cpp" />
+    <ClCompile Include="SRC\RUNIT.CPP" />
+    <ClCompile Include="src\Shader\_Shader.cpp" />
+    <ClInclude Include="src\Rendering\Material.h" />
+    <ClInclude Include="src\GameObjects\RUnit.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Geometry.h" />
+    <ClInclude Include="src\Rendering\Geometry.h" />
     <ClInclude Include="src\INIReader.h" />
-    <ClCompile Include="src\Geometry.cpp" />
+    <ClCompile Include="src\Rendering\Geometry.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClInclude Include="src\_Shader.h" />
+    <ClInclude Include="src\Shader\_Shader.h" />
     <ClInclude Include="src\Utils.h" />
+    <ClInclude Include="src\GameObjects\RObject.h" />
   </ItemGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">

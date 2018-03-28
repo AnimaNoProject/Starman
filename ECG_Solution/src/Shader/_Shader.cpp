@@ -28,6 +28,11 @@ _Shader::~_Shader()
 {
 }
 
+unsigned int _Shader::getUniform(std::string uniform)
+{
+	return glGetUniformLocation(shader, uniform.c_str());
+}
+
 void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
@@ -40,11 +45,10 @@ void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 	const char *fragShaderSrc = fragShaderStr.c_str();
 
 	GLint success;
-	int logLength;
 
 	// Compile vertex shader
 	std::cout << "Compiling vertex shader." << std::endl;
-	glShaderSource(vertShader, 1, (const GLchar**) &vertShaderSrc, 0);
+	glShaderSource(vertShader, 1, (const GLchar**)&vertShaderSrc, 0);
 	glCompileShader(vertShader);
 
 	// Check vertex shader
@@ -57,7 +61,7 @@ void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 
 	// Compile fragment shader
 	std::cout << "Compiling fragment shader." << std::endl;
-	glShaderSource(fragShader, 1, (const GLchar**) &fragShaderSrc, 0);
+	glShaderSource(fragShader, 1, (const GLchar**)&fragShaderSrc, 0);
 	glCompileShader(fragShader);
 
 	// Check fragment shader
@@ -72,8 +76,6 @@ void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 	shader = glCreateProgram();
 	glAttachShader(shader, vertShader);
 	glAttachShader(shader, fragShader);
-
-	glBindAttribLocation(shader, 0, "in_Position");
 
 	glLinkProgram(shader);
 
@@ -99,4 +101,37 @@ GLuint _Shader::getShader()
 void _Shader::use()
 {
 	glUseProgram(shader);
+}
+
+void _Shader::setUniform(std::string uniform, const int i)
+{
+	glUniform1i(getUniform(uniform), i);
+}
+
+void _Shader::setUniform(std::string uniform, const unsigned int i) {
+	glUniform1ui(getUniform(uniform), i);
+}
+
+void _Shader::setUniform(std::string uniform, const float f) {
+	glUniform1f(getUniform(uniform), f);
+}
+
+void _Shader::setUniform(std::string uniform, const glm::mat4& mat) {
+	glUniformMatrix4fv(getUniform(uniform), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void _Shader::setUniform(std::string uniform, const glm::mat3& mat) {
+	glUniformMatrix3fv(getUniform(uniform), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void _Shader::setUniform(std::string uniform, const glm::vec2& vec) {
+	glUniform2fv(getUniform(uniform), 1, glm::value_ptr(vec));
+}
+
+void _Shader::setUniform(std::string uniform, const glm::vec3& vec) {
+	glUniform3fv(getUniform(uniform), 1, glm::value_ptr(vec));
+}
+
+void _Shader::setUniform(std::string uniform, const glm::vec4& vec) {
+	glUniform4fv(getUniform(uniform), 1, glm::value_ptr(vec));
 }

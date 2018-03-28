@@ -7,12 +7,14 @@
 
 #include "Utils.h"
 #include <sstream>
-#include "_Shader.h"
-#include "Geometry.h"
+#include "Shader/_Shader.h"
+#include "Rendering/Geometry.h"
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "GameObjects\RObject.h"
+#include "GameObjects\RUnit.h"
 
 /* --------------------------------------------- */
 // Prototypes
@@ -24,7 +26,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-void setPerFrameUniforms(_Shader& program, Camera& camera);
+void setPerFrameUniforms(_Shader* program, Camera& camera);
 
 
 /* --------------------------------------------- */
@@ -129,10 +131,12 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 
 	// Create Shader
-	_Shader shader("assets/shader/texture.vert", "assets/shader/texture.frag");
+	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/texture.vert", "assets/shader/texture.frag");
 
 	// Create Testobject
-	Geometry tester(Geometry::createTestObject(2.0f, 2.0f, 2.0f));
+	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
+	Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(2.0f, 2.0f, 2.0f), testMaterial);
+	RUnit testobject(&testerGeometry);
 
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ, _window_height, _window_width);
 	_lastTime = glfwGetTime();
@@ -152,10 +156,10 @@ int main(int argc, char** argv)
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 			camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_now - t_start);
 			t_start = t_now;
-			setPerFrameUniforms(shader, camera);
+			setPerFrameUniforms(shader.get(), camera);
 
 			// Render
-			tester.draw();
+			testobject.draw();
 
 			// Poll events and swap buffers
 			glfwPollEvents();
@@ -178,14 +182,11 @@ int main(int argc, char** argv)
 }
 
 
-void setPerFrameUniforms(_Shader& shader, Camera& camera)
+void setPerFrameUniforms(_Shader* shader, Camera& camera)
 {
-	// uniform location
-	int view_projection = glGetUniformLocation(shader.getShader(), "view_projection");
-
 	// shader
-	shader.use();
-	glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(camera.getViewProjectionMatrix()));
+	shader->use();
+	shader->setUniform("viewProjMatrix", camera.getViewProjectionMatrix());
 }
 
 
