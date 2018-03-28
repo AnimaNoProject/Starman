@@ -7,8 +7,8 @@
 
 #include "Utils.h"
 #include <sstream>
-#include "_Shader.h"
-#include "Geometry.h"
+#include "Shader/_Shader.h"
+#include "Rendering/Geometry.h"
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 	_Shader shader("assets/shader/texture.vert", "assets/shader/texture.frag");
 
 	// Create Testobject
-	Geometry tester(Geometry::createTestObject(2.0f, 2.0f, 2.0f));
+	Geometry tester(glm::mat4(1), Geometry::createTestObject(2.0f, 2.0f, 2.0f));
 
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ, _window_height, _window_width);
 	_lastTime = glfwGetTime();
@@ -185,7 +185,7 @@ void setPerFrameUniforms(_Shader& shader, Camera& camera)
 
 	// shader
 	shader.use();
-	glUniformMatrix4fv(view_projection, 1, GL_FALSE, glm::value_ptr(camera.getViewProjectionMatrix()));
+	shader.setUniform("view_projection", camera.getViewProjectionMatrix());
 }
 
 

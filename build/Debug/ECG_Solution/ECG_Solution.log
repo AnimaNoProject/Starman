@@ -1,5 +1,10 @@
-﻿  Camera.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
+﻿  _Shader.cpp
+  Material.cpp
+  Geometry.cpp
   Main.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(153): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  RUnit.cpp
+  RObject.cpp
+  Camera.cpp
+  Generating Code...
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

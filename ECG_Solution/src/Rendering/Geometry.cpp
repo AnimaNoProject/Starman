@@ -1,6 +1,10 @@
 #include "Geometry.h"
 
-Geometry::Geometry(GeometryData& data)
+Geometry::Geometry()
+{
+}
+
+Geometry::Geometry(glm::mat4 modelMatrix, GeometryData& data)
 	: _elements(data.indices.size())
 {
 	// create VAO
@@ -41,6 +45,21 @@ void Geometry::draw()
 	glBindVertexArray(_vao);
 	glDrawElements(GL_TRIANGLES, _elements, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+}
+
+void Geometry::transform(glm::mat4 transformation)
+{
+	_modelMatrix = transformation * _modelMatrix;
+}
+
+void Geometry::setTransformMatrix(glm::mat4 transformMatrix)
+{
+	_transformMatrix = transformMatrix;
+}
+
+void Geometry::resetModelMatrix()
+{
+	_modelMatrix = glm::mat4(1);
 }
 
 GeometryData Geometry::createTestObject(float width, float height, float depth)

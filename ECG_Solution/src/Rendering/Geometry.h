@@ -1,19 +1,23 @@
-/*
-* Copyright 2017 Vienna University of Technology.
-* Institute of Computer Graphics and Algorithms.
-* This file is part of the ECG Lab Framework and must not be redistributed.
-*/
 #pragma once
+
 #include <vector>
 #include <memory>
 #include <GL\glew.h>
+
 #include <glm\glm.hpp>
 #include <glm\gtc\constants.hpp>
+
+#include <glm\gtc\matrix_transform.hpp>
+#include "../Shader/_Shader.h"
+#include "Material.h"
+
+
 
 struct GeometryData {
 	std::vector<glm::vec3> positions;
 	std::vector<unsigned int> indices;
 };
+
 
 class Geometry
 {
@@ -24,10 +28,21 @@ protected:
 	GLuint _vboIndices;
 	unsigned int _elements;
 
+	glm::mat4 _modelMatrix;
+	glm::mat4 _transformMatrix;
+
+
 public:
-	Geometry(GeometryData& data);
+	Geometry();
+	Geometry(glm::mat4 modelMatrix, GeometryData& data);
 	~Geometry();
+
 	void draw();
+
+	void transform(glm::mat4 transformation);
+	void setTransformMatrix(glm::mat4 transformMatrix);
+	void resetModelMatrix();
+
 
 	static GeometryData createTestObject(float width, float height, float depth);
 };
