@@ -13,8 +13,8 @@ protected:
 	int  _window_height, _window_width;
 	float _pitch, _yaw, _fov;
 
-	const float _speed = 0.0005f;
-	const float _mouse_speed = 0.0005f;
+	const float _speed = 3.00f;
+	const float _mouse_speed = 1.0f;
 
 	glm::vec3 _position;
 	glm::mat4 lookAt(glm::vec3  const & eye, glm::vec3  const & center, glm::vec3  const & up);

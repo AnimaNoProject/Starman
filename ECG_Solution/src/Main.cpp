@@ -151,6 +151,7 @@ int main(int argc, char** argv)
 			glfwGetCursorPos(_window, &x, &y);
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 			camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_now - t_start);
+			t_start = t_now;
 			setPerFrameUniforms(shader, camera);
 
 			// Render
