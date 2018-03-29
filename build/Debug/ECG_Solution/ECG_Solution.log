@@ -1,4 +1,12 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(937,5): warning MSB8027: Two or more files with the name of RUnit.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\GameObjects\RUnit.cpp, SRC\RUNIT.CPP.
-  Main.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(157): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿  Main.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(148): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(149): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(150): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(151): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(152): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(153): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(172): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(183): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(192): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(196): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

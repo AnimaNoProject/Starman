@@ -1,8 +1,12 @@
 #include "RUnit.h"
 
-RUnit::RUnit(Geometry* geom)
+RUnit::RUnit(Geometry* geometry)
 {
-	mesh = geom;
+	_geometry = geometry;
+}
+
+RUnit::RUnit()
+{
 }
 
 RUnit::~RUnit()
@@ -11,10 +15,19 @@ RUnit::~RUnit()
 
 void RUnit::draw()
 {
-	mesh->draw();
+	_geometry->draw();
+	for (RUnit unit : children)
+	{
+		unit.draw();
+	}
 }
 
 void RUnit::setPosition(glm::vec3 position)
 {
-	mesh->setTransformMatrix(glm::translate(glm::mat4(1), position));
+	_geometry->setTransformMatrix(glm::translate(glm::mat4(1), position));
+}
+
+void RUnit::addChild(RUnit unit)
+{
+	children.push_back(unit);
 }
