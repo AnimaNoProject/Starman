@@ -69,16 +69,6 @@ void Camera::update(float x, float y, bool up, bool down, bool left, bool right,
 	_viewMatrix = lookAt(_position, _position + v_dir, v_up);
 }
 
-float Camera::getYaw()
-{
-	return _yaw;
-}
-
-float Camera::getPitch()
-{
-	return _pitch;
-}
-
 glm::vec3 Camera::getPosition()
 {
 	return _position;
@@ -87,4 +77,14 @@ glm::vec3 Camera::getPosition()
 void Camera::setSpeed(float speed)
 {
 	_speed = speed;
+}
+
+float Camera::getYaw()
+{
+	return _yaw;
+}
+
+float Camera::getPitch()
+{
+	return _pitch;
 }

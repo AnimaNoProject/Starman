@@ -16,6 +16,7 @@
 #include "GameObjects/RObject.h"
 #include "GameObjects/RUnit.h"
 #include "GameObjects/RPlayer.h"
+#include "GameObjects/PlayerCamera.h"
 
 /* --------------------------------------------- */
 // Prototypes
@@ -44,6 +45,7 @@ static bool _right = false;
 static bool _left = false;
 static bool _up = false;
 static bool _down = false;
+static bool _debug_camera = false;
 
 /* --------------------------------------------- */
 // Main
@@ -136,14 +138,33 @@ int main(int argc, char** argv)
 
 	// Create Testobject
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
-	Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(2.0f, 2.0f, 2.0f), testMaterial);
+	Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
 	RUnit testobject(&testerGeometry);
-	testobject.setPosition(glm::vec3(2.0f, 2.0f, 2.0f));
+	int i = 0;
+	float xd, yd, z, w, h, d;
+	
+	while (i++ < 20)
+	{
+		xd = (rand() % 25) + 1;
+		yd = (rand() % 25) + 1;
+		z = (rand() % 25) + 1;
+		w = (rand() % 25) + 1;
+		h = (rand() % 25) + 1;
+		d = (rand() % 25) + 1;
+		Geometry tempG(Geometry(glm::mat4(1), Geometry::createTestObject(w, h, d), testMaterial));
+		RUnit temp(&tempG);
+		temp.setPosition(glm::vec3(xd, yd, z));
+		testobject.addChild(temp);
+	} 
+	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	// Debug Camera
+	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	// Create Player
 	Geometry playerModel(glm::mat4(1), Geometry::createTestObject(2.0f, 0.5f, 1.0f), testMaterial);
-	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
-	RPlayer player(&playerModel, &camera);
+	PlayerCamera pcamera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+	RPlayer player(&playerModel, &pcamera);
 
 
 	_lastTime = glfwGetTime();
@@ -165,9 +186,17 @@ int main(int argc, char** argv)
 
 			glfwGetCursorPos(_window, &x, &y);
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
-			//camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-			player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-			setPerFrameUniforms(shader.get(), camera);
+
+			if (_debug_camera)
+			{
+				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+				player.move(0, 0, false, false, false, false, t_delta);
+			}
+			else
+				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
+
 
 			// Render
 			testobject.draw();
@@ -226,6 +255,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		_culling = !_culling;
 		if (_culling) glEnable(GL_CULL_FACE);
 		else glDisable(GL_CULL_FACE);
+	}
+	else if (key == GLFW_KEY_F3 && action == GLFW_RELEASE)
+	{
+		_debug_camera = !_debug_camera;
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)

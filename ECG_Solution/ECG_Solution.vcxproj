@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\GameObjects\PlayerCamera.cpp" />
     <ClCompile Include="src\GameObjects\RPlayer.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\GameObjects\RObject.cpp" />
     <ClCompile Include="src\GameObjects\RUnit.cpp" />
     <ClCompile Include="src\GameObjects\Camera.cpp" />
     <ClCompile Include="src\Shader\_Shader.cpp" />
+    <ClInclude Include="src\GameObjects\PlayerCamera.h" />
     <ClInclude Include="src\GameObjects\RPlayer.h" />
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\GameObjects\RUnit.h" />
