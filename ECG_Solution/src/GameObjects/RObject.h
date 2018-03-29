@@ -7,9 +7,9 @@ class RObject
 {
 protected:
 	glm::vec3 position;
-	Geometry* mesh;
-	virtual void draw();
-	virtual void setPosition(glm::vec3 position);
+	Geometry* _geometry;
+	virtual void draw() = 0;
+	virtual void setPosition(glm::vec3 position) = 0;
 public:
 	RObject();
 	~RObject();

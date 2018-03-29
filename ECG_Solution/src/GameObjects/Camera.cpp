@@ -27,11 +27,9 @@ glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::v
 	return result;
 }
 
-Camera::Camera(float fov, float aspect, float nearZ, float farZ, int window_height, int window_width) : _position(0.0, 0.0, -3.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
+Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -3.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
 {
 	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
-	_window_height = window_height;
-	_window_width = window_width;
 	_fov = fov;
 }
 
@@ -69,4 +67,24 @@ void Camera::update(float x, float y, bool up, bool down, bool left, bool right,
 		_position -= v_right * deltaTime * _speed;
 
 	_viewMatrix = lookAt(_position, _position + v_dir, v_up);
+}
+
+float Camera::getYaw()
+{
+	return _yaw;
+}
+
+float Camera::getPitch()
+{
+	return _pitch;
+}
+
+glm::vec3 Camera::getPosition()
+{
+	return _position;
+}
+
+void Camera::setSpeed(float speed)
+{
+	_speed = speed;
 }

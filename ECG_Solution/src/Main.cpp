@@ -9,12 +9,13 @@
 #include <sstream>
 #include "Shader/_Shader.h"
 #include "Rendering/Geometry.h"
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Camera.h"
+#include "GameObjects/Camera.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "GameObjects\RObject.h"
-#include "GameObjects\RUnit.h"
+#include "GameObjects/RObject.h"
+#include "GameObjects/RUnit.h"
+#include "GameObjects/RPlayer.h"
 
 /* --------------------------------------------- */
 // Prototypes
@@ -137,11 +138,18 @@ int main(int argc, char** argv)
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
 	Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(2.0f, 2.0f, 2.0f), testMaterial);
 	RUnit testobject(&testerGeometry);
+	testobject.setPosition(glm::vec3(2.0f, 2.0f, 2.0f));
 
-	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ, _window_height, _window_width);
+	// Create Player
+	Geometry playerModel(glm::mat4(1), Geometry::createTestObject(2.0f, 0.5f, 1.0f), testMaterial);
+	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+	RPlayer player(&playerModel, &camera);
+
+
 	_lastTime = glfwGetTime();
 
-	auto t_start = glfwGetTime();
+	float t_delta, t_now, t_start = glfwGetTime();
+
 	double x, y;
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -151,15 +159,19 @@ int main(int argc, char** argv)
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			auto t_now = glfwGetTime();
+			t_now = glfwGetTime();
+			t_delta = t_now - t_start;
+			t_start = t_now;
+
 			glfwGetCursorPos(_window, &x, &y);
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
-			camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_now - t_start);
-			t_start = t_now;
+			//camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+			player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 			setPerFrameUniforms(shader.get(), camera);
 
 			// Render
 			testobject.draw();
+			player.draw();
 
 			// Poll events and swap buffers
 			glfwPollEvents();
