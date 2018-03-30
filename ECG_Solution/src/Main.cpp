@@ -139,7 +139,7 @@ int main(int argc, char** argv)
 	// Create Testobject
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
 	//Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
-	Geometry testerGeometry(glm::mat4(1), "assets/kiste.obj", testMaterial);
+	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
 	RUnit testobject(&testerGeometry);
 
 	/*
