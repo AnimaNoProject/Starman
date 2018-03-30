@@ -42,7 +42,7 @@ bool ObjectLoader::loadOBJ(const char * path, std::vector<glm::vec3>& out_vertic
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
 			std::string vertex1, vertex2, vertex3;
-			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+			unsigned int vertexIndex[9], uvIndex[3], normalIndex[3];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 			if (matches != 9) {
 				printf("File can't be read by our simple parser : ( Try exporting with other options\n");
@@ -51,6 +51,16 @@ bool ObjectLoader::loadOBJ(const char * path, std::vector<glm::vec3>& out_vertic
 			out_indices.push_back(vertexIndex[0]-1);
 			out_indices.push_back(vertexIndex[1]-1);
 			out_indices.push_back(vertexIndex[2]-1);
+			/*
+				normalIndex
+				vertexIndex[3] - 1
+				vertexIndex[4] - 1
+				vertexIndex[5] - 1
+				uvIndex
+				vertexIndex[6] - 1
+				vertexIndex[7] - 1
+				vertexIndex[8] - 1
+				*/
 		}
 	}
 
