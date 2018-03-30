@@ -27,7 +27,7 @@ glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::v
 	return result;
 }
 
-Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -3.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
+Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -20.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
 {
 	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
 	_fov = fov;

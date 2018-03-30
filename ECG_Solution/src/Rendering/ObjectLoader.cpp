@@ -42,29 +42,15 @@ bool ObjectLoader::loadOBJ(const char * path, std::vector<glm::vec3>& out_vertic
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
 			std::string vertex1, vertex2, vertex3;
-			unsigned int vertexIndex[9];
-			//int matches = fscanf(file, "%d//%d %d//%d %d//%d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3], &vertexIndex[4], &vertexIndex[5]);
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2], &vertexIndex[3], &vertexIndex[4], &vertexIndex[5], &vertexIndex[6], &vertexIndex[7], &vertexIndex[8]);
+			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 			if (matches != 9) {
 				printf("File can't be read by our simple parser : ( Try exporting with other options\n");
 				return false;
 			}
-			out_indices.push_back(vertexIndex[0]);
-			out_indices.push_back(vertexIndex[1]);
-			out_indices.push_back(vertexIndex[2]);
-			out_indices.push_back(vertexIndex[3]);
-			out_indices.push_back(vertexIndex[4]);
-			out_indices.push_back(vertexIndex[5]);
-			out_indices.push_back(vertexIndex[6]);
-			out_indices.push_back(vertexIndex[7]);
-			out_indices.push_back(vertexIndex[8]);
-			/*
-			uvIndices.push_back(uvIndex[0]);
-			uvIndices.push_back(uvIndex[1]);
-			uvIndices.push_back(uvIndex[2]);
-			normalIndices.push_back(normalIndex[0]);
-			normalIndices.push_back(normalIndex[1]);
-			normalIndices.push_back(normalIndex[2]);*/
+			out_indices.push_back(vertexIndex[0]-1);
+			out_indices.push_back(vertexIndex[1]-1);
+			out_indices.push_back(vertexIndex[2]-1);
 		}
 	}
 
