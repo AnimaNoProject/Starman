@@ -10,6 +10,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include "../Shader/_Shader.h"
 #include "Material.h"
+#include "ObjectLoader.h"
 
 
 
@@ -36,6 +37,7 @@ protected:
 
 public:
 	Geometry();
+	Geometry(glm::mat4 modelMatrix, const char * path, std::shared_ptr<Material> material);
 	Geometry(glm::mat4 modelMatrix, GeometryData& data, std::shared_ptr<Material> material);
 	~Geometry();
 

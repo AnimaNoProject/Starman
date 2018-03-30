@@ -4,6 +4,41 @@ Geometry::Geometry()
 {
 }
 
+Geometry::Geometry(glm::mat4 modelMatrix, const char * path, std::shared_ptr<Material> material) : _material(material), _modelMatrix(modelMatrix)
+{
+	GeometryData data;
+	std::vector<glm::vec3> out_vertices;
+	std::vector<glm::vec2> out_uvs;
+	std::vector<glm::vec3> out_normals;
+	std::vector<unsigned int> out_indices;
+
+	bool success = ObjectLoader::loadOBJ(path, out_vertices, out_uvs, out_normals, out_indices);
+	data.positions = out_vertices;
+	data.indices = out_indices;
+	_elements = data.indices.size();
+
+	// create VAO
+	glGenVertexArrays(1, &_vao);
+	glBindVertexArray(_vao);
+
+	// create positions VBO
+	glGenBuffers(1, &_vboPositions);
+	glBindBuffer(GL_ARRAY_BUFFER, _vboPositions);
+	glBufferData(GL_ARRAY_BUFFER, data.positions.size() * sizeof(glm::vec3), data.positions.data(), GL_STATIC_DRAW);
+
+	// bind positions to location 0
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// create and bind indices VBO
+	glGenBuffers(1, &_vboIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vboIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.indices.size() * sizeof(unsigned int), data.indices.data(), GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 Geometry::Geometry(glm::mat4 modelMatrix, GeometryData& data, std::shared_ptr<Material> material)
 	: _elements(data.indices.size()), _material(material), _modelMatrix(modelMatrix)
 {
