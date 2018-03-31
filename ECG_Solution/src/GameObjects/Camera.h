@@ -10,7 +10,7 @@ protected:
 	glm::mat4 _viewMatrix, _projMatrix;
 	float _pitch, _yaw, _fov;
 
-	float _speed = 5.00f;
+	float _speed = 2.00f;
 	const float _mouse_speed = 0.3f;
 
 	glm::vec3 _position;
@@ -24,4 +24,5 @@ public:
 	void setSpeed(float speed);
 	float getYaw();
 	float getPitch();
+	void resetCamera();
 };
