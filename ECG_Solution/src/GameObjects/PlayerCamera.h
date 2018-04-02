@@ -3,7 +3,6 @@
 
 class PlayerCamera : public Camera
 {
-
 public:
 	PlayerCamera(float fov, float aspect, float nearZ, float farZ) : Camera(fov, aspect, nearZ, farZ) {};
 	~PlayerCamera();

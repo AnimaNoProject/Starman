@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	// Create Player
-	Geometry playerModel(glm::mat4(1), Geometry::createTestObject(1.0f, 1.0f, 2.0f), testMaterial);
+	Geometry playerModel(glm::mat4(1), Geometry::createTestObject(2.0f, 0.5f, 1.0f), testMaterial);
 	PlayerCamera pcamera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
@@ -196,10 +196,8 @@ int main(int argc, char** argv)
 				player.move(0, 0, false, false, false, false, t_delta);
 			}
 			else
-			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-			}
-				
+
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
 
 
