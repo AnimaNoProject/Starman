@@ -47,6 +47,5 @@ public:
 	void setTransformMatrix(glm::mat4 transformMatrix);
 	void resetModelMatrix();
 
-
 	static GeometryData createTestObject(float width, float height, float depth);
 };

@@ -138,7 +138,6 @@ int main(int argc, char** argv)
 
 	// Create Testobject
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
-	//Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
 	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
 	RUnit testobject(&testerGeometry);
 
@@ -159,13 +158,13 @@ int main(int argc, char** argv)
 		temp.setPosition(glm::vec3(xd, yd, z));
 		testobject.addChild(temp);
 	} */
-	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	testobject.setTransformation(glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)));
 
 	// Debug Camera
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	// Create Player
-	Geometry playerModel(glm::mat4(1), Geometry::createTestObject(2.0f, 0.5f, 1.0f), testMaterial);
+	Geometry playerModel(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
 	PlayerCamera pcamera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
