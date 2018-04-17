@@ -8,6 +8,8 @@
 #include "Utils.h"
 #include <sstream>
 #include "Shader/_Shader.h"
+#include "Shader/Shader.h"
+#include "Rendering/Model.h"
 #include "Rendering/Geometry.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,7 +19,7 @@
 #include "GameObjects/RUnit.h"
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
-#include <assimp/Importer.hpp>
+//#include <assimp/Importer.hpp>
 
 /* --------------------------------------------- */
 // Prototypes
@@ -137,6 +139,12 @@ int main(int argc, char** argv)
 	// Create Shader
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/texture.vert", "assets/shader/texture.frag");
 
+	// Create new shader
+	Shader ourShader("assets/shader/model_loading.vert", "assets/shader/model_loading.frag", nullptr);
+
+	// load model
+	Model ourModel("assets/objects/starman_ship.obj");
+
 	// Create Testobject
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
 	//Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
@@ -203,9 +211,23 @@ int main(int argc, char** argv)
 				
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
 
+			ourShader.use();
+			// view/projection transformations
+			glm::mat4 projection = glm::perspective(glm::radians(1.0f), (float)_window_width / (float)_window_height, 0.1f, 100.0f);
+			glm::mat4 view = camera.getViewProjectionMatrix();
+			ourShader.setMat4("projection", projection);
+			ourShader.setMat4("view", view);
+
+			// render the loaded model
+			//glm::mat4 model;
+			//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+			//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+			ourShader.setMat4("model", glm::mat4(1));
+			ourModel.Draw(ourShader);
+
 
 			// Render
-			testobject.draw();
+			//testobject.draw();
 			player.draw();
 
 			// Poll events and swap buffers
