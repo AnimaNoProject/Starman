@@ -17,6 +17,7 @@
 #include "GameObjects/RUnit.h"
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
+#include <assimp/Importer.hpp>
 
 /* --------------------------------------------- */
 // Prototypes
