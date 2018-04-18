@@ -19,7 +19,12 @@
 #include "GameObjects/RUnit.h"
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
-//#include <assimp/Importer.hpp>
+#include <assimp/Importer.hpp>
+#include <physx-3.4\Include\PxPhysicsAPI.h>
+
+using namespace physx;
+using namespace glm;
+using namespace std;
 
 /* --------------------------------------------- */
 // Prototypes
@@ -147,27 +152,9 @@ int main(int argc, char** argv)
 
 	// Create Testobject
 	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
-	//Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
 	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
 	RUnit testobject(&testerGeometry);
 
-	/*
-	int i = 0;
-	float xd, yd, z, w, h, d;
-	
-	while (i++ < 20)
-	{
-		xd = (rand() % 25) + 1;
-		yd = (rand() % 25) + 1;
-		z = (rand() % 25) + 1;
-		w = (rand() % 25) + 1;
-		h = (rand() % 25) + 1;
-		d = (rand() % 25) + 1;
-		Geometry tempG(Geometry(glm::mat4(1), Geometry::createTestObject(w, h, d), testMaterial));
-		RUnit temp(&tempG);
-		temp.setPosition(glm::vec3(xd, yd, z));
-		testobject.addChild(temp);
-	} */
 	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Debug Camera
