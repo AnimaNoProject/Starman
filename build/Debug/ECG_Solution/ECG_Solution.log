@@ -2,5 +2,4 @@
 c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(184): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
 c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(195): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
 c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(204): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(209): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
   ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

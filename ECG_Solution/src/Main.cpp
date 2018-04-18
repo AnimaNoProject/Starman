@@ -137,19 +137,19 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 
 	// Create Shader
-	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/texture.vert", "assets/shader/texture.frag");
+	//std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/texture.vert", "assets/shader/texture.frag");
 
 	// Create new shader
 	Shader ourShader("assets/shader/model_loading.vert", "assets/shader/model_loading.frag", nullptr);
 
 	// load model
-	Model ourModel("assets/objects/starman_ship.obj");
+	Model ourModel("assets/objects/nanosuit/nanosuit.obj");
 
 	// Create Testobject
-	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
+	//std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
 	//Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
-	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
-	RUnit testobject(&testerGeometry);
+	//Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
+	//RUnit testobject(&testerGeometry);
 
 	/*
 	int i = 0;
@@ -168,15 +168,15 @@ int main(int argc, char** argv)
 		temp.setPosition(glm::vec3(xd, yd, z));
 		testobject.addChild(temp);
 	} */
-	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	//testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Debug Camera
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	// Create Player
-	Geometry playerModel(glm::mat4(1), Geometry::createTestObject(1.0f, 1.0f, 2.0f), testMaterial);
+	//Geometry playerModel(glm::mat4(1), Geometry::createTestObject(1.0f, 1.0f, 2.0f), testMaterial);
 	PlayerCamera pcamera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
-	RPlayer player(&playerModel, &pcamera);
+	//RPlayer player(&playerModel, &pcamera);
 
 
 	_lastTime = glfwGetTime();
@@ -202,21 +202,19 @@ int main(int argc, char** argv)
 			if (_debug_camera)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-				player.move(0, 0, false, false, false, false, t_delta);
+				//player.move(0, 0, false, false, false, false, t_delta);
 			}
 			else
 			{
-				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+				//player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 			}
 				
-			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
+			//setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
 
 			ourShader.use();
 			// view/projection transformations
-			glm::mat4 projection = glm::perspective(glm::radians(1.0f), (float)_window_width / (float)_window_height, 0.1f, 100.0f);
-			glm::mat4 view = camera.getViewProjectionMatrix();
-			ourShader.setMat4("projection", projection);
-			ourShader.setMat4("view", view);
+
+			ourShader.setMat4("viewProj", camera.getViewProjectionMatrix());
 
 			// render the loaded model
 			//glm::mat4 model;
@@ -228,7 +226,7 @@ int main(int argc, char** argv)
 
 			// Render
 			//testobject.draw();
-			player.draw();
+			//player.draw();
 
 			// Poll events and swap buffers
 			glfwPollEvents();

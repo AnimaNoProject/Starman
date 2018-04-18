@@ -5,7 +5,7 @@ Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture
 	this->indices = indices;
 	this->textures = textures;
 
-	// now that we have all the required data, set the vertex buffers and its attribute pointers.
+	// Prepare mesh for drawing
 	setupMesh();
 }
 
@@ -18,9 +18,6 @@ void Mesh::setupMesh() {
 	glBindVertexArray(VAO);
 	// load data into vertex buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	// A great thing about structs is that their memory layout is sequential for all its items.
-	// The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
-	// again translates to 3/2 floats which translates to a byte array.
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -67,7 +64,7 @@ void Mesh::Draw(Shader shader) {
 		else if (name == "texture_height")
 			number = std::to_string(heightNr++); // transfer unsigned int to stream
 
-												 // now set the sampler to the correct texture unit
+		// now set the sampler to the correct texture unit
 		glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
 		// and finally bind the texture
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
