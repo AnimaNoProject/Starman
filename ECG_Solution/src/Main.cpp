@@ -19,7 +19,12 @@
 #include "GameObjects/RUnit.h"
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
-//#include <assimp/Importer.hpp>
+#include <assimp/Importer.hpp>
+#include <physx-3.4\Include\PxPhysicsAPI.h>
+
+using namespace physx;
+using namespace glm;
+using namespace std;
 
 /* --------------------------------------------- */
 // Prototypes
@@ -146,6 +151,7 @@ int main(int argc, char** argv)
 	Model ourModel("assets/objects/nanosuit/nanosuit.obj");
 
 	// Create Testobject
+<<<<<<< HEAD
 	//std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
 	//Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
 	//Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
@@ -169,6 +175,13 @@ int main(int argc, char** argv)
 		testobject.addChild(temp);
 	} */
 	//testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+=======
+	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
+	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
+	RUnit testobject(&testerGeometry);
+
+	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+>>>>>>> 261680a8abc6e9539f53e760ca4840d0144fa75b
 
 	// Debug Camera
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
