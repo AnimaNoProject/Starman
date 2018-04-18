@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "Mesh.h"
 //#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "assimp/stb_image.h"
@@ -194,4 +195,29 @@ unsigned int Model::TextureFromFile(const char *path, const string &directory, b
 	}
 
 	return textureID;
+}
+
+void Model::setTransformMatrix(glm::mat4 transformMatrix)
+{
+	for (Mesh m : meshes)
+	{
+		m.setTransformMatrixForMesh(transformMatrix);
+	}
+}
+
+void Model::resetModelMatrix()
+{
+	for (Mesh m : meshes)
+	{
+		m.resetModelMatrixForMesh();
+	}
+}
+
+void Model::transform(glm::mat4 transformation)
+{
+	for (Mesh m : meshes)
+	{
+		m.transformMesh(transformation);
+	}
+
 }

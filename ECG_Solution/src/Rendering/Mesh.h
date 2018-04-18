@@ -45,9 +45,19 @@ public:
 	// render the mesh
 	void Draw(Shader shader);
 
+	void setTransformMatrixForMesh(glm::mat4 transformMatrix);
+	void resetModelMatrixForMesh();
+	void transformMesh(glm::mat4 transformation);
+
 private:
 	// VBO and EBO for rendering
 	unsigned int VBO, EBO;
+
+	// Model & Transformation matrix
+	glm::mat4 _modelMatrix;
+	glm::mat4 _transformMatrix;
+
+	Shader* shader;
 
 	// initializes all the buffer objects/arrays
 	void setupMesh();

@@ -7,10 +7,10 @@ private:
 	std::vector<RUnit> children;
 
 public:
-	RUnit(Geometry* geometry);
+	RUnit(Model* model);
 	RUnit();
 	~RUnit();
-	void draw();
+	void draw(Shader shader);
 	void setPosition(glm::vec3 position);
 	void addChild(RUnit unit);
 };

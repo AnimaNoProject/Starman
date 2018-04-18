@@ -10,6 +10,12 @@ uniform mat4 viewProj;
 
 void main()
 {
-    TexCoords = aTexCoords;    
-    gl_Position = viewProj * model * vec4(aPos, 1.0);
+    //TexCoords = aTexCoords;    
+    //gl_Position = viewProj * model * vec4(aPos, 1.0);
+	
+	
+	TexCoords = aTexCoords;  
+	vec4 position_world = model * vec4(aPos, 1);	
+    gl_Position = viewProj * position_world;
+	
 }

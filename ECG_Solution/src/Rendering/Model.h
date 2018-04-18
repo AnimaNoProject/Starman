@@ -22,13 +22,21 @@ class Model
 {
 public:
 	bool gammaCorrection;
-	Model(char *path); // Constructor
-	void Draw(Shader shader); // Draw function
-
-private:
 	vector<Mesh> meshes; // Model data
 	vector<Texture> textures_loaded; // Model data
 	string directory; // Directory where the model is stored
+
+	Model(char *path); // Constructor
+	void Draw(Shader shader); // Draw function
+	void setTransformMatrix(glm::mat4 transformMatrix);
+	void resetModelMatrix();
+	void transform(glm::mat4 transformation);
+
+
+private:
+	//vector<Mesh> meshes; // Model data
+	//vector<Texture> textures_loaded; // Model data
+	//string directory; // Directory where the model is stored
 
 	// Basic funtion for processing model
 	void loadModel(string path);

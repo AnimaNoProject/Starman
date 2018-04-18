@@ -1,14 +1,6 @@
 ﻿  Main.cpp
-<<<<<<< HEAD
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(184): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(195): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(204): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(207): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(218): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(227): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(232): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
   ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
-=======
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(171): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(182): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(191): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(196): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  LINK : C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe not found or not built by the last incremental link; performing full link
-  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
->>>>>>> 261680a8abc6e9539f53e760ca4840d0144fa75b

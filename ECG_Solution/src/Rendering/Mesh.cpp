@@ -70,6 +70,10 @@ void Mesh::Draw(Shader shader) {
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 
+
+	glm::mat4 accumModel = _transformMatrix * _modelMatrix;
+	shader.setMat4("modelMatrix", accumModel);
+
 	// draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
@@ -77,4 +81,19 @@ void Mesh::Draw(Shader shader) {
 
 	// always good practice to set everything back to defaults once configured.
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Mesh::setTransformMatrixForMesh(glm::mat4 transformMatrix)
+{
+	_transformMatrix = transformMatrix;
+}
+
+void Mesh::resetModelMatrixForMesh()
+{
+	_modelMatrix = glm::mat4(1);
+}
+
+void Mesh::transformMesh(glm::mat4 transformation)
+{
+	_modelMatrix = transformation * _modelMatrix;
 }
