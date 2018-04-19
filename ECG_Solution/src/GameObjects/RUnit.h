@@ -10,7 +10,7 @@ public:
 	RUnit(Model* model);
 	RUnit();
 	~RUnit();
-	void draw(Shader shader);
+	void draw();
 	void setPosition(glm::vec3 position);
 	void addChild(RUnit unit);
 };

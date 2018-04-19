@@ -9,8 +9,6 @@ private:
 	Camera* _camera;
 public:
 	RPlayer();
-	//RPlayer(Geometry* geometry);
-	//RPlayer(Geometry* geometry, Camera* camera);
 	RPlayer(Model* model);
 	RPlayer(Model* model, Camera* camera);
 	~RPlayer();

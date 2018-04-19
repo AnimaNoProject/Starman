@@ -1,16 +1,8 @@
-/*
-* Copyright 2017 Vienna University of Technology.
-* Institute of Computer Graphics and Algorithms.
-* This file is part of the ECG Lab Framework and must not be redistributed.
-*/
-
-
 #include "Utils.h"
 #include <sstream>
 #include "Shader/_Shader.h"
-#include "Shader/Shader.h"
+#include "Shader/_Shader.h"
 #include "Rendering/Model.h"
-#include "Rendering/Geometry.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "GameObjects/Camera.h"
@@ -35,10 +27,7 @@ static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLen
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-//void setPerFrameUniforms(_Shader* program, Camera& camera);
-
-void setPerFrameUniforms(Shader* program, Camera& camera);
+void setPerFrameUniforms(_Shader* program, Camera& camera);
 
 
 /* --------------------------------------------- */
@@ -143,61 +132,17 @@ int main(int argc, char** argv)
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
-
-	/*
-	int i = 0;
-	float xd, yd, z, w, h, d;
-
-	while (i++ < 20)
-	{
-	xd = (rand() % 25) + 1;
-	yd = (rand() % 25) + 1;
-	z = (rand() % 25) + 1;
-	w = (rand() % 25) + 1;
-	h = (rand() % 25) + 1;
-	d = (rand() % 25) + 1;
-	Geometry tempG(Geometry(glm::mat4(1), Geometry::createTestObject(w, h, d), testMaterial));
-	RUnit temp(&tempG);
-	temp.setPosition(glm::vec3(xd, yd, z));
-	testobject.addChild(temp);
-	} */
-
-	/*----------------------------------------------------------------------------------------------------------------------------------*/
-	// Create Shader
-	//std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/texture.vert", "assets/shader/texture.frag");
-
-	// Create Testobject
-	/*
-	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
-	Geometry testerGeometry(glm::mat4(1), Geometry::createTestObject(1.5f, 1.5f, 1.5f), testMaterial);
-	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
-	RUnit testobject(&testerGeometry);
-	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	*/
-	
-
-	/*
-	std::shared_ptr<Material> testMaterial = std::make_shared<Material>(shader, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f);
-	Geometry testerGeometry(glm::mat4(1), "assets/objects/starman_ship.obj", testMaterial);
-	RUnit testobject(&testerGeometry);
-	
-	testobject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	*/
-	/*----------------------------------------------------------------------------------------------------------------------------------*/
-
 	// Create new shader
-	Shader ourShader("assets/shader/model_loading.vert", "assets/shader/model_loading.frag", nullptr);
+	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/model_loading.vert", "assets/shader/model_loading.frag");
 	// Load model from .obj file
-	Model ourModel("assets/objects/nanosuit/nanosuit.obj");
+	Model ourModel("assets/objects/nanosuit/nanosuit.obj", shader.get());
 	RUnit staticTestObject(&ourModel);
 
 	// Debug Camera
 	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* Create Player */
-	//Model playerModel("assets/objects/starman_ship.obj");
-	Model playerModel("assets/objects/kiste.obj");
-	// Geometry playerModel(glm::mat4(1), Geometry::createTestObject(1.0f, 1.0f, 2.0f), testMaterial);
+	Model playerModel("assets/objects/kiste.obj", shader.get());
 	PlayerCamera pcamera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
@@ -232,24 +177,11 @@ int main(int argc, char** argv)
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 			}
 				
-			//setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
-			setPerFrameUniforms(&ourShader, _debug_camera ? camera : pcamera);
-
-			//ourShader.use();
-			// view/projection transformations
-
-			//ourShader.setMat4("viewProj", camera.getViewProjectionMatrix());
-
-			// render the loaded model
-			glm::mat4 model;
-			model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));	// it's a bit too big for our scene, so scale it down
-			ourShader.setMat4("model", model);
-			//ourModel.Draw(ourShader);
-
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
 
 			// Render
-			staticTestObject.draw(ourShader);
-			player.draw(ourShader);
+			staticTestObject.draw();
+			player.draw();
 
 			// Poll events and swap buffers
 			glfwPollEvents();
@@ -271,20 +203,11 @@ int main(int argc, char** argv)
 	return EXIT_SUCCESS;
 }
 
-/*
 void setPerFrameUniforms(_Shader* shader, Camera& camera)
 {
 	// shader
 	shader->use();
-	shader->setUniform("viewProjMatrix", camera.getViewProjectionMatrix());
-
-}*/
-
-void setPerFrameUniforms(Shader* shader, Camera& camera)
-{
-	// shader
-	shader->use();
-	shader->setMat4("viewProj", camera.getViewProjectionMatrix());
+	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
 }
 
 

@@ -5,14 +5,14 @@
 #include "assimp/stb_image.h"
 //#endif
 
-Model::Model(char *path) {
+Model::Model(char *path, _Shader* shader) : _shader(shader) {
 	loadModel(path);
 }
 
-void Model::Draw(Shader shader)
+void Model::Draw()
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw(shader);
+		meshes[i].Draw();
 }
 
 void Model::loadModel(string path)
@@ -123,7 +123,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	// return a mesh object created from the extracted mesh data
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures, this->_shader);
 }
 
 vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
@@ -197,7 +197,7 @@ unsigned int Model::TextureFromFile(const char *path, const string &directory, b
 	return textureID;
 }
 
-void Model::setTransformMatrix(glm::mat4 transformMatrix)
+void Model::setTransformMatrix(mat4 transformMatrix)
 {
 	for (Mesh m : meshes)
 	{
@@ -213,7 +213,7 @@ void Model::resetModelMatrix()
 	}
 }
 
-void Model::transform(glm::mat4 transformation)
+void Model::transform(mat4 transformation)
 {
 	for (Mesh m : meshes)
 	{
