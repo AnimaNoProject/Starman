@@ -1,11 +1,5 @@
 #include "Camera.h"
 
-Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -20.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
-{
-	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
-	_fov = fov;
-}
-
 Camera::~Camera()
 {
 }
@@ -31,6 +25,12 @@ glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::v
 	result[3][1] = -dot(u, eye);
 	result[3][2] = dot(f, eye);
 	return result;
+}
+
+Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -20.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
+{
+	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
+	_fov = fov;
 }
 
 glm::mat4 Camera::getViewProjectionMatrix()
@@ -87,9 +87,4 @@ float Camera::getYaw()
 float Camera::getPitch()
 {
 	return _pitch;
-}
-
-void Camera::resetCamera()
-{
-	_pitch = _yaw = _fov = 0.0f;
 }

@@ -30,6 +30,7 @@ void PlayerCamera::update(float x, float y, bool up, bool down, bool left, bool 
 	else if (left)
 		_position -= v_right * deltaTime * _speed;
 
-	//_viewMatrix = lookAt(_position - glm::vec3(0.0f, -2.0f, 5.0f), _position + v_dir, v_up);
-	_viewMatrix = lookAt(_position - glm::vec3(0.0f, -2.0f, 8.0f), _position, glm::vec3(1.0f, 10.0f, 1.0f));
+	glm::vec3 temp_pos = _position - v_dir * 2.0f + v_up * 2.0f;
+
+	_viewMatrix = lookAt(temp_pos, temp_pos + v_dir, v_up);
 }

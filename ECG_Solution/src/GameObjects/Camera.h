@@ -4,17 +4,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+using namespace glm;
+
 class Camera
 {
 protected:
-	glm::mat4 _viewMatrix, _projMatrix;
+	mat4 _viewMatrix, _projMatrix;
 	float _pitch, _yaw, _fov;
 
-	float _speed = 2.00f;
+	float _speed = 5.00f;
 	const float _mouse_speed = 0.3f;
 
-	glm::vec3 _position;
-	glm::mat4 lookAt(glm::vec3  const & eye, glm::vec3  const & center, glm::vec3  const & up);
+	vec3 _position;
+	mat4 lookAt(vec3 const & eye, vec3 const & center, vec3 const & up);
+
 public:
 	Camera(float fov, float aspect, float nearZ, float farZ);
 	~Camera();
@@ -24,5 +27,4 @@ public:
 	void setSpeed(float speed);
 	float getYaw();
 	float getPitch();
-	void resetCamera();
 };

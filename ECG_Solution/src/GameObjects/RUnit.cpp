@@ -22,12 +22,26 @@ void RUnit::draw()
 	}
 }
 
-void RUnit::setPosition(glm::vec3 position)
+void RUnit::setTransformation(glm::mat4 transformation)
 {
-	_model->setTransformMatrix(glm::translate(glm::mat4(1), position));
+	this->transformation = transformation;
+	_model->setTransformMatrix(transformation);
 }
 
 void RUnit::addChild(RUnit unit)
 {
 	children.push_back(unit);
+}
+
+void RUnit::setTime(float deltaTime)
+{
+	for (RUnit unit : children)
+	{
+		unit.setTime(deltaTime);
+	}
+}
+
+void RUnit::setMovement(vec3 translation, vec3 rotation)
+{
+	_model->setTransformMatrix(rotate(mat4(1), deltaTime * 20, rotation) * translate(glm::mat4(1), rotation * deltaTime));
 }
