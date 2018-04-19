@@ -10,6 +10,9 @@
 #include <glm\glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using namespace glm;
+using namespace std;
+
 class _Shader
 {
 private:
@@ -24,15 +27,15 @@ protected:
 public:
 	_Shader(const char *vertex_path, const char *fragment_path);
 	~_Shader();
-	std::string readFile(const char *filePath);
+	string readFile(const char *filePath);
 	GLuint getShader();
 	void use();
 	void setUniform(std::string uniform, const int i);
 	void setUniform(std::string uniform, const unsigned int i);
 	void setUniform(std::string uniform, const float f);
-	void setUniform(std::string uniform, const glm::mat4& mat);
-	void setUniform(std::string uniform, const glm::mat3& mat);
-	void setUniform(std::string uniform, const glm::vec2& vec);
-	void setUniform(std::string uniform, const glm::vec3& vec);
-	void setUniform(std::string uniform, const glm::vec4& vec);
+	void setUniform(std::string uniform, const mat4& mat);
+	void setUniform(std::string uniform, const mat3& mat);
+	void setUniform(std::string uniform, const vec2& vec);
+	void setUniform(std::string uniform, const vec3& vec);
+	void setUniform(std::string uniform, const vec4& vec);
 };

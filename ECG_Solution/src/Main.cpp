@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 
 	_window_width = reader.GetInteger("window", "width", 800);
 	_window_height = reader.GetInteger("window", "height", 800);
-	std::string window_title = reader.Get("window", "title", "Starman");
+	string window_title = reader.Get("window", "title", "Starman");
 	float fov = float(reader.GetReal("camera", "fov", 60.0f));
 	float nearZ = float(reader.GetReal("camera", "near", 0.1f));
 	float farZ = float(reader.GetReal("camera", "far", 100.0f));
@@ -139,11 +139,11 @@ int main(int argc, char** argv)
 	RUnit staticTestObject(&ourModel);
 
 	// Debug Camera
-	Camera camera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+	Camera camera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* Create Player */
 	Model playerModel("assets/objects/kiste.obj", shader.get());
-	PlayerCamera pcamera(fov * glm::pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
 
@@ -277,15 +277,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 static void APIENTRY DebugCallbackDefault(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam) {
 	if (id == 131185 || id == 131218) return; // ignore performance warnings (buffer uses GPU memory, shader recompilation) from nvidia
-	std::string error = FormatDebugOutput(source, type, id, severity, message);
-	std::cout << error << std::endl;
+	string error = FormatDebugOutput(source, type, id, severity, message);
+	cout << error << endl;
 }
 
 static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, const char* msg) {
-	std::stringstream stringStream;
-	std::string sourceString;
-	std::string typeString;
-	std::string severityString;
+	stringstream stringStream;
+	string sourceString;
+	string typeString;
+	string severityString;
 
 	switch (source) {
 		case GL_DEBUG_SOURCE_API: {

@@ -13,7 +13,7 @@ RPlayer::RPlayer(Model* model, Camera* camera) : _speed(0)
 {
 	_model = model;
 	_camera = camera;
-	_position = glm::vec3(0.0f, 0.0f, -10.0f);
+	_position = vec3(0.0f, 0.0f, -10.0f);
 }
 
 RPlayer::~RPlayer()
@@ -35,19 +35,19 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	_yaw += _mouse_speed * deltaTime * x;
 	_pitch += _mouse_speed * deltaTime * y;
 
-	glm::vec3 v_dir(
+	vec3 v_dir(
 		cos(_pitch) * sin(_yaw),
 		sin(_pitch),
 		cos(_pitch) * cos(_yaw)
 	);
 
-	glm::vec3 v_right(
+	vec3 v_right(
 		sin(_yaw - pi<float>() / 2),
 		0,
 		cos(_yaw - pi<float>() / 2)
 	);
 
-	glm::vec3 v_up(glm::cross(v_right, v_dir));
+	vec3 v_up(glm::cross(v_right, v_dir));
 
 	_position += v_dir * (float)(deltaTime * _speed);
 

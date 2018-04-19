@@ -45,7 +45,7 @@ public:
 	// render the mesh
 	void Draw();
 
-	void setTransformMatrixForMesh(glm::mat4 transformMatrix);
+	void setTransformMatrixForMesh(mat4 transformMatrix);
 	void resetModelMatrixForMesh();
 	void transformMesh(glm::mat4 transformation);
 

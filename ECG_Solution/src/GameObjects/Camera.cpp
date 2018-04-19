@@ -4,14 +4,14 @@ Camera::~Camera()
 {
 }
 
-glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::vec3 const & up)
+mat4 Camera::lookAt(vec3 const & eye, vec3 const & center, vec3 const & up)
 {
-	glm::vec3  f = glm::normalize(center - eye);
-	glm::vec3  u = glm::normalize(up);
-	glm::vec3  s = glm::normalize(cross(f, u));
+	vec3  f = normalize(center - eye);
+	vec3  u = normalize(up);
+	vec3  s = normalize(cross(f, u));
 	u = cross(s, f);
 
-	glm::mat4 result(1);
+	mat4 result(1);
 	result[0][0] = s.x;
 	result[1][0] = s.y;
 	result[2][0] = s.z;
@@ -29,11 +29,11 @@ glm::mat4 Camera::lookAt(glm::vec3 const & eye, glm::vec3 const & center, glm::v
 
 Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -20.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
 {
-	_projMatrix = glm::perspective(fov, aspect, nearZ, farZ);
+	_projMatrix = perspective(fov, aspect, nearZ, farZ);
 	_fov = fov;
 }
 
-glm::mat4 Camera::getViewProjectionMatrix()
+mat4 Camera::getViewProjectionMatrix()
 {
 	return _projMatrix * _viewMatrix;
 }
@@ -43,19 +43,19 @@ void Camera::update(float x, float y, bool up, bool down, bool left, bool right,
 	_yaw += _mouse_speed * deltaTime * x;
 	_pitch += _mouse_speed * deltaTime * y;
 
-	glm::vec3 v_dir(
+	vec3 v_dir(
 		cos(_pitch) * sin(_yaw),
 		sin(_pitch),
 		cos(_pitch) * cos(_yaw)
 	);
 
-	glm::vec3 v_right(
-		sin(_yaw - glm::pi<float>() / 2),
+	vec3 v_right(
+		sin(_yaw - pi<float>() / 2),
 		0,
-		cos(_yaw - glm::pi<float>() / 2)
+		cos(_yaw - pi<float>() / 2)
 	);
 
-	glm::vec3 v_up(glm::cross(v_right, v_dir));
+	vec3 v_up(glm::cross(v_right, v_dir));
 
 	if (up)
 		_position += v_dir * deltaTime * _speed;
@@ -69,7 +69,7 @@ void Camera::update(float x, float y, bool up, bool down, bool left, bool right,
 	_viewMatrix = lookAt(_position, _position + v_dir, v_up);
 }
 
-glm::vec3 Camera::getPosition()
+vec3 Camera::getPosition()
 {
 	return _position;
 }

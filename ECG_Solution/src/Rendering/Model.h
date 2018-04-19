@@ -28,9 +28,9 @@ public:
 
 	Model(char *path, _Shader* shader); // Constructor
 	void Draw(); // Draw function
-	void setTransformMatrix(glm::mat4 transformMatrix);
+	void setTransformMatrix(mat4 transformMatrix);
 	void resetModelMatrix();
-	void transform(glm::mat4 transformation);
+	void transform(mat4 transformation);
 
 
 private:

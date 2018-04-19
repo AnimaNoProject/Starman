@@ -15,7 +15,7 @@ public:
 	RPlayer(Model* model);
 	RPlayer(Model* model, Camera* camera);
 	~RPlayer();
-	void setTransformation(glm::mat4 transformation) override;
+	void setTransformation(mat4 transformation) override;
 	void move(float x, float y, bool up, bool down, bool left, bool right, float deltaTime);
 };
 

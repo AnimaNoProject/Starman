@@ -21,9 +21,9 @@ protected:
 public:
 	Camera(float fov, float aspect, float nearZ, float farZ);
 	~Camera();
-	glm::mat4 getViewProjectionMatrix();
+	mat4 getViewProjectionMatrix();
 	virtual void update(float x, float y, bool up, bool down, bool left, bool right, float deltaTime);
-	glm::vec3 getPosition();
+	vec3 getPosition();
 	void setSpeed(float speed);
 	float getYaw();
 	float getPitch();
