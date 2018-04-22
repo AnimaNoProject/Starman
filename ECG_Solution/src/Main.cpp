@@ -142,7 +142,7 @@ int main(int argc, char** argv)
 	Camera camera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* Create Player */
-	Model playerModel("assets/objects/kiste.obj", shader.get());
+	Model playerModel("assets/objects/starman.obj", shader.get());
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
