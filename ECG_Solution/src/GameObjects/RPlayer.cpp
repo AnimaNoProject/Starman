@@ -32,7 +32,7 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	else if (down)
 		(_real_speed <= -25) ? _real_speed = -25 : _real_speed -= 0.0025;
 
-	_speed = floor(_real_speed);
+	_speed = (floor((_real_speed * 2) + 0.5) / 2);
 
 	_yaw += _mouse_speed * deltaTime * x;
 	_pitch += _mouse_speed * deltaTime * y;
