@@ -64,3 +64,8 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 
 	_camera->update(x, y, up, down, left, right, deltaTime);
 }
+
+void RPlayer::draw()
+{
+	_model->Draw();
+}

@@ -151,9 +151,6 @@ int main(int argc, char** argv)
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
-
-	staticTestObject.setTransformation(mat4(1) * translate(vec3(5.0, 5.0, 5.0)));
-
 	_lastTime = glfwGetTime();
 
 	float t_delta, t_now, t_start = glfwGetTime();
@@ -200,6 +197,8 @@ int main(int argc, char** argv)
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
 
 			// Render
+			staticTestObject.setTime(t_now);
+			staticTestObject.setMovement(vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
 			staticTestObject.draw();
 			player.draw();
 

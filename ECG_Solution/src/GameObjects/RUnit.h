@@ -8,6 +8,7 @@ private:
 protected:
 	float deltaTime;
 	mat4 transformation;
+	mat4 _movement;
 public:
 	RUnit(Model* model);
 	RUnit();

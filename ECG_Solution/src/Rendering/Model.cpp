@@ -199,25 +199,18 @@ unsigned int Model::TextureFromFile(const char *path, const string &directory, b
 
 void Model::setTransformMatrix(mat4 transformMatrix)
 {
-	for (Mesh m : meshes)
-	{
-		m.setTransformMatrixForMesh(transformMatrix);
-	}
+	for (unsigned int i = 0; i < meshes.size(); i++)
+		meshes[i].setTransformMatrixForMesh(transformMatrix);
 }
 
 void Model::resetModelMatrix()
 {
-	for (Mesh m : meshes)
-	{
-		m.resetModelMatrixForMesh();
-	}
+	for (unsigned int i = 0; i < meshes.size(); i++)
+		meshes[i].resetModelMatrixForMesh();
 }
 
 void Model::transform(mat4 transformation)
 {
-	for (Mesh m : meshes)
-	{
-		m.transformMesh(transformation);
-	}
-
+	for (unsigned int i = 0; i < meshes.size(); i++)
+		meshes[i].transformMesh(transformation);
 }

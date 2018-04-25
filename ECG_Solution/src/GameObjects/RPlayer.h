@@ -2,7 +2,7 @@
 #include "RUnit.h"
 #include "Camera.h"
 
-class RPlayer : public RUnit
+class RPlayer : public RObject
 {
 private:
 	double _speed;
@@ -18,5 +18,6 @@ public:
 	~RPlayer();
 	void setTransformation(mat4 transformation) override;
 	void move(float x, float y, bool up, bool down, bool left, bool right, float deltaTime);
+	void draw();
 };
 
