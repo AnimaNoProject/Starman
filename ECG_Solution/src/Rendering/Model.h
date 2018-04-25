@@ -31,8 +31,6 @@ public:
 	void setTransformMatrix(mat4 transformMatrix);
 	void resetModelMatrix();
 	void transform(mat4 transformation);
-
-
 private:
 	//vector<Mesh> meshes; // Model data
 	//vector<Texture> textures_loaded; // Model data

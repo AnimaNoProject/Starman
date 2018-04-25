@@ -142,10 +142,17 @@ int main(int argc, char** argv)
 	Camera camera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* Create Player */
-	Model playerModel("assets/objects/starman.obj", shader.get());
+	//Model playerModel("assets/objects/starman.obj", shader.get());
+	//PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+	//RPlayer player(&playerModel, &pcamera);
+
+	// test model
+	Model playerModel("assets/objects/object_camera/untitled.obj", shader.get());
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 
+
+	staticTestObject.setTransformation(mat4(1) * translate(vec3(5.0, 5.0, 5.0)));
 
 	_lastTime = glfwGetTime();
 

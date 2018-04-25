@@ -6,6 +6,7 @@ class RPlayer : public RUnit
 {
 private:
 	double _speed;
+	double _real_speed;
 	Camera* _camera;
 	float _yaw;
 	float _pitch;

@@ -9,7 +9,7 @@ RPlayer::RPlayer(Model* model)
 	_model = model;
 }
 
-RPlayer::RPlayer(Model* model, Camera* camera) : _speed(0)
+RPlayer::RPlayer(Model* model, Camera* camera) : _speed(0), _real_speed(0)
 {
 	_model = model;
 	_camera = camera;
@@ -28,9 +28,11 @@ void RPlayer::setTransformation(mat4 transformation)
 void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, float deltaTime)
 {
 	if (up)
-		(_speed >= 25) ? _speed = 25 : _speed += 0.0025;
+		(_real_speed >= 25) ? _real_speed = 25 : _real_speed += 0.0025;
 	else if (down)
-		(_speed <= -25) ? _speed = -25 : _speed -= 0.0025;
+		(_real_speed <= -25) ? _real_speed = -25 : _real_speed -= 0.0025;
+
+	_speed = floor(_real_speed);
 
 	_yaw += _mouse_speed * deltaTime * x;
 	_pitch += _mouse_speed * deltaTime * y;
@@ -58,7 +60,7 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 
 	_camera->setSpeed(_speed);
 
-	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
+	_model->setTransformMatrix(mat4(1) * translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 
 	_camera->update(x, y, up, down, left, right, deltaTime);
 }

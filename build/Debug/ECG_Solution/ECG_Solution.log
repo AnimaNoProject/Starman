@@ -1,1 +1,9 @@
-﻿  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  RPlayer.cpp
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(61): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+  Main.cpp
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(159): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(183): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(192): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(197): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+  Code wird generiert...
+  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

@@ -66,7 +66,6 @@ void Mesh::Draw() {
 		glBindTexture(GL_TEXTURE_2D, _textures[i].id);
 	}
 
-
 	mat4 accumModel = _transformMatrix * _modelMatrix;
 	_shader->setUniform("model", accumModel);
 
