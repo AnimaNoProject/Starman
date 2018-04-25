@@ -147,7 +147,7 @@ int main(int argc, char** argv)
 	//RPlayer player(&playerModel, &pcamera);
 
 	// test model
-	Model playerModel("assets/objects/object_camera/untitled.obj", shader.get());
+	Model playerModel("assets/objects/starman_ship/ship.obj", shader.get());
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	RPlayer player(&playerModel, &pcamera);
 

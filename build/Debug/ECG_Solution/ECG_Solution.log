@@ -1,3 +1,5 @@
-﻿  RPlayer.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(61): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  Camera.cpp
+  RPlayer.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(61): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

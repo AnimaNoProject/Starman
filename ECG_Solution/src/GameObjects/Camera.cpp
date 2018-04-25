@@ -27,7 +27,7 @@ mat4 Camera::lookAt(vec3 const & eye, vec3 const & center, vec3 const & up)
 	return result;
 }
 
-Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -20.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
+Camera::Camera(float fov, float aspect, float nearZ, float farZ) : _position(0.0, 0.0, -5.0f), _yaw(0.0f), _pitch(0.0f), _viewMatrix(1)
 {
 	_projMatrix = perspective(fov, aspect, nearZ, farZ);
 	_fov = fov;

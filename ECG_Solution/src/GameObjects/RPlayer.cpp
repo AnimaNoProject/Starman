@@ -13,7 +13,7 @@ RPlayer::RPlayer(Model* model, Camera* camera) : _speed(0), _real_speed(0)
 {
 	_model = model;
 	_camera = camera;
-	_position = vec3(0.0f, 0.0f, -10.0f);
+	_position = vec3(0.0f, 0.0f, -5.0f);
 }
 
 RPlayer::~RPlayer()
