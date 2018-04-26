@@ -11,9 +11,9 @@
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
 #include <assimp/Importer.hpp>
-//#include <physx-3.4\PxPhysicsAPI.h>
+#include <physx-3.4\PxPhysicsAPI.h>
 
-//using namespace physx;
+using namespace physx;
 using namespace glm;
 using namespace std;
 
@@ -172,10 +172,10 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// ICreate PhysX Foundation
 	/* --------------------------------------------- */
-	//PxDefaultErrorCallback gDefaultErrorCallback;
-	//PxDefaultAllocator gDefaultAllocatorCallback;
-	//PxFoundation* gFoundation = nullptr;
-	//gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
+	PxDefaultErrorCallback gDefaultErrorCallback;
+	PxDefaultAllocator gDefaultAllocatorCallback;
+	PxFoundation* gFoundation = nullptr;
+	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
