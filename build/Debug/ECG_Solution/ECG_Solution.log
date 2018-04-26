@@ -1,12 +1,8 @@
-﻿  RPlayer.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  RUnit.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(25): warning C4018: '<': signed/unsigned mismatch
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(47): warning C4018: '<': signed/unsigned mismatch
-  Main.cpp
+﻿  Main.cpp
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(167): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(188): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(201): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(206): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Mesh.cpp
   Generating Code...
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

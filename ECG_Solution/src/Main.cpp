@@ -137,7 +137,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Shader
 	/* --------------------------------------------- */
-	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/model_loading.vert", "assets/shader/model_loading.frag");
+	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
 	
 	/* --------------------------------------------- */
 	// World
@@ -240,6 +240,7 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera)
 	// shader
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
+	shader->setUniform("camera_world", camera.getPosition());
 }
 
 

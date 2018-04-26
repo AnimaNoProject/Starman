@@ -68,6 +68,7 @@ void Mesh::Draw() {
 
 	mat4 accumModel = _transformMatrix * _modelMatrix;
 	_shader->setUniform("model", accumModel);
+	_shader->setUniform("normals", mat3(transpose(inverse(accumModel))));
 
 	// draw mesh
 	glBindVertexArray(VAO);
