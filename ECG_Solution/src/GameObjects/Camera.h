@@ -13,7 +13,7 @@ protected:
 	float _pitch, _yaw, _fov;
 
 	float _speed = 5.00f;
-	const float _mouse_speed = 0.3f;
+	const float _mouse_speed = 0.0125f;
 
 	vec3 _position;
 	mat4 lookAt(vec3 const & eye, vec3 const & center, vec3 const & up);

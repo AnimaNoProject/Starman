@@ -44,6 +44,7 @@ static bool _left = false;
 static bool _up = false;
 static bool _down = false;
 static bool _debug_camera = false;
+static double _fps;
 
 /* --------------------------------------------- */
 // Main
@@ -68,6 +69,7 @@ int main(int argc, char** argv)
 	float nearZ = float(reader.GetReal("camera", "near", 0.1f));
 	float farZ = float(reader.GetReal("camera", "far", 100.0f));
 	bool fullscreen = bool(reader.GetBoolean("window", "fullscreen", false));
+	_fps = double(reader.GetReal("window", "limitFPS", 60.0f));
 
 	/* --------------------------------------------- */
 	// Create context
@@ -179,40 +181,45 @@ int main(int argc, char** argv)
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
 	{
+		const double maxPeriod = 1.0 / _fps;
+
 		while (!glfwWindowShouldClose(_window)) {
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			t_now = glfwGetTime();
 			t_delta = t_now - t_start;
-			t_start = t_now;
 
-			glfwGetCursorPos(_window, &x, &y);
-			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
-
-			// Update
-			if (_debug_camera)
+			if (t_delta >= maxPeriod)
 			{
-				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-				player.move(0, 0, false, false, false, false, t_delta);
-			}
-			else
-			{
-				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-			}
-			world.update(mat4(1), t_now);
-			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
-			//
+				t_start = t_now;
 
-			// Render
-			world.draw();
-			player.draw();
-			//
+				glfwGetCursorPos(_window, &x, &y);
+				glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 
-			// Poll events and swap buffers
-			glfwPollEvents();
-			glfwSwapBuffers(_window);
-			//
+				// Update
+				if (_debug_camera)
+				{
+					camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+					player.move(0, 0, false, false, false, false, t_delta);
+				}
+				else
+				{
+					player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+				}
+				world.update(mat4(1), t_now);
+
+
+				setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
+				// Render
+				world.draw();
+				player.draw();
+
+				// Poll events and swap buffers
+				glfwPollEvents();
+				glfwSwapBuffers(_window);
+				//
+			}
 		}
 	}
 
