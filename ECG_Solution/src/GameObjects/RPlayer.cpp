@@ -23,9 +23,9 @@ RPlayer::~RPlayer()
 void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, float deltaTime)
 {
 	if (up)
-		(_real_speed >= 25) ? _real_speed = 25 : _real_speed += 1 * deltaTime;
+		(_real_speed >= 15) ? _real_speed = 15 : _real_speed += 1 * deltaTime;
 	else if (down)
-		(_real_speed <= -25) ? _real_speed = -25 : _real_speed -= 1 * deltaTime;
+		(_real_speed <= -15) ? _real_speed = -15 : _real_speed -= 1 * deltaTime;
 
 	_speed = (floor((_real_speed * 2) + 0.5) / 2);
 

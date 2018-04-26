@@ -8,13 +8,11 @@ private:
 	vec3 _translation;
 	vec3 _rotation;
 	float _degree;
-protected:
-	float deltaTime;
 	mat4 _defaultTransformation;
-	vec3 _position;
+	mat4 _position;
 	Model* _model;
 public:
-	RUnit(Model* model, vec3 translation, vec3 rotation, float degree);
+	RUnit(Model* model, vec3 translation, vec3 rotation, float degree, vec3 position);
 	RUnit(mat4 defaultTransformation);
 	~RUnit();
 	void draw();

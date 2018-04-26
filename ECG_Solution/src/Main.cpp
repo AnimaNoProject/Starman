@@ -143,8 +143,6 @@ int main(int argc, char** argv)
 	// World
 	/* --------------------------------------------- */
 	RUnit world(mat4(1));
-	//Model model("assets/objects/asteroid/asteroid.obj", shader.get());
-	//RUnit world(&model, vec3(0.05f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f), 0.050f);
 
 	/* --------------------------------------------- */
 	// Cameras
@@ -162,7 +160,7 @@ int main(int argc, char** argv)
 	// World Objects
 	/* --------------------------------------------- */
 	Model model("assets/objects/asteroid/asteroid.obj", shader.get());
-	RUnit unit(&model, vec3(0.05f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f), 0.050f);
+	RUnit unit(&model, vec3(0.05f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f), 0.050f, vec3(5.0f, 5.0f, 10.0f));
 	world.addChild(&unit);
 
 	_lastTime = glfwGetTime();
