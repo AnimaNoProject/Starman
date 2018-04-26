@@ -45,6 +45,7 @@ static bool _up = false;
 static bool _down = false;
 static bool _debug_camera = false;
 static double _fps;
+static float _brightness;
 
 /* --------------------------------------------- */
 // Main
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
 	float farZ = float(reader.GetReal("camera", "far", 100.0f));
 	bool fullscreen = bool(reader.GetBoolean("window", "fullscreen", false));
 	_fps = double(reader.GetReal("window", "limitFPS", 60.0f));
+	_brightness = float(reader.GetReal("window", "brightness", 1.0));
 
 	/* --------------------------------------------- */
 	// Create context
@@ -241,6 +243,7 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera)
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
 	shader->setUniform("camera_world", camera.getPosition());
+	shader->setUniform("brightness", _brightness);
 }
 
 

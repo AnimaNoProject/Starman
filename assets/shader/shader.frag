@@ -10,6 +10,8 @@ in VertexData {
 
 out vec4 color;
 
+uniform float brightness;
+
 void main()
 {    
 	vec3 b_color = texture(texture_diff, vert.texture_coord).rgb;

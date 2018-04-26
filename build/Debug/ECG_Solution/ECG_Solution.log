@@ -1,8 +1,6 @@
 ﻿  Main.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(167): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(188): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(201): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(206): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Mesh.cpp
-  Generating Code...
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(169): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(190): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(203): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(208): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
