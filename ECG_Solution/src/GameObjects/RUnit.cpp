@@ -19,7 +19,8 @@ RUnit::~RUnit()
 
 void RUnit::draw()
 {
-	_model->Draw();
+	if(_model != nullptr)
+		_model->Draw();
 	for (int i = 0; i < this->children.size(); i++)
 	{
 		this->children.at(i)->draw();
@@ -40,7 +41,8 @@ void RUnit::setDefaultTransformation(vec3 translation, vec3 rotation, float degr
 
 void RUnit::update(mat4 transformation, float time)
 {
-	_model->setTransformMatrix(transformation * translate(mat4(1), _translation * time) * rotate(mat4(1), _degree * time, _rotation));
+	if(_model != nullptr)
+		_model->setTransformMatrix(transformation * translate(mat4(1), _translation * time) * rotate(mat4(1), _degree * time, _rotation));
 	for (int i = 0; i < this->children.size(); i++)
 	{
 		this->children.at(i)->update(transformation, time);
