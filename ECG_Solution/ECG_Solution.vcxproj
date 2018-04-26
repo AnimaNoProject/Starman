@@ -130,7 +130,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;ECG_Library_Release.lib;PhysX3CharacterKinematicCHECKED_x86.lib;PhysX3CHECKED_x86.lib;PhysX3CommonCHECKED_x86.lib;PhysX3ExtensionsCHECKED.lib;PhysX3CookingCHECKED_x86.lib;PxToolkitCHECKED.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;assimp-vc140-mt.lib;ECG_Library_Release.lib;PhysX3CharacterKinematicCHECKED_x86.lib;PhysX3CHECKED_x86.lib;PhysX3CommonCHECKED_x86.lib;PhysX3ExtensionsCHECKED.lib;PhysX3CookingCHECKED_x86.lib;PxFoundationCHECKED_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
