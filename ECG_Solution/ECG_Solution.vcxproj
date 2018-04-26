@@ -5,7 +5,6 @@
     <ClCompile Include="src\Rendering\Model.cpp" />
     <ClCompile Include="src\GameObjects\PlayerCamera.cpp" />
     <ClCompile Include="src\GameObjects\RPlayer.cpp" />
-    <ClCompile Include="src\GameObjects\RObject.cpp" />
     <ClCompile Include="src\GameObjects\RUnit.cpp" />
     <ClCompile Include="src\GameObjects\Camera.cpp" />
     <ClCompile Include="src\Shader\_Shader.cpp" />
@@ -19,7 +18,6 @@
     <ClCompile Include="src\Main.cpp" />
     <ClInclude Include="src\Shader\_Shader.h" />
     <ClInclude Include="src\Utils.h" />
-    <ClInclude Include="src\GameObjects\RObject.h" />
   </ItemGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">

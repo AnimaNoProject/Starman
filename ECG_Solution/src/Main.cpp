@@ -7,7 +7,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "GameObjects/Camera.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "GameObjects/RObject.h"
 #include "GameObjects/RUnit.h"
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
@@ -132,31 +131,41 @@ int main(int argc, char** argv)
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
-	// Create new shader
+
+	/* --------------------------------------------- */
+	// Shader
+	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/model_loading.vert", "assets/shader/model_loading.frag");
-	// Load model from .obj file
-	Model ourModel("assets/objects/nanosuit/nanosuit.obj", shader.get());
-	RUnit staticTestObject(&ourModel);
+	
+	/* --------------------------------------------- */
+	// World
+	/* --------------------------------------------- */
+	//RUnit world(mat4(1));
+	Model model("assets/objects/asteroid/asteroid.obj", shader.get());
+	RUnit world(&model, vec3(0.05f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f), 0.050f);
 
-	// Debug Camera
+	/* --------------------------------------------- */
+	// Cameras
+	/* --------------------------------------------- */
 	Camera camera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
-
-	/* Create Player */
-	//Model playerModel("assets/objects/starman.obj", shader.get());
-	//PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
-	//RPlayer player(&playerModel, &pcamera);
-
-	// test model
-	Model playerModel("assets/objects/starman_ship/ship.obj", shader.get());
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+
+	/* --------------------------------------------- */
+	// Player
+	/* --------------------------------------------- */
+	Model playerModel("assets/objects/starman_ship/ship.obj", shader.get());
 	RPlayer player(&playerModel, &pcamera);
 
+	/* --------------------------------------------- */
+	// World Objects
+	/* --------------------------------------------- */
+	//Model model("assets/objects/asteroid/asteroid.obj", shader.get());
+	//RUnit unit(&model, mat4(1));
+	//world.addChild(&unit);
+
 	_lastTime = glfwGetTime();
-
 	float t_delta, t_now, t_start = glfwGetTime();
-
 	double x, y;
-
 
 	/* --------------------------------------------- */
 	// ICreate PhysX Foundation
@@ -165,9 +174,6 @@ int main(int argc, char** argv)
 	//PxDefaultAllocator gDefaultAllocatorCallback;
 	//PxFoundation* gFoundation = nullptr;
 	//gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-
-
-
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -184,6 +190,7 @@ int main(int argc, char** argv)
 			glfwGetCursorPos(_window, &x, &y);
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 
+			// Update
 			if (_debug_camera)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
@@ -193,18 +200,19 @@ int main(int argc, char** argv)
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 			}
-				
+			world.update(mat4(1), t_now);
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
+			//
 
 			// Render
-			staticTestObject.setTime(t_now);
-			staticTestObject.setMovement(vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
-			staticTestObject.draw();
+			world.draw();
 			player.draw();
+			//
 
 			// Poll events and swap buffers
 			glfwPollEvents();
 			glfwSwapBuffers(_window);
+			//
 		}
 	}
 

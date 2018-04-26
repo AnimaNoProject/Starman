@@ -1,12 +1,16 @@
 #include "RUnit.h"
 
-RUnit::RUnit(Model* model)
+RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree)
 {
 	_model = model;
+	_translation = translation;
+	_rotation = rotation;
+	_degree = degree;
 }
 
-RUnit::RUnit() : _movement(1)
+RUnit::RUnit(mat4 defaultTransformation)
 {
+	_defaultTransformation = defaultTransformation;
 }
 
 RUnit::~RUnit()
@@ -15,35 +19,30 @@ RUnit::~RUnit()
 
 void RUnit::draw()
 {
-	_model->setTransformMatrix(_movement);
 	_model->Draw();
-	for (RUnit unit : children)
+	for (int i = 0; i < this->children.size(); i++)
 	{
-		unit.draw();
+		this->children.at(i)->draw();
 	}
 }
 
-void RUnit::setTransformation(glm::mat4 transformation)
+void RUnit::addChild(RUnit* unit)
 {
-	this->transformation = transformation;
-	_model->setTransformMatrix(transformation);
+	this->children.push_back(unit);
 }
 
-void RUnit::addChild(RUnit unit)
+void RUnit::setDefaultTransformation(vec3 translation, vec3 rotation, float degree)
 {
-	children.push_back(unit);
+	_translation = translation;
+	_rotation = rotation;
+	_degree = degree;
 }
 
-void RUnit::setTime(float deltaTime)
+void RUnit::update(mat4 transformation, float time)
 {
-	this->deltaTime = deltaTime;
-	for (RUnit unit : children)
+	_model->setTransformMatrix(transformation * translate(mat4(1), _translation * time) * rotate(mat4(1), _degree * time, _rotation));
+	for (int i = 0; i < this->children.size(); i++)
 	{
-		unit.setTime(deltaTime);
+		this->children.at(i)->update(transformation, time);
 	}
-}
-
-void RUnit::setMovement(vec3 translation, vec3 rotation)
-{
-	_movement = (rotate(mat4(1), deltaTime * 20, rotation) * translate(glm::mat4(1), translation * deltaTime));
 }

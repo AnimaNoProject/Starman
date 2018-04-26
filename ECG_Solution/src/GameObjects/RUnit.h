@@ -1,22 +1,25 @@
 #pragma once
-#include "RObject.h"
+#include "../Rendering/Model.h"
 
-class RUnit : public RObject
+class RUnit
 {
 private:
-	std::vector<RUnit> children;
+	std::vector<RUnit*> children;
+	vec3 _translation;
+	vec3 _rotation;
+	float _degree;
 protected:
 	float deltaTime;
-	mat4 transformation;
-	mat4 _movement;
+	mat4 _defaultTransformation;
+	vec3 _position;
+	Model* _model;
 public:
-	RUnit(Model* model);
-	RUnit();
+	RUnit(Model* model, vec3 translation, vec3 rotation, float degree);
+	RUnit(mat4 defaultTransformation);
 	~RUnit();
 	void draw();
-	void setTransformation(mat4 transformation);
-	void addChild(RUnit unit);
-	void setTime(float deltaTime);
-	void setMovement(vec3 translation, vec3 rotation);
+	void addChild(RUnit* unit);
+	void setDefaultTransformation(vec3 translation, vec3 rotation, float degree);
+	void update(mat4 transformation, float time);
 };
 
