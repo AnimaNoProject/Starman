@@ -20,7 +20,7 @@ RUnit::~RUnit()
 
 void RUnit::draw()
 {
-	if(_model != nullptr)
+	if (_model != nullptr)
 		_model->Draw();
 	for (int i = 0; i < this->children.size(); i++)
 	{

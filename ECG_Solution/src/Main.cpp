@@ -27,7 +27,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void setPerFrameUniforms(_Shader* program, Camera& camera);
-
+void initializeWorld(RUnit& world, _Shader* shader);
 
 /* --------------------------------------------- */
 // Global variables
@@ -161,10 +161,12 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
-	Model model("assets/objects/asteroid/asteroid.obj", shader.get());
-	RUnit unit(&model, vec3(0.05f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f), 0.050f, vec3(5.0f, 5.0f, 10.0f));
-	world.addChild(&unit);
+	initializeWorld(world, shader.get());
 
+
+	/* --------------------------------------------- */
+	// Frame Independency
+	/* --------------------------------------------- */
 	_lastTime = glfwGetTime();
 	float t_delta, t_now, t_start = glfwGetTime();
 	double x, y;
@@ -175,7 +177,7 @@ int main(int argc, char** argv)
 	PxDefaultErrorCallback gDefaultErrorCallback;
 	PxDefaultAllocator gDefaultAllocatorCallback;
 	PxFoundation* gFoundation = nullptr;
-	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
+	gFoundation = PxCreateFoundation(PX_FOUNDATION_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -229,6 +231,30 @@ int main(int argc, char** argv)
 	glfwTerminate();
 
 	return EXIT_SUCCESS;
+}
+
+void initializeWorld(RUnit& world, _Shader* shader)
+{
+	float px, py, pz, r, tx, ty, tz, rx, ry, rz;
+	srand(12348);
+	for (unsigned int i = 0; i < 15; i++)
+	{
+		tx = rand() & 1;
+		ty = rand() & 1;
+		tz = rand() & 1;
+		px = rand() % 50;
+		py = rand() % 50;
+		pz = rand() % 50;
+		rx = rand() & 1;
+		ry = rand() & 1;
+		rz = rand() & 1;
+
+		r = rand() % 25 / 100;
+
+		cout << "x,y,z" << px << "," << py << "," << pz << ";";
+
+		world.addChild(new RUnit(new Model("assets/objects/asteroid/asteroid.obj", shader), vec3(tx, ty, tz), vec3(rx, ry, rz), r, vec3(px, py, pz)));
+	}
 }
 
 void setPerFrameUniforms(_Shader* shader, Camera& camera)
