@@ -37,8 +37,6 @@ static bool _culling = true;
 static int _window_width;
 static int _window_height;
 static GLFWwindow* _window;
-static double _currentTime;
-static double _lastTime;
 static bool _right = false;
 static bool _left = false;
 static bool _up = false;
@@ -167,7 +165,6 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Frame Independency
 	/* --------------------------------------------- */
-	_lastTime = glfwGetTime();
 	float t_delta, t_now, t_start = glfwGetTime();
 	double x, y;
 
@@ -208,6 +205,7 @@ int main(int argc, char** argv)
 			world.update(mat4(1), t_now);
 
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
+
 			// Render
 			world.draw();
 			player.draw();
@@ -248,10 +246,7 @@ void initializeWorld(RUnit& world, _Shader* shader)
 		rx = rand() & 1;
 		ry = rand() & 1;
 		rz = rand() & 1;
-
 		r = rand() % 25 / 100;
-
-		cout << "x,y,z" << px << "," << py << "," << pz << ";";
 
 		world.addChild(new RUnit(new Model("assets/objects/asteroid/asteroid.obj", shader), vec3(tx, ty, tz), vec3(rx, ry, rz), r, vec3(px, py, pz)));
 	}
