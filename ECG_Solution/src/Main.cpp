@@ -181,8 +181,6 @@ int main(int argc, char** argv)
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
 	{
-		const double maxPeriod = 1.0 / _fps;
-
 		while (!glfwWindowShouldClose(_window)) {
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -190,36 +188,32 @@ int main(int argc, char** argv)
 			t_now = glfwGetTime();
 			t_delta = t_now - t_start;
 
-			if (t_delta >= maxPeriod)
+			t_start = t_now;
+
+			glfwGetCursorPos(_window, &x, &y);
+			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
+
+			// Update
+			if (_debug_camera)
 			{
-				t_start = t_now;
-
-				glfwGetCursorPos(_window, &x, &y);
-				glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
-
-				// Update
-				if (_debug_camera)
-				{
-					camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-					player.move(0, 0, false, false, false, false, t_delta);
-				}
-				else
-				{
-					player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-				}
-				world.update(mat4(1), t_now);
-
-
-				setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
-				// Render
-				world.draw();
-				player.draw();
-
-				// Poll events and swap buffers
-				glfwPollEvents();
-				glfwSwapBuffers(_window);
-				//
+				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+				player.move(0, 0, false, false, false, false, t_delta);
 			}
+			else
+			{
+				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+			}
+			world.update(mat4(1), t_now);
+
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
+			// Render
+			world.draw();
+			player.draw();
+
+			// Poll events and swap buffers
+			glfwPollEvents();
+			glfwSwapBuffers(_window);
+			//
 		}
 	}
 

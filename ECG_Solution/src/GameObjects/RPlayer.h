@@ -13,7 +13,7 @@ private:
 	Camera* _camera;
 	float _yaw;
 	float _pitch;
-	const float _mouse_speed = 0.0125f;
+	const float _mouse_speed = 2.0f;
 public:
 	RPlayer();
 	RPlayer(Model* model);
