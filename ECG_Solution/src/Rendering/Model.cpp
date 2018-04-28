@@ -109,6 +109,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	// specular: texture_specularN
 	// normal: texture_normalN
 
+
 	// 1. diffuse maps
 	vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -154,6 +155,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 		}
 	}
+
 	return textures;
 }
 
