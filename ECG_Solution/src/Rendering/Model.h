@@ -36,7 +36,7 @@ private:
 	//vector<Texture> textures_loaded; // Model data
 	//string directory; // Directory where the model is stored
 
-	// Basic funtion for processing model
+	// Basic function for processing model
 	void loadModel(string path);
 	void processNode(aiNode *node, const aiScene *scene);
 	Mesh processMesh(aiMesh *mesh, const aiScene *scene);

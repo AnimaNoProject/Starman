@@ -20,8 +20,6 @@ struct Vertex {
 	vec3 Position; // Vector that stores the position of a vertex
 	vec3 Normal; // Vector that stores the normal of a vertex
 	vec2 TexCoords; // Vector to store the texture coordinates
-	vec3 Tangent; // Vector to store the tangents
-	vec3 Bitangent; // Vector to store the bitangents
 };
 
 // Struct for everything that is related to the texture of a mesh
@@ -46,11 +44,13 @@ public:
 	// Constructor
 	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, _Shader* shader);
 
-	// render the mesh
+	// Method for rendering the models/meshes
 	void Draw();
-
+	// Method for setting the transformation matrix of the mesh
 	void setTransformMatrixForMesh(mat4 transformMatrix);
+	// Method to reset the transformation matrix of the mesh
 	void resetModelMatrixForMesh();
+	// Method for transforming the mesh
 	void transformMesh(glm::mat4 transformation);
 
 private:
@@ -64,7 +64,7 @@ private:
 	// Shader
 	_Shader* _shader;
 
-	// initializes all the buffer objects/arrays
+	// Method for initializing all the buffer objects/arrays
 	void setupMesh();
 };
 #endif
