@@ -265,7 +265,6 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL
 	shader->setUniform("camera_world", camera.getPosition());
 	shader->setUniform("brightness", _brightness);
 
-	shader->setUniform("materialCoefficients", vec3(0.1f, 0.8f, 0.3f));
 	shader->setUniform("shinyness", 14.0f);
 	
 	shader->setUniform("dirL.color", dirL.color);

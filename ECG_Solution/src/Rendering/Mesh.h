@@ -29,6 +29,10 @@ struct Texture {
 	unsigned int id;
 	string type;
 	string path;
+	float Ka;
+	float Kd;
+	float Ks;
+	float Alpha;
 };
 
 class Mesh {

@@ -1,4 +1,9 @@
-﻿  Main.cpp
+﻿  RPlayer.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  RUnit.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(25): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(47): warning C4018: '<': signed/unsigned mismatch
+  Main.cpp
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(173): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(193): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(204): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -13,4 +18,7 @@ c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(251)
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(252): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(253): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(254): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Mesh.cpp
+  Model.cpp
+  Generating Code...
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

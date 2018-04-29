@@ -12,7 +12,9 @@ uniform sampler2D texture_diff;
 uniform float brightness;
 uniform vec3 camera_world;
 
-uniform vec3 materialCoefficients;
+uniform float Ka;
+uniform float Kd;
+uniform float Ks;
 uniform float shinyness;
 
 uniform struct DirectionalLight {
@@ -41,10 +43,10 @@ void main()
 	vec3 v = normalize(camera_world - vert.position_world);
 	
 	vec3 texColor = texture(texture_diff, vert.texture_coord).rgb;
-	color = vec4(texColor * materialCoefficients.x * brightness, 1); // ambient
+	color = vec4(texColor * Ka * brightness, 1); // ambient
 	
 	// add directional light contribution
-	color.rgb += phong(n, -dirL.direction, v, dirL.color * texColor * brightness, materialCoefficients.y, dirL.color, materialCoefficients.z, shinyness, false, vec3(0));
+	color.rgb += phong(n, -dirL.direction, v, dirL.color * texColor * brightness, Kd, dirL.color, Ks, shinyness, false, vec3(0));
 	
 	// add point light contribution
 	//color.rgb += phong(n, pointL.position - vert.position_world, v, pointL.color * texColor * brightness, materialCoefficients.y, pointL.color, materialCoefficients.z, specularAlpha, true, pointL.attenuation);

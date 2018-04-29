@@ -127,6 +127,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 
 vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
 {
+	aiColor3D temp;
 	vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
@@ -152,6 +153,12 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 			textures.push_back(texture);
 			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 		}
+		mat->Get(AI_MATKEY_COLOR_AMBIENT, temp);
+		textures[i].Ka = temp.r;
+		mat->Get(AI_MATKEY_COLOR_DIFFUSE, temp);
+		textures[i].Kd = temp.r;
+		mat->Get(AI_MATKEY_COLOR_SPECULAR, temp);
+		textures[i].Ks = temp.r;
 	}
 
 	return textures;

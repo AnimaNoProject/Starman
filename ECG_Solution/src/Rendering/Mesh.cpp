@@ -70,6 +70,10 @@ void Mesh::Draw() {
 	_shader->setUniform("model", accumModel);
 	_shader->setUniform("normals", mat3(transpose(inverse(accumModel))));
 
+	_shader->setUniform("Ka", _textures[0].Ka);
+	_shader->setUniform("Kd", _textures[0].Kd);
+	_shader->setUniform("Ks", _textures[0].Ks);
+
 	// draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
