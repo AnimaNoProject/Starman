@@ -27,7 +27,7 @@ static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLen
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL);
+void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun, PointLight lights[]);
 void initializeWorld(RUnit& world, _Shader* shader);
 
 /* --------------------------------------------- */
@@ -45,6 +45,7 @@ static bool _down = false;
 static bool _debug_camera = false;
 static double _fps;
 static float _brightness;
+static PointLight lights[2];
 
 /* --------------------------------------------- */
 // Main
@@ -81,7 +82,7 @@ int main(int argc, char** argv)
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // Request OpenGL version 4.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // Request core profile													  
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);  // Create an OpenGL debug context 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -138,12 +139,15 @@ int main(int argc, char** argv)
 	// Shader
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
-	
+
 	/* --------------------------------------------- */
 	// Light
 	/* --------------------------------------------- */
-	DirectionalLight dirL(glm::vec3(0.8f), glm::vec3(1, 0, 0));
-	PointLight pointL(glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.4f, 0.1f));
+	DirectionalLight sun(glm::vec3(0.8f), glm::vec3(1, 0, 0));
+	PointLight pointL(glm::vec3(1, 1, 1), glm::vec3(-2, -2, -2), glm::vec3(1.0f, 0.4f, 0.1f));
+	PointLight pointL2(glm::vec3(1, 1, 1), glm::vec3(2, 2, 2), glm::vec3(1.0f, 0.4f, 0.1f));
+	lights[0] = pointL;
+	lights[1] = pointL2;
 
 	/* --------------------------------------------- */
 	// World
@@ -211,7 +215,7 @@ int main(int argc, char** argv)
 			world.update(mat4(1), t_now);
 
 			// Render
-			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, dirL, pointL);
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun, lights);
 			world.draw();
 			player.draw();
 
@@ -257,8 +261,9 @@ void initializeWorld(RUnit& world, _Shader* shader)
 	}
 }
 
-void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL)
+void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun, PointLight lights[])
 {
+
 	// shader
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
@@ -266,9 +271,22 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL
 	shader->setUniform("brightness", _brightness);
 
 	shader->setUniform("shinyness", 14.0f);
-	
-	shader->setUniform("dirL.color", dirL.color);
-	shader->setUniform("dirL.direction", dirL.direction);
+
+	shader->setUniform("sun.color", sun.color);
+	shader->setUniform("sun.direction", sun.direction);
+
+	/*
+	for (unsigned int i = 0; i < 2; i++) {
+		stringstream os;
+		stringstream color;
+		stringstream attentuation;
+		os << "pl[" << i << "].position";
+		shader->setUniform(os.str().c_str(), lights[i].position);
+		color << "pl[" << i << "].color";
+		shader->setUniform(color.str().c_str(), lights[i].color);
+		attentuation << "pl[" << i << "].attenuation";
+		shader->setUniform(attentuation.str().c_str(), lights[i].attenuation);
+	}*/
 }
 
 

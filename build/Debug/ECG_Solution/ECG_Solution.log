@@ -1,24 +1,16 @@
-﻿  RPlayer.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  RUnit.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(25): warning C4018: '<': signed/unsigned mismatch
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(47): warning C4018: '<': signed/unsigned mismatch
-  Main.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(173): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(193): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(204): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(209): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(245): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(246): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(247): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(248): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+﻿  Main.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(177): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(197): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(208): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(213): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(249): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(250): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(251): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(252): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(253): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(254): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Mesh.cpp
-  Model.cpp
-  Generating Code...
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(255): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(256): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(257): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(258): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

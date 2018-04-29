@@ -20,13 +20,15 @@ uniform float shinyness;
 uniform struct DirectionalLight {
 	vec3 color;
 	vec3 direction;
-} dirL;
+} sun;
 
-uniform struct PointLight {
+struct PointLight {
 	vec3 color;
 	vec3 position;
 	vec3 attenuation;
-} pointL;
+};
+
+uniform PointLight[2] pl;
 
 vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC, float specularF, float alpha, bool attenuate, vec3 attenuation) {
 	float d = length(l);
@@ -45,11 +47,14 @@ void main()
 	vec3 texColor = texture(texture_diff, vert.texture_coord).rgb;
 	color = vec4(texColor * Ka * brightness, 1); // ambient
 	
-	// add directional light contribution
-	color.rgb += phong(n, -dirL.direction, v, dirL.color * texColor * brightness, Kd, dirL.color, Ks, shinyness, false, vec3(0));
+	// sun
+	color.rgb += phong(n, -sun.direction, v, sun.color * texColor * brightness, Kd, sun.color, Ks, shinyness, false, vec3(0));
 	
-	// add point light contribution
-	//color.rgb += phong(n, pointL.position - vert.position_world, v, pointL.color * texColor * brightness, materialCoefficients.y, pointL.color, materialCoefficients.z, specularAlpha, true, pointL.attenuation);
+	/*
+	// point lights
+	for (int light= 0; light < 2; light++){
+		color.rgb += phong(n, pl[light].position - vert.position_world, v, pl[light].color * texColor * brightness, Kd, pl[light].color, Ks, shinyness, true, pl[light].attenuation);
+	}*/
 }
 
 
