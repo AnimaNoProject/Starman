@@ -12,6 +12,7 @@
 #include "GameObjects/PlayerCamera.h"
 #include <assimp/Importer.hpp>
 #include <physx-3.4\PxPhysicsAPI.h>
+#include "GameObjects\Light.h"
 
 using namespace physx;
 using namespace glm;
@@ -26,7 +27,7 @@ static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLen
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void setPerFrameUniforms(_Shader* program, Camera& camera);
+void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL);
 void initializeWorld(RUnit& world, _Shader* shader);
 
 /* --------------------------------------------- */
@@ -129,16 +130,21 @@ int main(int argc, char** argv)
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// set some GL defaults
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
-
 
 	/* --------------------------------------------- */
 	// Shader
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
 	
+	/* --------------------------------------------- */
+	// Light
+	/* --------------------------------------------- */
+	DirectionalLight dirL(glm::vec3(0.8f), glm::vec3(1, 0, 0));
+	PointLight pointL(glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.4f, 0.1f));
+
 	/* --------------------------------------------- */
 	// World
 	/* --------------------------------------------- */
@@ -161,7 +167,6 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	initializeWorld(world, shader.get());
 
-
 	/* --------------------------------------------- */
 	// Frame Independency
 	/* --------------------------------------------- */
@@ -181,6 +186,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	{
 		while (!glfwWindowShouldClose(_window)) {
+
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -204,9 +210,8 @@ int main(int argc, char** argv)
 			}
 			world.update(mat4(1), t_now);
 
-			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera);
-
 			// Render
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, dirL, pointL);
 			world.draw();
 			player.draw();
 
@@ -252,13 +257,19 @@ void initializeWorld(RUnit& world, _Shader* shader)
 	}
 }
 
-void setPerFrameUniforms(_Shader* shader, Camera& camera)
+void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL)
 {
 	// shader
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
 	shader->setUniform("camera_world", camera.getPosition());
 	shader->setUniform("brightness", _brightness);
+
+	shader->setUniform("materialCoefficients", vec3(0.1f, 0.8f, 0.3f));
+	shader->setUniform("shinyness", 14.0f);
+	
+	shader->setUniform("dirL.color", dirL.color);
+	shader->setUniform("dirL.direction", dirL.direction);
 }
 
 

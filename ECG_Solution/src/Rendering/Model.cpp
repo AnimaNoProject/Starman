@@ -1,9 +1,7 @@
 #include "Model.h"
 #include "Mesh.h"
-//#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "assimp/stb_image.h"
-//#endif
 
 Model::Model(char *path, _Shader* shader) : _shader(shader) {
 	loadModel(path);
@@ -19,7 +17,7 @@ void Model::loadModel(string path)
 {
 	// read file via ASSIMP
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);
 	// check for errors
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
@@ -109,6 +107,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	// specular: texture_specularN
 	// normal: texture_normalN
 
+
 	// 1. diffuse maps
 	vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -154,6 +153,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 		}
 	}
+
 	return textures;
 }
 
