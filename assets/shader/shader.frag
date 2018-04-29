@@ -1,22 +1,19 @@
 #version 430 core
 
+out vec4 color;
+
 in VertexData {
 	vec3 position_world;
 	vec3 normal_world;
 	vec2 texture_coord;
 } vert;
 
-out vec4 color;
-
 uniform sampler2D texture_diff;
 uniform float brightness;
 uniform vec3 camera_world;
 
-
-uniform vec3 materialCoefficients; // x = ambient, y = diffuse, z = specular 
-uniform float specularAlpha;
-uniform vec3 diffuseColor;
-
+uniform vec3 materialCoefficients;
+uniform float shinyness;
 
 uniform struct DirectionalLight {
 	vec3 color;
@@ -44,20 +41,13 @@ void main()
 	vec3 v = normalize(camera_world - vert.position_world);
 	
 	vec3 texColor = texture(texture_diff, vert.texture_coord).rgb;
-	color = vec4(texColor * materialCoefficients.x, 1); // ambient
+	color = vec4(texColor * materialCoefficients.x * brightness, 1); // ambient
 	
 	// add directional light contribution
-	color.rgb += phong(n, -dirL.direction, v, dirL.color * texColor, materialCoefficients.y, dirL.color, materialCoefficients.z, specularAlpha, false, vec3(0));
-			
-	// add point light contribution
-	color.rgb += phong(n, pointL.position - vert.position_world, v, pointL.color * texColor, materialCoefficients.y, pointL.color, materialCoefficients.z, specularAlpha, true, pointL.attenuation);
+	color.rgb += phong(n, -dirL.direction, v, dirL.color * texColor * brightness, materialCoefficients.y, dirL.color, materialCoefficients.z, shinyness, false, vec3(0));
 	
-
-
-	//vec3 b_color = texture(texture_diff, vert.texture_coord).rgb;
-	//b_color = b_color * 0.9; // ambient, replace 1 with material kA
-
-	//color = vec4(b_color, 1);
+	// add point light contribution
+	//color.rgb += phong(n, pointL.position - vert.position_world, v, pointL.color * texColor * brightness, materialCoefficients.y, pointL.color, materialCoefficients.z, specularAlpha, true, pointL.attenuation);
 }
 
 

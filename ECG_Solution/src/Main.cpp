@@ -28,7 +28,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL);
-
+void initializeWorld(RUnit& world, _Shader* shader);
 
 /* --------------------------------------------- */
 // Global variables
@@ -38,8 +38,6 @@ static bool _culling = true;
 static int _window_width;
 static int _window_height;
 static GLFWwindow* _window;
-static double _currentTime;
-static double _lastTime;
 static bool _right = false;
 static bool _left = false;
 static bool _up = false;
@@ -132,11 +130,9 @@ int main(int argc, char** argv)
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// set some GL defaults
-	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
-
 
 	/* --------------------------------------------- */
 	// Shader
@@ -146,7 +142,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Light
 	/* --------------------------------------------- */
-	DirectionalLight dirL(glm::vec3(0.8f), glm::vec3(0, -1, -1));
+	DirectionalLight dirL(glm::vec3(0.8f), glm::vec3(1, 0, 0));
 	PointLight pointL(glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.4f, 0.1f));
 
 	/* --------------------------------------------- */
@@ -169,28 +165,26 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
-	Model model("assets/objects/asteroid/asteroid.obj", shader.get());
-	RUnit unit(&model, vec3(0.05f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f), 0.050f, vec3(5.0f, 5.0f, 10.0f));
-	world.addChild(&unit);
+	initializeWorld(world, shader.get());
 
-	_lastTime = glfwGetTime();
+	/* --------------------------------------------- */
+	// Frame Independency
+	/* --------------------------------------------- */
 	float t_delta, t_now, t_start = glfwGetTime();
 	double x, y;
 
 	/* --------------------------------------------- */
 	// ICreate PhysX Foundation
 	/* --------------------------------------------- */
-	//PxDefaultErrorCallback gDefaultErrorCallback;
-	//PxDefaultAllocator gDefaultAllocatorCallback;
-	//PxFoundation* gFoundation = nullptr;
-	//gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
+	PxDefaultErrorCallback gDefaultErrorCallback;
+	PxDefaultAllocator gDefaultAllocatorCallback;
+	PxFoundation* gFoundation = nullptr;
+	gFoundation = PxCreateFoundation(PX_FOUNDATION_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
 	{
-		const double maxPeriod = 1.0 / _fps;
-
 		while (!glfwWindowShouldClose(_window)) {
 
 			// Clear backbuffer
@@ -199,36 +193,32 @@ int main(int argc, char** argv)
 			t_now = glfwGetTime();
 			t_delta = t_now - t_start;
 
-			if (t_delta >= maxPeriod)
+			t_start = t_now;
+
+			glfwGetCursorPos(_window, &x, &y);
+			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
+
+			// Update
+			if (_debug_camera)
 			{
-				t_start = t_now;
-
-				glfwGetCursorPos(_window, &x, &y);
-				glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
-
-				// Update
-				if (_debug_camera)
-				{
-					camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-					player.move(0, 0, false, false, false, false, t_delta);
-				}
-				else
-				{
-					player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-				}
-				world.update(mat4(1), t_now);
-
-
-				setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, dirL, pointL);
-				// Render
-				world.draw();
-				player.draw();
-
-				// Poll events and swap buffers
-				glfwPollEvents();
-				glfwSwapBuffers(_window);
-				//
+				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+				player.move(0, 0, false, false, false, false, t_delta);
 			}
+			else
+			{
+				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+			}
+			world.update(mat4(1), t_now);
+
+			// Render
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, dirL, pointL);
+			world.draw();
+			player.draw();
+
+			// Poll events and swap buffers
+			glfwPollEvents();
+			glfwSwapBuffers(_window);
+			//
 		}
 	}
 
@@ -246,6 +236,27 @@ int main(int argc, char** argv)
 	return EXIT_SUCCESS;
 }
 
+void initializeWorld(RUnit& world, _Shader* shader)
+{
+	float px, py, pz, r, tx, ty, tz, rx, ry, rz;
+	srand(12348);
+	for (unsigned int i = 0; i < 15; i++)
+	{
+		tx = rand() & 1;
+		ty = rand() & 1;
+		tz = rand() & 1;
+		px = rand() % 50;
+		py = rand() % 50;
+		pz = rand() % 50;
+		rx = rand() & 1;
+		ry = rand() & 1;
+		rz = rand() & 1;
+		r = rand() % 25 / 100;
+
+		world.addChild(new RUnit(new Model("assets/objects/asteroid/asteroid.obj", shader), vec3(tx, ty, tz), vec3(rx, ry, rz), r, vec3(px, py, pz)));
+	}
+}
+
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL, PointLight& pointL)
 {
 	// shader
@@ -254,17 +265,11 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& dirL
 	shader->setUniform("camera_world", camera.getPosition());
 	shader->setUniform("brightness", _brightness);
 
-
-	// Parametric material properties
-	shader->setUniform("materialCoefficients", vec3(0.1f, 0.7f, 0.1f));
-	shader->setUniform("specularAlpha", 2.0f);
-
+	shader->setUniform("materialCoefficients", vec3(0.1f, 0.8f, 0.3f));
+	shader->setUniform("shinyness", 14.0f);
+	
 	shader->setUniform("dirL.color", dirL.color);
 	shader->setUniform("dirL.direction", dirL.direction);
-	shader->setUniform("pointL.color", pointL.color);
-	shader->setUniform("pointL.position", pointL.position);
-	shader->setUniform("pointL.attenuation", pointL.attenuation);
-
 }
 
 

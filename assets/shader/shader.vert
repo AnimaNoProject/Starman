@@ -18,12 +18,10 @@ void main()
 {	
 	vert.normal_world = normals * aNormal;
 	vert.normal_world = normalize(vert.normal_world);
-	
+
 	vert.texture_coord = aTexCoords; 
-	
 	vec4 position_world = model * vec4(aPos, 1);
 	vert.position_world = position_world.xyz;
-	
 
     gl_Position = viewProj * position_world;
 }
