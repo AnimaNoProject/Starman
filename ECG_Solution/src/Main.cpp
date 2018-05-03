@@ -42,6 +42,7 @@ static bool _right = false;
 static bool _left = false;
 static bool _up = false;
 static bool _down = false;
+static bool _shoot = false;
 static bool _debug_camera = false;
 static double _fps;
 static float _brightness;
@@ -165,7 +166,7 @@ int main(int argc, char** argv)
 	// Player
 	/* --------------------------------------------- */
 	Model playerModel("assets/objects/starman_ship/ship.obj", shader.get());
-	RPlayer player(&playerModel, &pcamera);
+	RPlayer player(&playerModel, &pcamera, shader.get());
 
 	/* --------------------------------------------- */
 	// World Objects
@@ -208,11 +209,11 @@ int main(int argc, char** argv)
 			if (_debug_camera)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-				player.move(0, 0, false, false, false, false, t_delta);
+				player.move(0, 0, false, false, false, false, false, t_delta);
 			}
 			else
 			{
-				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
+				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shoot, t_delta);
 			}
 			world.update(mat4(1), t_now);
 
@@ -294,6 +295,10 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun,
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
+		_shoot = true;
+	else if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
+		_shoot = false;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)

@@ -1,0 +1,13 @@
+# Blender MTL File: 'shots.blend'
+# Material Count: 1
+
+newmtl Laser
+Ns 96.078431
+Ka 0.933747 0.933747 0.933747
+Kd 0.679746 0.765382 0.800000
+Ks 0.051760 0.051760 0.051760
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd shots.png
