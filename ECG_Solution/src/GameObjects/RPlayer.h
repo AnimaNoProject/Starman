@@ -21,7 +21,7 @@ private:
 	_Shader* _shader;
 	Model* _shot;
 	float timepassed;
-	float cooldown = 1.0f;
+	float cooldown = 0.25f;
 public:
 	RPlayer();
 	RPlayer(Model* model);

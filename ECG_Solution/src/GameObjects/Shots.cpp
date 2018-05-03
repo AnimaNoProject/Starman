@@ -21,5 +21,4 @@ void Shots::draw()
 void Shots::update(float deltaTime)
 {
 	_position += _direction * (float)(deltaTime * 50.0f);
-	//_model->setTransformMatrix(translate(mat4(1), _position));
 }

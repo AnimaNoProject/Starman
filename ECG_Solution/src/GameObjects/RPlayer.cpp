@@ -16,7 +16,6 @@ RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _re
 	_shader = shader;
 	_position = vec3(0.0f, 0.0f, -5.0f);
 	_shot = new Model("assets/objects/starman_ship/shots.obj", _shader);
-	//_shot = &Model("assets/objects/starman_ship/shots.obj", _shader);
 	timepassed = 0;
 }
 
@@ -78,7 +77,6 @@ void RPlayer::shoot(float deltaTime)
 	if (timepassed > cooldown)
 	{
 		shots.push_back(new Shots(_shot, _dir, _position));
-		//shots.push_back(new Shots(new Model("assets/objects/starman_ship/shots.obj", _shader), _dir, _position));
 		timepassed = 0;
 	}
 }

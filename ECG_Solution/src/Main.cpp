@@ -47,6 +47,7 @@ static bool _debug_camera = false;
 static double _fps;
 static float _brightness;
 static PointLight lights[2];
+static Model* asteroid_model;
 
 /* --------------------------------------------- */
 // Main
@@ -171,6 +172,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
+	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
 	initializeWorld(world, shader.get());
 
 	/* --------------------------------------------- */
@@ -182,6 +184,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// ICreate PhysX Foundation
 	/* --------------------------------------------- */
+	
 	/*
 	PxDefaultErrorCallback gDefaultErrorCallback;
 	PxDefaultAllocator gDefaultAllocatorCallback;
@@ -245,22 +248,10 @@ int main(int argc, char** argv)
 
 void initializeWorld(RUnit& world, _Shader* shader)
 {
-	float px, py, pz, r, tx, ty, tz, rx, ry, rz;
 	srand(12348);
-	for (unsigned int i = 0; i < 15; i++)
+	for (unsigned int i = 0; i < 75; i++)
 	{
-		tx = rand() & 1;
-		ty = rand() & 1;
-		tz = rand() & 1;
-		px = rand() % 50;
-		py = rand() % 50;
-		pz = rand() % 50;
-		rx = rand() & 1;
-		ry = rand() & 1;
-		rz = rand() & 1;
-		r = rand() % 25 / 100;
-
-		world.addChild(new RUnit(new Model("assets/objects/asteroid/asteroid.obj", shader), vec3(tx, ty, tz), vec3(rx, ry, rz), r, vec3(px, py, pz)));
+		world.addChild(new RUnit(asteroid_model));
 	}
 }
 
