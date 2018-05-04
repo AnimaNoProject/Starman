@@ -29,7 +29,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun, PointLight lights[]);
-void initializeWorld(RUnit& world, _Shader* shader);
+void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
 
 /* --------------------------------------------- */
 // Global variables
@@ -159,6 +159,7 @@ int main(int argc, char** argv)
 	// World
 	/* --------------------------------------------- */
 	RUnit world(mat4(1));
+	REnemy enemies(mat4(1));
 
 	/* --------------------------------------------- */
 	// Cameras
@@ -177,7 +178,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
-	initializeWorld(world, shader.get());
+	initializeWorld(world, shader.get(), enemies);
 
 	/* --------------------------------------------- */
 	// Frame Independency
@@ -223,10 +224,13 @@ int main(int argc, char** argv)
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
 			}
 			world.update(mat4(1), t_now);
+			enemies.update(mat4(1), t_now);
+			enemies.takeHint(player.getPosition(), t_delta);
 
 			// Render
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun, lights);
 			world.draw();
+			enemies.draw();
 			player.draw();
 
 			// Poll events and swap buffers
@@ -250,7 +254,7 @@ int main(int argc, char** argv)
 	return EXIT_SUCCESS;
 }
 
-void initializeWorld(RUnit& world, _Shader* shader)
+void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 	for (unsigned int i = 0; i < 75; i++)
@@ -259,7 +263,7 @@ void initializeWorld(RUnit& world, _Shader* shader)
 	}
 	for (unsigned int i = 0; i < 7; i++)
 	{
-		world.addChild(new REnemy(enemy_model));
+		enemies.addChild(new REnemy(enemy_model, shader));
 	}
 }
 

@@ -36,6 +36,10 @@ RUnit::RUnit(mat4 defaultTransformation)
 	_defaultTransformation = defaultTransformation;
 }
 
+RUnit::RUnit()
+{
+}
+
 RUnit::~RUnit()
 {
 }
