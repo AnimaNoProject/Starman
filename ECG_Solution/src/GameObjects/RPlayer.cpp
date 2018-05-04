@@ -16,14 +16,14 @@ RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _re
 	_shader = shader;
 	_position = vec3(0.0f, 0.0f, -5.0f);
 	_shot = new Model("assets/objects/starman_ship/shots.obj", _shader);
-	timepassed = 0;
+	timepassedR = timepassedL = 0;
 }
 
 RPlayer::~RPlayer()
 {
 }
 
-void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, bool shooting, float deltaTime)
+void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, bool shootL, bool shootR, float deltaTime)
 {
 	if (up)
 		(_real_speed >= 15) ? _real_speed = 15 : _real_speed += 1 * deltaTime;
@@ -61,23 +61,31 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 
 	_camera->update(x, y, up, down, left, right, deltaTime);
-	
+
 	for (int i = 0; i < this->shots.size(); i++)
 	{
 		this->shots.at(i)->update(deltaTime);
 	}
 	
-	if(shooting)
-		shoot(deltaTime);
+	if(shootL || shootR)
+		shoot(deltaTime, shootL, shootR);
 }
 
-void RPlayer::shoot(float deltaTime)
+void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 {
-	timepassed = timepassed + deltaTime;
-	if (timepassed > cooldown)
+	timepassedL += deltaTime;
+	timepassedR += deltaTime;
+
+	if (timepassedL > cooldown && shootL)
 	{
-		shots.push_back(new Shots(_shot, _dir, _position));
-		timepassed = 0;
+		shots.push_back(new Shots(_shot, _dir, _position, _up, -_right));
+		timepassedL = 0;
+	}
+
+	if (timepassedR > cooldown && shootR)
+	{
+		shots.push_back(new Shots(_shot, _dir, _position, _up, _right));
+		timepassedR = 0;
 	}
 }
 

@@ -1,10 +1,13 @@
 #include "Shots.h"
 
-Shots::Shots(Model* model, vec3 direction, vec3 position)
+Shots::Shots(Model* model, vec3 direction, vec3 position, vec3 up, vec3 right)
 {
 	_model = model;
 	_direction = direction;
 	_position = position;
+	_position += direction * 2.0f;
+	_position -= up * 2.0f;
+	_position -= right * 2.0f;
 }
 
 Shots::~Shots()
@@ -20,5 +23,5 @@ void Shots::draw()
 
 void Shots::update(float deltaTime)
 {
-	_position += _direction * (float)(deltaTime * 50.0f);
+	_position += _direction * (float)(deltaTime * 100.0f);
 }

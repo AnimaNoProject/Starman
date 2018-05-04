@@ -20,15 +20,16 @@ private:
 	vec3 _dir;
 	_Shader* _shader;
 	Model* _shot;
-	float timepassed;
+	float timepassedL;
+	float timepassedR;
 	float cooldown = 0.25f;
 public:
 	RPlayer();
 	RPlayer(Model* model);
 	RPlayer(Model* model, Camera* camera, _Shader* shader);
 	~RPlayer();
-	void move(float x, float y, bool up, bool down, bool left, bool right, bool shooting, float deltaTime);
-	void shoot(float deltaTime);
+	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
+	void shoot(float deltaTime, bool shootL, bool shootR);
 	void draw();
 };
 
