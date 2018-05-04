@@ -8,6 +8,7 @@
 #include "GameObjects/Camera.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "GameObjects/RUnit.h"
+#include "GameObjects/REnemy.h"
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
 #include <assimp/Importer.hpp>
@@ -49,6 +50,7 @@ static double _fps;
 static float _brightness;
 static PointLight lights[2];
 static Model* asteroid_model;
+static Model* enemy_model;
 
 /* --------------------------------------------- */
 // Main
@@ -173,6 +175,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
+	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
 	initializeWorld(world, shader.get());
 
@@ -253,6 +256,10 @@ void initializeWorld(RUnit& world, _Shader* shader)
 	for (unsigned int i = 0; i < 75; i++)
 	{
 		world.addChild(new RUnit(asteroid_model));
+	}
+	for (unsigned int i = 0; i < 7; i++)
+	{
+		world.addChild(new REnemy(enemy_model));
 	}
 }
 

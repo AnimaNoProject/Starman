@@ -1,0 +1,19 @@
+# Blender MTL File: 'drone.blend'
+# Material Count: 1
+
+newmtl Material
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.698953 0.685817 0.675484
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd drone.png
+map_Ka drone.png
+map_Ke drone.png
+map_Ks drone.png
+map_Ns drone.png
+map_Tr drone.png
+map_d drone.png

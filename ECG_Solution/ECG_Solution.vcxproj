@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\GameObjects\REnemy.cpp" />
     <ClCompile Include="src\GameObjects\Shots.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
@@ -9,6 +10,7 @@
     <ClCompile Include="src\GameObjects\RUnit.cpp" />
     <ClCompile Include="src\GameObjects\Camera.cpp" />
     <ClCompile Include="src\Shader\_Shader.cpp" />
+    <ClInclude Include="src\GameObjects\REnemy.h" />
     <ClInclude Include="src\GameObjects\Shots.h" />
     <ClInclude Include="src\GameObjects\Light.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
