@@ -1,25 +1,8 @@
-﻿  RPlayer.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(56): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-  RUnit.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(25): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(47): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-  Main.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(89): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(178): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(199): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(210): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(215): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(251): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(252): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(253): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(254): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(255): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(256): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(257): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(258): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(259): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(260): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
-  Mesh.cpp
-  Model.cpp
-  Code wird generiert...
+﻿  Main.cpp
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: Unerwartete Token nach Präprozessordirektive - Zeilenvorschub erwartet.
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(109): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(207): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(220): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(231): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(236): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
   ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

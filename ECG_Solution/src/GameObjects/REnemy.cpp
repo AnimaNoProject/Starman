@@ -31,8 +31,8 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 
 	if (_model != nullptr)
 	{
-		if (dot(position - _posVec, position - _posVec) <= 300)
-		{
+		//if (dot(position - _posVec, position - _posVec) <= 300)
+		//{
 			timepassed += deltaTime;
 			if (timepassed > cooldown)
 			{
@@ -50,7 +50,9 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 				_shots.push_back(new Shots(_shot, position - _posVec, _posVec, _up, _right));
 				timepassed = 0;
 			}
-		}
+
+		//}
+		
 	}
 }
 

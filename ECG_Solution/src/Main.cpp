@@ -12,10 +12,14 @@
 #include "GameObjects/RPlayer.h"
 #include "GameObjects/PlayerCamera.h"
 #include <assimp/Importer.hpp>
-//#include <physx-3.4\PxPhysicsAPI.h>
+#include <physx-3.4\PxPhysicsAPI.h>
+#include <ctype.h>
 #include "GameObjects\Light.h"
 
-//using namespace physx;
+#pragma comment(lib, "PhysX3_x86.lib")
+#pragma comment(lib, "PhysX3Extensions.lib")
+
+using namespace physx;
 using namespace glm;
 using namespace std;
 
@@ -30,6 +34,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun, PointLight lights[]);
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
+// PhysX related methods
+//void initPhysics();
+
+
 
 /* --------------------------------------------- */
 // Global variables
@@ -51,6 +59,13 @@ static float _brightness;
 static PointLight lights[2];
 static Model* asteroid_model;
 static Model* enemy_model;
+static Model* box_model;
+/* --------------------------------------------- */
+// PhysX global variables
+/* --------------------------------------------- */
+/*static PxPhysics* gPhysicsSDK = NULL;
+static PxDefaultErrorCallback gDefaultErrorCallback;
+static PxDefaultAllocator gDefaultAllocatorCallback;*/
 
 /* --------------------------------------------- */
 // Main
@@ -142,6 +157,11 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 
 	/* --------------------------------------------- */
+	// Init PhysX
+	/* --------------------------------------------- */
+	//initPhysics();
+
+	/* --------------------------------------------- */
 	// Shader
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
@@ -178,6 +198,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
+	box_model = new Model("assets/objects/box/Kiste.obj", shader.get());
 	initializeWorld(world, shader.get(), enemies);
 
 	/* --------------------------------------------- */
@@ -185,16 +206,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	float t_delta, t_now, t_start = glfwGetTime();
 	double x, y;
-
-	/* --------------------------------------------- */
-	// ICreate PhysX Foundation
-	/* --------------------------------------------- */
 	
-	/*
-	PxDefaultErrorCallback gDefaultErrorCallback;
-	PxDefaultAllocator gDefaultAllocatorCallback;
-	PxFoundation* gFoundation = nullptr;
-	gFoundation = PxCreateFoundation(PX_FOUNDATION_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);*/
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -224,8 +236,9 @@ int main(int argc, char** argv)
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
 			}
 			world.update(mat4(1), t_now);
-			enemies.update(mat4(1), t_now);
 			enemies.takeHint(player.getPosition(), t_delta);
+			enemies.update(mat4(1), t_now);
+			
 
 			// Render
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun, lights);
@@ -261,6 +274,13 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	{
 		world.addChild(new RUnit(asteroid_model));
 	}
+
+	for (unsigned int i = 0; i < 30; i++)
+	{
+		
+		world.addChild(new RUnit(box_model));
+	}
+
 	for (unsigned int i = 0; i < 7; i++)
 	{
 		enemies.addChild(new REnemy(enemy_model, shader));
@@ -470,3 +490,15 @@ static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLen
 
 	return stringStream.str();
 }
+
+/* --------------------------------------------- */
+// PhysX related methods
+/* --------------------------------------------- */
+/*void initPhysics()
+{
+	PxFoundation* gFoundation = PxCreateFoundation(PX_FOUNDATION_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
+
+	if (!gFoundation)
+		cerr << "PxCreateFoundation failed!";
+
+}*/
