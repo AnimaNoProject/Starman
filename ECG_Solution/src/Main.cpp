@@ -15,6 +15,7 @@
 #include <physx-3.4\PxPhysicsAPI.h>
 #include <ctype.h>
 #include "GameObjects\Light.h"
+#include "Rendering\HUD.h"
 
 #pragma comment(lib, "PhysX3_x86.lib")
 #pragma comment(lib, "PhysX3Extensions.lib")
@@ -37,8 +38,6 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
 // PhysX related methods
 //void initPhysics();
 
-
-
 /* --------------------------------------------- */
 // Global variables
 /* --------------------------------------------- */
@@ -54,6 +53,7 @@ static bool _down = false;
 static bool _shootL = false;
 static bool _shootR = false;
 static bool _debug_camera = false;
+static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
 static PointLight lights[2];
@@ -122,6 +122,8 @@ int main(int argc, char** argv)
 	glewExperimental = true;
 	GLenum err = glewInit();
 
+	glViewport(0, 0, _window_width, _window_height);
+
 	// If GLEW wasn't initialized
 	if (err != GLEW_OK) {
 		glfwTerminate();
@@ -154,7 +156,6 @@ int main(int argc, char** argv)
 	// set some GL defaults
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
 
 	/* --------------------------------------------- */
 	// Init PhysX
@@ -165,6 +166,8 @@ int main(int argc, char** argv)
 	// Shader
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
+
+	std::shared_ptr<_Shader> hud_shader = std::make_shared<_Shader>("assets/shader/shaderHUD.vert", "assets/shader/shaderHUD.frag");
 
 	/* --------------------------------------------- */
 	// Light
@@ -200,6 +203,16 @@ int main(int argc, char** argv)
 	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
 	box_model = new Model("assets/objects/box/Kiste.obj", shader.get());
 	initializeWorld(world, shader.get(), enemies);
+	
+	/* --------------------------------------------- */
+	// World Objects
+	/* --------------------------------------------- */
+	HUD hud(hud_shader.get(), _window_height, _window_width);
+
+	if (!hud.initialize())
+	{
+		cerr << "Hud could not be initialized" << endl;
+	}
 
 	/* --------------------------------------------- */
 	// Frame Independency
@@ -224,7 +237,7 @@ int main(int argc, char** argv)
 
 			glfwGetCursorPos(_window, &x, &y);
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
-
+			
 			// Update
 			if (_debug_camera)
 			{
@@ -245,6 +258,9 @@ int main(int argc, char** argv)
 			world.draw();
 			enemies.draw();
 			player.draw();
+
+			// Render HUD
+			hud.render(t_delta, _debug_hud, player._health, player._real_speed);
 
 			// Poll events and swap buffers
 			glfwPollEvents();
@@ -289,7 +305,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun, PointLight lights[])
 {
-
+	glEnable(GL_DEPTH_TEST);
 	// shader
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
@@ -354,12 +370,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		_debug_camera = !_debug_camera;
 	}
-
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	else if (key == GLFW_KEY_F4 && action == GLFW_RELEASE)
 	{
-		_right = true;
+		_debug_hud = !_debug_hud;
 	}
-	else if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+
+	if (key == GLFW_KEY_D && action == GLFW_RELEASE)
 	{
 		_right = false;
 	}

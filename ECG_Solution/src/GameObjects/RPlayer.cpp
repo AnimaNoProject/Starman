@@ -9,7 +9,7 @@ RPlayer::RPlayer(Model* model)
 	_model = model;
 }
 
-RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _real_speed(0)
+RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _real_speed(0), _health(100)
 {
 	_model = model;
 	_camera = camera;

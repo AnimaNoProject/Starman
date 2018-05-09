@@ -15,9 +15,6 @@ using namespace std;
 
 class _Shader
 {
-private:
-	unsigned int getUniform(std::string uniform);
-
 protected:
 	GLuint vertexShader, fragmentShader, shader;
 	const GLchar* vertex_shader_source;
@@ -30,6 +27,7 @@ public:
 	string readFile(const char *filePath);
 	GLuint getShader();
 	void use();
+	unsigned int getUniform(std::string uniform);
 	void setUniform(std::string uniform, const int i);
 	void setUniform(std::string uniform, const unsigned int i);
 	void setUniform(std::string uniform, const float f);

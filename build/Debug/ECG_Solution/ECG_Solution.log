@@ -1,8 +1,5 @@
-﻿  Main.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: Unerwartete Token nach Präprozessordirektive - Zeilenvorschub erwartet.
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(109): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(207): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(220): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(231): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(236): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  HUD.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
+  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.cpp(71): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\Rendering\HUD.cpp" />
     <ClCompile Include="src\GameObjects\REnemy.cpp" />
     <ClCompile Include="src\GameObjects\Shots.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
@@ -10,6 +11,7 @@
     <ClCompile Include="src\GameObjects\RUnit.cpp" />
     <ClCompile Include="src\GameObjects\Camera.cpp" />
     <ClCompile Include="src\Shader\_Shader.cpp" />
+    <ClInclude Include="src\Rendering\HUD.h" />
     <ClInclude Include="src\GameObjects\REnemy.h" />
     <ClInclude Include="src\GameObjects\Shots.h" />
     <ClInclude Include="src\GameObjects\Light.h" />
@@ -21,6 +23,7 @@
     <ClInclude Include="src\GameObjects\Camera.h" />
     <ClInclude Include="src\INIReader.h" />
     <ClCompile Include="src\Main.cpp" />
+    <ClInclude Include="src\Rendering\Types.hpp" />
     <ClInclude Include="src\Shader\_Shader.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
@@ -109,7 +112,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;ECG_Library_Debug.lib;assimp-vc140-mt.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CookingDEBUG_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;ECG_Library_Debug.lib;assimp-vc140-mt.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CookingDEBUG_x86.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT;MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
@@ -135,7 +138,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;ECG_Library_Release.lib;assimp-vc140-mt.lib;PhysX3CharacterKinematicCHECKED_x86.lib;PhysX3CHECKED_x86.lib;PhysX3CommonCHECKED_x86.lib;PhysX3ExtensionsCHECKED.lib;PhysX3CookingCHECKED_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;ECG_Library_Release.lib;assimp-vc140-mt.lib;PhysX3CharacterKinematicCHECKED_x86.lib;PhysX3CHECKED_x86.lib;PhysX3CommonCHECKED_x86.lib;PhysX3ExtensionsCHECKED.lib;PhysX3CookingCHECKED_x86.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>

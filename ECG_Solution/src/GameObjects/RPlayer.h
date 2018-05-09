@@ -10,7 +10,6 @@ private:
 	vec3 _position;
 	Model* _model;
 	double _speed;
-	double _real_speed;
 	Camera* _camera;
 	float _yaw;
 	float _pitch;
@@ -28,6 +27,8 @@ public:
 	RPlayer(Model* model);
 	RPlayer(Model* model, Camera* camera, _Shader* shader);
 	~RPlayer();
+	double _real_speed;
+	int _health;
 	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
 	void shoot(float deltaTime, bool shootL, bool shootR);
 	void draw();
