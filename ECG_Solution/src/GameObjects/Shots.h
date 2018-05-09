@@ -8,7 +8,9 @@ private:
 	Model* _model;
 	vec3 _position;
 	vec3 _direction;
+	vec3 _startposition;
 public:
+	bool _toofar;
 	Shots(Model* model, vec3 direction, vec3 position, vec3 up, vec3 right);
 	~Shots();
 	void draw();

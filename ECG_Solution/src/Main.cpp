@@ -250,8 +250,7 @@ int main(int argc, char** argv)
 			}
 			world.update(mat4(1), t_now);
 			enemies.takeHint(player.getPosition(), t_delta);
-			enemies.update(mat4(1), t_now);
-			
+			enemies.update(mat4(1), t_delta);
 
 			// Render
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun, lights);

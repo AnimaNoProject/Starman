@@ -64,9 +64,15 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 
 	for (int i = 0; i < this->shots.size(); i++)
 	{
-		this->shots.at(i)->update(deltaTime);
+			this->shots.at(i)->update(deltaTime);
 	}
-	
+
+	for (int i = shots.size() - 1; i >= 0; i--)
+	{
+		if (shots.at(i)->_toofar)
+			shots.erase(shots.begin()+i);
+	}
+
 	if(shootL || shootR)
 		shoot(deltaTime, shootL, shootR);
 }
@@ -94,6 +100,7 @@ void RPlayer::draw()
 	_model->Draw();
 	for (int i = 0; i < this->shots.size(); i++)
 	{
-		this->shots.at(i)->draw();
+		if (this->shots.at(i) != nullptr)
+			this->shots.at(i)->draw();
 	}
 }

@@ -2,6 +2,7 @@
 #include "RUnit.h"
 #include "Camera.h"
 #include "../Rendering/Model.h"
+#include <algorithm>
 
 class RPlayer
 {

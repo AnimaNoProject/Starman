@@ -12,13 +12,8 @@ private:
 	vec3 _posVec;
 	float timepassed;
 	float cooldown = 1.0f;
-	vec3 _translation;
-	vec3 _rotation;
-	mat4 _scale;
 	float _degree;
-	mat4 _defaultTransformation;
 	mat4 _position;
-
 	mat4 _transformation;
 public:
 	REnemy(Model* model, _Shader* shader);
@@ -28,7 +23,6 @@ public:
 
 	virtual void draw();
 	void addChild(REnemy* unit);
-	virtual void setDefaultTransformation(vec3 translation, vec3 rotation, float degree);
 	virtual void update(mat4 transformation, float time);
 };
 
