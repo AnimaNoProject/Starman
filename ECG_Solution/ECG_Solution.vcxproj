@@ -23,7 +23,6 @@
     <ClInclude Include="src\GameObjects\Camera.h" />
     <ClInclude Include="src\INIReader.h" />
     <ClCompile Include="src\Main.cpp" />
-    <ClInclude Include="src\Rendering\Types.hpp" />
     <ClInclude Include="src\Shader\_Shader.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>

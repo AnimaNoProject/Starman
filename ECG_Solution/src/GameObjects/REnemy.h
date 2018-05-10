@@ -21,7 +21,7 @@ public:
 	void takeHint(vec3 position, float deltaTime);
 	~REnemy();
 
-	virtual void draw();
+	virtual long draw();
 	void addChild(REnemy* unit);
 	virtual void update(mat4 transformation, float time);
 };

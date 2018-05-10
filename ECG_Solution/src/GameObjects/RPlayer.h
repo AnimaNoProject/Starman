@@ -32,7 +32,7 @@ public:
 	int _health;
 	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
 	void shoot(float deltaTime, bool shootL, bool shootR);
-	void draw();
+	long draw();
 	vec3 getPosition() { return _position; }
 };
 

@@ -7,10 +7,12 @@ Model::Model(char *path, _Shader* shader) : _shader(shader) {
 	loadModel(path);
 }
 
-void Model::Draw()
+long Model::Draw()
 {
+	long triangles = 0;
 	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw();
+		triangles += meshes[i].Draw();
+	return triangles;
 }
 
 void Model::loadModel(string path)

@@ -44,17 +44,19 @@ RUnit::~RUnit()
 {
 }
 
-void RUnit::draw()
+long RUnit::draw()
 {
+	unsigned int triangle = 0;
 	if (_model != nullptr)
 	{
 		_model->setTransformMatrix(_transformation);
-		_model->Draw();
+		triangle += _model->Draw();
 	}
 	for (int i = 0; i < this->children.size(); i++)
 	{
-		this->children.at(i)->draw();
+		triangle += this->children.at(i)->draw();
 	}
+	return triangle;
 }
 
 void RUnit::addChild(RUnit* unit)

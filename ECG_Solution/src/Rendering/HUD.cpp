@@ -91,6 +91,10 @@ bool HUD::initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	_shader->use();
+	_shader->setUniform("projection", _projection);
+	_shader->setUniform("textColor", vec4(1.0f, 1.0f, 1.0f, 0.4f));
+
 	// initialization success!
 	return true;
 }
@@ -129,17 +133,10 @@ void HUD::renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm:
 	}
 }
 
-void HUD::render(float deltaTime, bool debug_mode, int healtpoints, int speed)
+void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, unsigned int speed, long triangles)
 {
-	char buffer[100];
+	char buffer[1000];
 	_shader->use();
-	_shader->setUniform("projection", _projection);
-	_shader->setUniform("textColor", vec4(1.0f, 1.0f, 1.0f, 0.4f));
-
-	glDisable(GL_DEPTH_TEST);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vao);
@@ -152,12 +149,13 @@ void HUD::render(float deltaTime, bool debug_mode, int healtpoints, int speed)
 	if (debug_mode)
 	{
 		sprintf(buffer, "Frametime: %f", deltaTime);
-		renderText(buffer, 300.0f, 25.0f, 0.6f, glm::vec3(0.5f, 0.5f, 0.5f));
+		renderText(buffer, 300.0f, 50.0f, 0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
 		sprintf(buffer, "FPS: %.0f", 1 / deltaTime);
-		renderText(buffer, 600.0f, 25.0f, 0.6f, glm::vec3(0.5f, 0.5f, 0.5f));
+		renderText(buffer, 600.0f, 50.0f, 0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
+		sprintf(buffer, "Rendered: %i Triangles", triangles);
+		renderText(buffer, 300.0f, 25.0f, 0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
 	}
 
-	glDisable(GL_BLEND);
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

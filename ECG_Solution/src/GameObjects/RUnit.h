@@ -21,7 +21,7 @@ public:
 	RUnit(mat4 defaultTransformation);
 	RUnit();
 	~RUnit();
-	virtual void draw();
+	virtual long draw();
 	void addChild(RUnit* unit);
 	virtual void setDefaultTransformation(vec3 translation, vec3 rotation, float degree);
 	virtual void update(mat4 transformation, float time);

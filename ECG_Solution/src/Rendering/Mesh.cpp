@@ -32,7 +32,7 @@ void Mesh::setupMesh() {
 	glBindVertexArray(0);
 }
 
-void Mesh::Draw() {
+long Mesh::Draw() {
 	// First step --> bind appropriate textures for the mesh
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -77,6 +77,8 @@ void Mesh::Draw() {
 	glBindVertexArray(0);
 	// Reset everything after configuration
 	glActiveTexture(GL_TEXTURE0);
+
+	return _indices.size()/3;
 }
 
 void Mesh::setTransformMatrixForMesh(mat4 transformMatrix)

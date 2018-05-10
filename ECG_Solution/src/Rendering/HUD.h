@@ -36,6 +36,5 @@ public:
 	~HUD();
 	bool initialize();
 	void renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
-	void render(float deltaTime, bool debug_mode, int healtpoints, int speed);
-	mat4 getProjection();
+	void render(float deltaTime, bool debug_mode, unsigned int healtpoints, unsigned int speed, long triangles);
 };

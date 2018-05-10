@@ -26,9 +26,9 @@ RPlayer::~RPlayer()
 void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, bool shootL, bool shootR, float deltaTime)
 {
 	if (up)
-		(_real_speed >= 15) ? _real_speed = 15 : _real_speed += 1 * deltaTime;
+		(_real_speed >= 25) ? _real_speed = 25 : _real_speed += 5 * deltaTime;
 	else if (down)
-		(_real_speed <= -15) ? _real_speed = -15 : _real_speed -= 1 * deltaTime;
+		(_real_speed <= -25) ? _real_speed = -25 : _real_speed -= 5 * deltaTime;
 
 	_speed = (floor((_real_speed * 2) + 0.5) / 2);
 
@@ -95,12 +95,14 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 	}
 }
 
-void RPlayer::draw()
+long RPlayer::draw()
 {
+	long triangles = 0;
 	_model->Draw();
 	for (int i = 0; i < this->shots.size(); i++)
 	{
 		if (this->shots.at(i) != nullptr)
-			this->shots.at(i)->draw();
+			triangles += this->shots.at(i)->draw();
 	}
+	return triangles;
 }

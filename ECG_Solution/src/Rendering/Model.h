@@ -27,7 +27,7 @@ public:
 	string directory; // Directory where the model is stored
 
 	Model(char *path, _Shader* shader); // Constructor
-	void Draw(); // Draw function
+	long Draw(); // Draw function
 	void setTransformMatrix(mat4 transformMatrix);
 	void resetModelMatrix();
 	void transform(mat4 transformation);

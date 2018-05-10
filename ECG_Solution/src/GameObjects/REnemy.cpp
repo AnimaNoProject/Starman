@@ -27,7 +27,7 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 
 	if (_model != nullptr)
 	{
-		if(distance(position, _posVec) < 6000)
+		if(distance(position, _posVec) < 7000)
 		{
 			timepassed += deltaTime;
 			if (timepassed > cooldown)
@@ -56,21 +56,23 @@ REnemy::~REnemy()
 }
 
 
-void REnemy::draw()
+long REnemy::draw()
 {
+	unsigned int triangles = 0;
 	if (_model != nullptr)
 	{
 		_model->setTransformMatrix(_transformation);
-		_model->Draw();
+		triangles += _model->Draw();
 	}
 	for (int i = 0; i < this->children.size(); i++)
 	{
-		this->children.at(i)->draw();
+		triangles += this->children.at(i)->draw();
 	}
 	for (int i = 0; i < this->_shots.size(); i++)
 	{
-		_shots.at(i)->draw();
+		triangles += _shots.at(i)->draw();
 	}
+	return triangles;
 }
 
 void REnemy::addChild(REnemy* unit)

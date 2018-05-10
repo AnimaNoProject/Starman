@@ -156,6 +156,8 @@ int main(int argc, char** argv)
 	// set some GL defaults
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/* --------------------------------------------- */
 	// Init PhysX
@@ -219,7 +221,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	float t_delta, t_now, t_start = glfwGetTime();
 	double x, y;
-	
+	long triangles;
 
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
@@ -253,13 +255,14 @@ int main(int argc, char** argv)
 			enemies.update(mat4(1), t_delta);
 
 			// Render
+			triangles = 0;
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun, lights);
-			world.draw();
-			enemies.draw();
-			player.draw();
+			triangles += world.draw();
+			triangles += enemies.draw();
+			triangles += player.draw();
 
 			// Render HUD
-			hud.render(t_delta, _debug_hud, player._health, player._real_speed);
+			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
 
 			// Poll events and swap buffers
 			glfwPollEvents();
@@ -354,27 +357,36 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
-	else if (key == GLFW_KEY_F1 && action == GLFW_RELEASE)
+
+	else if (key == GLFW_KEY_F3 && action == GLFW_RELEASE)
 	{
 		_wireframe = !_wireframe;
 		glPolygonMode(GL_FRONT_AND_BACK, _wireframe ? GL_LINE : GL_FILL);
 	}
-	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
+
+	else if (key == GLFW_KEY_F8 && action == GLFW_RELEASE)
 	{
 		_culling = !_culling;
 		if (_culling) glEnable(GL_CULL_FACE);
 		else glDisable(GL_CULL_FACE);
 	}
-	else if (key == GLFW_KEY_F3 && action == GLFW_RELEASE)
+
+	else if (key == GLFW_KEY_F9 && action == GLFW_RELEASE)
 	{
 		_debug_camera = !_debug_camera;
 	}
-	else if (key == GLFW_KEY_F4 && action == GLFW_RELEASE)
+
+	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
 	{
 		_debug_hud = !_debug_hud;
 	}
 
-	if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	{
+		_right = true;
+	}
+	else if (key == GLFW_KEY_D && action == GLFW_RELEASE)
 	{
 		_right = false;
 	}

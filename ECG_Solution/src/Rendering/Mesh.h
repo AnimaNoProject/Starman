@@ -45,7 +45,7 @@ public:
 	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, _Shader* shader);
 
 	// Method for rendering the models/meshes
-	void Draw();
+	long Draw();
 	// Method for setting the transformation matrix of the mesh
 	void setTransformMatrixForMesh(mat4 transformMatrix);
 	// Method to reset the transformation matrix of the mesh
