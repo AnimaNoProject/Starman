@@ -16,19 +16,49 @@ RUnit::RUnit(Model * model)
 	tx = rand() & 1;
 	ty = rand() & 1;
 	tz = rand() & 1;
-	px = rand() % 200;
-	py = rand() % 200;
-	pz = rand() % 200;
+	px = rand() % 400;
+	py = rand() % 400;
+	pz = rand() % 400;
 	rx = rand() & 1;
 	ry = rand() & 1;
 	rz = rand() & 1;
-	s = rand() % 5;
+	s = rand() % 10;
 	r = rand() % 25 / 100;
 	_translation = vec3(tx, ty, tz);
 	_position = translate(mat4(1), vec3(px, py, pz));
 	_rotation = vec3(rx, ry, rz);
 	_scale = scale(mat4(1), vec3(s, s, s));
 	_degree = r;
+
+	_shape = new btConvexHullShape();
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
+			((btConvexHullShape*)_shape)->addPoint(btv);
+		}
+	}
+
+	btQuaternion rotation;
+	rotation.setEulerZYX(rz, ry, rx);
+	btVector3 position = btVector3(px, py, pz);
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
+
+	btScalar mass = s;
+	btVector3 bodyInertia;
+	_shape->calculateLocalInertia(mass, bodyInertia);
+
+	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
+
+	bodyCI.m_restitution = 0.5f;
+	bodyCI.m_friction = 0.001f;
+
+	_body = new btRigidBody(bodyCI);
+
+	_body->setLinearFactor(btVector3(1, 1, 0));
+
+	_body->setLinearVelocity(btVector3(tx, ty, tz));
 }
 
 RUnit::RUnit(mat4 defaultTransformation)
@@ -42,6 +72,12 @@ RUnit::RUnit()
 
 RUnit::~RUnit()
 {
+	if (_body)
+	{
+		delete _body->getMotionState();
+		delete _body;
+	}
+	delete _shape;
 }
 
 long RUnit::draw()
@@ -73,10 +109,18 @@ void RUnit::setDefaultTransformation(vec3 translation, vec3 rotation, float degr
 
 void RUnit::update(mat4 transformation, float time)
 {
-	if(_model != nullptr)
-		_transformation = transformation * _position * translate(mat4(1), _translation * time) * rotate(mat4(1), _degree * time, _rotation) * _scale;
+	if (_model != nullptr)
+	{
+		btTransform transform = _body->getWorldTransform();
+		btQuaternion rota = transform.getRotation();
+		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
+		_degree = rota.getAngle();
+		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
+	}
+		//_transformation = transformation * _position * translate(mat4(1), _translation * time) * rotate(mat4(1), _degree * time, _rotation) * _scale;
 	for (int i = 0; i < this->children.size(); i++)
 	{
 		this->children.at(i)->update(transformation, time);
 	}
 }
+

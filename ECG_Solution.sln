@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.0
 MinimumVisualStudioVersion = 15.0.0
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ECG_Solution", "ECG_Solution\ECG_Solution.vcxproj", "{89281764-4192-41E0-B813-DFB62C075125}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletCollision", "Bullet\build3\vs2010\BulletCollision.vcxproj", "{B91153C5-259D-C089-2EAE-437E9AB81C8A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletDynamics", "Bullet\build3\vs2010\BulletDynamics.vcxproj", "{45122E0F-31E0-2115-1A74-923B06E1FD79}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinearMath", "Bullet\build3\vs2010\LinearMath.vcxproj", "{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,8 +21,23 @@ Global
 		{89281764-4192-41E0-B813-DFB62C075125}.Debug|x86.Build.0 = Debug|Win32
 		{89281764-4192-41E0-B813-DFB62C075125}.Release|x86.ActiveCfg = Release|Win32
 		{89281764-4192-41E0-B813-DFB62C075125}.Release|x86.Build.0 = Release|Win32
+		{B91153C5-259D-C089-2EAE-437E9AB81C8A}.Debug|x86.ActiveCfg = Debug|Win32
+		{B91153C5-259D-C089-2EAE-437E9AB81C8A}.Debug|x86.Build.0 = Debug|Win32
+		{B91153C5-259D-C089-2EAE-437E9AB81C8A}.Release|x86.ActiveCfg = Release|Win32
+		{B91153C5-259D-C089-2EAE-437E9AB81C8A}.Release|x86.Build.0 = Release|Win32
+		{45122E0F-31E0-2115-1A74-923B06E1FD79}.Debug|x86.ActiveCfg = Debug|Win32
+		{45122E0F-31E0-2115-1A74-923B06E1FD79}.Debug|x86.Build.0 = Debug|Win32
+		{45122E0F-31E0-2115-1A74-923B06E1FD79}.Release|x86.ActiveCfg = Release|Win32
+		{45122E0F-31E0-2115-1A74-923B06E1FD79}.Release|x86.Build.0 = Release|Win32
+		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.Debug|x86.ActiveCfg = Debug|Win32
+		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.Debug|x86.Build.0 = Debug|Win32
+		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.Release|x86.ActiveCfg = Release|Win32
+		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8ECE6BD7-AEE4-4FDD-B8B1-ADDBCD91A578}
 	EndGlobalSection
 EndGlobal

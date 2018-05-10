@@ -28,8 +28,6 @@ struct PointLight {
 	vec3 attenuation;
 };
 
-uniform PointLight[2] pl;
-
 vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC, float specularF, float alpha, bool attenuate, vec3 attenuation) {
 	float d = length(l);
 	l = normalize(l);
@@ -53,12 +51,7 @@ void main()
 	
 	// sun
 	color.rgb += phong(n, -sun.direction, v, sun.color * texColor * brightness, Kd, sun.color, Ks, shinyness, false, vec3(0));
-	
-	/*
-	// point lights
-	for (int light= 0; light < 2; light++){
-		color.rgb += phong(n, pl[light].position - vert.position_world, v, pl[light].color * texColor * brightness, Kd, pl[light].color, Ks, shinyness, true, pl[light].attenuation);
-	}*/
+
 }
 
 

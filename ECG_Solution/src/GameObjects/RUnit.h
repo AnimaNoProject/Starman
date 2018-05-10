@@ -1,6 +1,7 @@
 #pragma once
 #include "../Rendering/Model.h"
 #include "Shots.h"
+#include "btBulletDynamicsCommon.h"
 
 class RUnit
 {
@@ -16,6 +17,8 @@ protected:
 	Model* _model;
 	mat4 _transformation;
 public:
+	btRigidBody * _body;
+	btCollisionShape* _shape;
 	RUnit(Model* model, vec3 translation, vec3 rotation, float degree, vec3 position);
 	RUnit(Model* model);
 	RUnit(mat4 defaultTransformation);
