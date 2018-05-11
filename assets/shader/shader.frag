@@ -48,10 +48,8 @@ void main()
 	
 	vec3 texColor = texture(texture_diff, vert.texture_coord).rgb;
 	color = vec4(texColor * Ka * brightness, 1); // ambient
-	
 	// sun
 	color.rgb += phong(n, -sun.direction, v, sun.color * texColor * brightness, Kd, sun.color, Ks, shinyness, false, vec3(0));
-
 }
 
 

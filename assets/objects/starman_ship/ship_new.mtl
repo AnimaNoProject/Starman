@@ -11,7 +11,7 @@ Ni 1.000000
 d 0.800000
 illum 2
 map_Kd ship_new.png
-map_Ka ship_new - Copy.png
+map_Ka ship_new.png
 
 newmtl Metal
 Ns 103.921569
@@ -23,4 +23,4 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ship_new.png
-map_Ka ship_new - Copy.png
+map_Ka ship_new.png
