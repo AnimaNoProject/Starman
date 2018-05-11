@@ -182,7 +182,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Player
 	/* --------------------------------------------- */
-	Model playerModel("assets/objects/starman_ship/ship.obj", shader.get());
+	Model playerModel("assets/objects/starman_ship/ship_new.obj", shader.get());
 	RPlayer player(&playerModel, &pcamera, shader.get());
 
 	/* --------------------------------------------- */
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
 			if (_debug_camera)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
-				player.move(0, 0, false, false, false, false, false, false, t_delta);
+				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
 			}
 			else
 			{

@@ -9,9 +9,9 @@ Shots::Shots(Model* model, vec3 direction, vec3 position, vec3 up, vec3 right)
 	// set starting position
 	_direction = direction;
 	_position = position;
-	_position += direction * 2.0f;
+	_position += direction * 8.0f;
 	_position -= up * 2.0f;
-	_position -= right * 2.0f;
+	_position -= right;
 
 	_startposition = _position;
 
