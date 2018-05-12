@@ -15,7 +15,7 @@
 #include "../Shader/_Shader.h"
 struct Character {
 	GLuint TextureID;
-	glm::ivec2 Size;   
+	glm::ivec2 Size;
 	glm::ivec2 Bearing;  // offset from baseline to top left
 	GLuint Advance;  // horizontal offset
 };
