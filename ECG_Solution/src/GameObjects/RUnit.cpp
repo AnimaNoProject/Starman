@@ -7,6 +7,36 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	_rotation = rotation;
 	_degree = degree;
 	_position = translate(mat4(1), position);
+
+	_shape = new btConvexHullShape();
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
+			((btConvexHullShape*)_shape)->addPoint(btv);
+		}
+	}
+
+	btQuaternion rotationQuat;
+	rotationQuat.setEulerZYX(rotation.x, rotation.y, rotation.z);
+	btVector3 positionbT = btVector3(position.x, position.y, position.z);
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotationQuat, positionbT));
+
+	btScalar mass = 1500;
+	btVector3 bodyInertia;
+	_shape->calculateLocalInertia(mass, bodyInertia);
+
+	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
+
+	bodyCI.m_restitution = 0.5f;
+	bodyCI.m_friction = 0.001f;
+
+	_body = new btRigidBody(bodyCI);
+
+	_body->setLinearFactor(btVector3(1, 1, 0));
+
+	_body->setLinearVelocity(btVector3(translation.x, translation.y, translation.z));
 }
 
 RUnit::RUnit(Model * model)

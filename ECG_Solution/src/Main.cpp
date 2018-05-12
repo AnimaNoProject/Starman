@@ -54,9 +54,12 @@ static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
 static PointLight lights[2];
+
 static Model* asteroid_model;
 static Model* enemy_model;
 static Model* box_model;
+static Model* station_model;
+
 btBroadphaseInterface*                  _broadphase;
 btDefaultCollisionConfiguration*        _collisionConfiguration;
 btCollisionDispatcher*                  _dispatcher;
@@ -159,7 +162,6 @@ int main(int argc, char** argv)
 	// Shader
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
-
 	std::shared_ptr<_Shader> hud_shader = std::make_shared<_Shader>("assets/shader/shaderHUD.vert", "assets/shader/shaderHUD.frag");
 
 	/* --------------------------------------------- */
@@ -213,7 +215,9 @@ int main(int argc, char** argv)
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
 	box_model = new Model("assets/objects/box/Kiste.obj", shader.get());
-
+	station_model = new Model("assets/objects/station/station.obj", shader.get());
+	RUnit station(station_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f), 0.0f, vec3(500.0f, 25.0f, -50.0f));
+	_world->addRigidBody(station._body);
 	initializeWorld(world, shader.get(), enemies);
 
 	{
@@ -246,6 +250,7 @@ int main(int argc, char** argv)
 
 			_world->stepSimulation(t_delta, 10);
 			world.update(mat4(1), t_now);
+			station.update(mat4(1), t_now);
 
 			// Render
 			triangles = 0;
@@ -253,6 +258,7 @@ int main(int argc, char** argv)
 			triangles += world.draw();
 			//triangles += enemies.draw();
 			triangles += player.draw();
+			triangles += station.draw();
 
 			// Render HUD
 			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
@@ -287,6 +293,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		RUnit* n = new RUnit(asteroid_model);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
+		//_world->addCollisionObject(static_cast<btCollisionObject*>(n->_body));
 	}
 
 	/*
