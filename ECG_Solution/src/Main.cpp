@@ -13,10 +13,11 @@
 #include "GameObjects/PlayerCamera.h"
 #include <assimp/Importer.hpp>
 #include <ctype.h>
-#include "GameObjects\Light.h"
-#include "Rendering\HUD.h"
+#include "GameObjects/Light.h"
+#include "Rendering/HUD.h"
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "Rendering/Frustum.h"
 
 using namespace glm;
 using namespace std;
@@ -59,6 +60,8 @@ static Model* asteroid_model;
 static Model* enemy_model;
 static Model* box_model;
 static Model* station_model;
+
+static Frustum* Rfrustum;
 
 btBroadphaseInterface*                  _broadphase;
 btDefaultCollisionConfiguration*        _collisionConfiguration;
@@ -180,6 +183,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Camera camera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
+	Rfrustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* --------------------------------------------- */
 	// Player
@@ -239,11 +243,14 @@ int main(int argc, char** argv)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
+				Rfrustum->calculatePlanes(camera._eye, camera._center, camera._up);
 			}
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
+				Rfrustum->calculatePlanes(player._camera->_eye, player._camera->_center, player._camera->_up);
 			}
+
 			//world.update(mat4(1), t_now);
 			//enemies.takeHint(player.getPosition(), t_delta);
 			//enemies.update(mat4(1), t_delta);

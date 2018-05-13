@@ -30,5 +30,9 @@ void PlayerCamera::update(float x, float y, bool up, bool down, bool left, bool 
 	else if (left)
 		_position -= v_right * deltaTime * _speed;
 
+	_eye = _position;
+	_center = _position + v_dir;
+	_up = v_up;
+
 	_viewMatrix = lookAt(_position, _position + v_dir, v_up);
 }

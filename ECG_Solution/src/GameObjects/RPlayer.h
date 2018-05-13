@@ -11,7 +11,7 @@ private:
 	vec3 _position;
 	Model* _model;
 	double _speed;
-	Camera* _camera;
+
 	float _yaw;
 	float _pitch;
 	const float _mouse_speed = 2.0f;
@@ -33,6 +33,7 @@ public:
 	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
 	void shoot(float deltaTime, bool shootL, bool shootR);
 	long draw();
+	Camera* _camera;
 	vec3 getPosition() { return _position; }
 };
 

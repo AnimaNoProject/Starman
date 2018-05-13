@@ -19,6 +19,7 @@ protected:
 	mat4 lookAt(vec3 const & eye, vec3 const & center, vec3 const & up);
 
 public:
+	vec3 _eye, _center, _up;
 	Camera(float fov, float aspect, float nearZ, float farZ);
 	~Camera();
 	mat4 getViewProjectionMatrix();
