@@ -150,10 +150,6 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 		textures[i].Kd = temp.r;
 		mat->Get(AI_MATKEY_COLOR_SPECULAR, temp);
 		textures[i].Ks = temp.r;
-
-		cout << "KA: " << textures[i].Ka << endl;
-		cout << "KD: " << textures[i].Kd << endl;
-		cout << "KS: " << textures[i].Ks << endl;
 	}
 	return textures;
 }

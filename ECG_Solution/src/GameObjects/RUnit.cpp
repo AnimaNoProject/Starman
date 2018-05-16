@@ -106,8 +106,7 @@ RUnit::RUnit(Model * model)
 	_body->setLinearVelocity(btVector3(tx, ty, tz));
 
 	_body->setAngularFactor(btVector3(rx, ry, rz));
-
-	_body->setAngularVelocity(btVector3(r, r, r));
+	_body->setAngularVelocity(btVector3(0.001, 0.001, 0.001));
 }
 
 RUnit::RUnit(mat4 defaultTransformation)
