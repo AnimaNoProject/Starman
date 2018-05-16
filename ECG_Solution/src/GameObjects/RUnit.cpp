@@ -1,12 +1,13 @@
 #include "RUnit.h"
 
-RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 position)
+RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 position, vec3 scaleIt)
 {
 	_model = model;
 	_translation = translation;
 	_rotation = rotation;
 	_degree = degree;
 	_position = translate(mat4(1), position);
+	_scale = scale(mat4(1), scaleIt);
 
 	_shape = new btConvexHullShape();
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
@@ -46,13 +47,27 @@ RUnit::RUnit(Model * model)
 	tx = rand() & 1;
 	ty = rand() & 1;
 	tz = rand() & 1;
-	px = rand() % 400;
-	py = rand() % 400;
-	pz = rand() % 400;
+	px = rand() % 500;
+	py = rand() % 500;
+	pz = rand() % 500;
+
+	if ((rand() & 1) == 1)
+	{
+		px = -px;
+	}
+	if ((rand() & 1) == 1)
+	{
+		py = -py;
+	}
+	if ((rand() & 1) == 1)
+	{
+		pz = -pz;
+	}
+
 	rx = rand() & 1;
 	ry = rand() & 1;
 	rz = rand() & 1;
-	s = rand() % 10;
+	s = rand() % 25;
 	r = rand() % 25 / 100;
 	_translation = vec3(tx, ty, tz);
 	_position = translate(mat4(1), vec3(px, py, pz));
@@ -89,6 +104,10 @@ RUnit::RUnit(Model * model)
 	_body->setLinearFactor(btVector3(1, 1, 0));
 
 	_body->setLinearVelocity(btVector3(tx, ty, tz));
+
+	_body->setAngularFactor(btVector3(rx, ry, rz));
+
+	_body->setAngularVelocity(btVector3(r, r, r));
 }
 
 RUnit::RUnit(mat4 defaultTransformation)
@@ -147,7 +166,7 @@ void RUnit::update(mat4 transformation, float time)
 		_degree = rota.getAngle();
 		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
 	}
-		//_transformation = transformation * _position * translate(mat4(1), _translation * time) * rotate(mat4(1), _degree * time, _rotation) * _scale;
+
 	for (int i = 0; i < this->children.size(); i++)
 	{
 		this->children.at(i)->update(transformation, time);

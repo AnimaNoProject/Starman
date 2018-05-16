@@ -1,0 +1,13 @@
+# Blender MTL File: 'asteroid02.blend'
+# Material Count: 1
+
+newmtl Material
+Ns 96.078431
+Ka 0.100457 0.100457 0.100457
+Kd 0.659418 0.659418 0.659418
+Ks 0.257282 0.257282 0.257282
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd asteroid02.png

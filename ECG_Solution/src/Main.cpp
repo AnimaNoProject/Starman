@@ -31,7 +31,7 @@ static std::string FormatDebugOutput(GLenum source, GLenum type, GLuint id, GLen
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun);
+void setPerFrameUniforms(_Shader* shader, Camera& camera, PointLight& sun);
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
 void initPhysics();
 void destroyPhysics();
@@ -56,10 +56,13 @@ static double _fps;
 static float _brightness;
 static PointLight lights[2];
 
-static Model* asteroid_model;
+static Model* asteroid_model01;
+static Model* asteroid_model02;
+static Model* asteroid_model03;
 static Model* enemy_model;
 static Model* box_model;
 static Model* station_model;
+static Model* sun_model;
 
 static Frustum* Rfrustum;
 
@@ -167,10 +170,6 @@ int main(int argc, char** argv)
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
 	std::shared_ptr<_Shader> hud_shader = std::make_shared<_Shader>("assets/shader/shaderHUD.vert", "assets/shader/shaderHUD.frag");
 
-	/* --------------------------------------------- */
-	// Light
-	/* --------------------------------------------- */
-	DirectionalLight sun(glm::vec3(0.3f), glm::vec3(1, 0, 0));
 
 	/* --------------------------------------------- */
 	// World
@@ -188,7 +187,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Player
 	/* --------------------------------------------- */
-	Model playerModel("assets/objects/starman_ship/ship_new.obj", shader.get());
+	Model playerModel("assets/objects/starman_ship/player.obj", shader.get());
 	RPlayer player(&playerModel, &pcamera, shader.get());
 
 	/* --------------------------------------------- */
@@ -216,13 +215,22 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
-	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
-	asteroid_model = new Model("assets/objects/asteroid/asteroid.obj", shader.get());
-	box_model = new Model("assets/objects/box/Kiste.obj", shader.get());
-	station_model = new Model("assets/objects/station/station.obj", shader.get());
-	RUnit station(station_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f), 0.0f, vec3(500.0f, 25.0f, -50.0f));
-	_world->addRigidBody(station._body);
-	initializeWorld(world, shader.get(), enemies);
+	//enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
+	asteroid_model01 = new Model("assets/objects/asteroid/asteroid01.obj", shader.get());
+	asteroid_model02 = new Model("assets/objects/asteroid/asteroid02.obj", shader.get());
+	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
+	//box_model = new Model("assets/objects/box/Kiste.obj", shader.get());
+	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
+	RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), 12.0f, vec3(20.0f, 0.0f, -20.0f), vec3(5.0f, 5.0f, 5.0f));
+	world.addChild(&sun_star);
+
+	/* --------------------------------------------- */
+	// Light
+	/* --------------------------------------------- */
+	//DirectionalLight sun(glm::vec3(0.3f), glm::vec3(1, 0, 0));
+	PointLight sun(vec3(0.5, 0.5, 0.5), vec3(0.0f, 0.0f, 0.0f), vec3(1.0f, 0.4f, 0.1f));
+
+	initializeWorld(sun_star, shader.get(), enemies);
 
 	{
 		while (!glfwWindowShouldClose(_window)) {
@@ -257,7 +265,6 @@ int main(int argc, char** argv)
 
 			_world->stepSimulation(t_delta, 10);
 			world.update(mat4(1), t_now);
-			station.update(mat4(1), t_now);
 
 			// Render
 			triangles = 0;
@@ -265,7 +272,6 @@ int main(int argc, char** argv)
 			triangles += world.draw();
 			//triangles += enemies.draw();
 			triangles += player.draw();
-			triangles += station.draw();
 
 			// Render HUD
 			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
@@ -295,13 +301,30 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-	for (unsigned int i = 0; i < 25; i++)
+	for (unsigned int i = 0; i < 100; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model);
+		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 		//_world->addCollisionObject(static_cast<btCollisionObject*>(n->_body));
 	}
+
+	for (unsigned int i = 0; i < 75; i++)
+	{
+		RUnit* n = new RUnit(asteroid_model02);
+		world.addChild(n);
+		_world->addRigidBody(n->_body);
+		//_world->addCollisionObject(static_cast<btCollisionObject*>(n->_body));
+	}
+
+	for (unsigned int i = 0; i < 125; i++)
+	{
+		RUnit* n = new RUnit(asteroid_model03);
+		world.addChild(n);
+		_world->addRigidBody(n->_body);
+		//_world->addCollisionObject(static_cast<btCollisionObject*>(n->_body));
+	}
+
 
 	/*
 	for (unsigned int i = 0; i < 30; i++)
@@ -335,7 +358,7 @@ void destroyPhysics()
 	delete _broadphase;
 }
 
-void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
+void setPerFrameUniforms(_Shader* shader, Camera& camera, PointLight& sun)
 {
 	glEnable(GL_DEPTH_TEST);
 	// shader
@@ -347,8 +370,8 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 	shader->setUniform("shinyness", 14.0f);
 
 	shader->setUniform("sun.color", sun.color);
-	shader->setUniform("sun.direction", sun.direction);
-
+	shader->setUniform("sun.position", sun.position);
+	shader->setUniform("sun.attentuation", sun.attenuation);
 }
 
 

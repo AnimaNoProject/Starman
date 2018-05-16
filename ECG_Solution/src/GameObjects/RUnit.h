@@ -19,7 +19,7 @@ protected:
 public:
 	btRigidBody * _body;
 	btCollisionShape* _shape;
-	RUnit(Model* model, vec3 translation, vec3 rotation, float degree, vec3 position);
+	RUnit(Model* model, vec3 translation, vec3 rotation, float degree, vec3 position, vec3 scaleIt);
 	RUnit(Model* model);
 	RUnit(mat4 defaultTransformation);
 	RUnit();
