@@ -12,9 +12,6 @@ Shots::Shots(Model* model, vec3 direction, vec3 position, vec3 up, vec3 right)
 	_position += direction * 8.0f;
 	_position -= up * 2.0f;
 	_position -= right;
-
-	_startposition = _position;
-
 	// rotate into shooting direction
 	vec3 dirA(0.0f, 1.0f, 0.0f);
 	vec3 dirB(direction);

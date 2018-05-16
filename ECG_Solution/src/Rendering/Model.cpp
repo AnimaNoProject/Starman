@@ -150,6 +150,8 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 		textures[i].Kd = temp.r;
 		mat->Get(AI_MATKEY_COLOR_SPECULAR, temp);
 		textures[i].Ks = temp.r;
+		mat->Get(AI_MATKEY_SHININESS, temp);
+		textures[i].Alpha = temp.r;
 	}
 	return textures;
 }

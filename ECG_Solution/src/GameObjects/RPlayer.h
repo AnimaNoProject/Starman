@@ -7,7 +7,6 @@
 class RPlayer
 {
 private:
-	std::vector<Shots*> shots;
 	vec3 _position;
 	Model* _model;
 	double _speed;
@@ -24,6 +23,7 @@ private:
 	float timepassedR;
 	float cooldown = 0.25f;
 public:
+	std::vector<Shots*> shots;
 	RPlayer();
 	RPlayer(Model* model);
 	RPlayer(Model* model, Camera* camera, _Shader* shader);

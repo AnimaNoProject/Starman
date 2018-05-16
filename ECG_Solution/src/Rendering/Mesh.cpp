@@ -70,6 +70,7 @@ long Mesh::Draw() {
 	_shader->setUniform("Ka", _textures[0].Ka);
 	_shader->setUniform("Kd", _textures[0].Kd);
 	_shader->setUniform("Ks", _textures[0].Ks);
+	_shader->setUniform("shyniness", _textures[0].Alpha);
 
 	// Finally draw the mesh
 	glBindVertexArray(VAO);
