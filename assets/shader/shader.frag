@@ -12,6 +12,8 @@ uniform sampler2D texture_diff;
 uniform float brightness;
 uniform vec3 camera_world;
 
+uniform bool cellshading;
+
 uniform float Ka;
 uniform float Kd;
 uniform float Ks;
@@ -31,7 +33,7 @@ struct PointLight {
 uniform float MAX_LIGHTS;
 uniform PointLight[20] lights;
 
-const float levels = 2.0;
+const float levels = 4.0;
 
 vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC, float specularF, float alpha, bool attenuate, vec3 attenuation) {
 	float d = length(l);
@@ -43,12 +45,21 @@ vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC
 
 
 	float intensity = max(0, dot(n, l));
-	float level = floor(intensity * levels);
-	intensity = level / levels;
+	if(cellshading)
+	{
+		float level = floor(intensity * levels);
+		intensity = level / levels;
+	}
 	vec3 r = reflect(-l, n);
 
+	float intensity_spec = pow(max(0, dot(r, v)), alpha);
+	if(cellshading)
+	{
+		float level = floor(intensity_spec * levels);
+		intensity_spec = level / levels;
+	}
 
-	return (diffuseF * diffuseC * intensity + specularF * specularC * pow(max(0, dot(r, v)), alpha)) * att; 
+	return (diffuseF * diffuseC * intensity + specularF * specularC * intensity_spec) * att; 
 }
 
 void main()

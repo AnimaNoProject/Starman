@@ -54,15 +54,15 @@ static bool _debug_camera = false;
 static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
-static PointLight lights[2];
+static bool _cell_shading = true;
 
 static Model* asteroid_model01;
 static Model* asteroid_model02;
 static Model* asteroid_model03;
 static Model* enemy_model;
-static Model* box_model;
 static Model* station_model;
 static Model* sun_model;
+static Model* pickup_model;
 
 static Frustum* Rfrustum;
 
@@ -218,6 +218,7 @@ int main(int argc, char** argv)
 	asteroid_model01 = new Model("assets/objects/asteroid/asteroid01.obj", shader.get());
 	asteroid_model02 = new Model("assets/objects/asteroid/asteroid02.obj", shader.get());
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
+	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
 	RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(50.0f, 50.0f, 50.0f));
 	world.addChild(&sun_star);
@@ -319,6 +320,13 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
+	for (unsigned int i = 0; i < 25; i++)
+	{
+		RUnit* n = new RUnit(pickup_model, vec3(0.0f, 0.0f, 0.0f), vec3(rand() & 1, rand() & 1, rand() & 1), rand() % 25, vec3(rand() % 500, rand() % 500, rand() % 500), vec3(1.0f, 1.0f, 1.0f));
+		world.addChild(n);
+		_world->addRigidBody(n->_body);
+	}
+
 	for (unsigned int i = 0; i < 7; i++)
 	{
 		enemies.addChild(new REnemy(enemy_model, shader));
@@ -353,10 +361,10 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 	shader->setUniform("camera_world", camera.getPosition());
 	shader->setUniform("brightness", _brightness);
 
-	//shader->setUniform("shinyness", 14.0f);
-
 	shader->setUniform("sun.color", sun.color);
 	shader->setUniform("sun.direction", sun.direction);
+
+	shader->setUniform("cellshading", _cell_shading);
 }
 
 
@@ -407,6 +415,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		_debug_hud = !_debug_hud;
 	}
 
+	else if (key == GLFW_KEY_F6 && action == GLFW_RELEASE)
+	{
+		_cell_shading = !_cell_shading;
+	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 	{
