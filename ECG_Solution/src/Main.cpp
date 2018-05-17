@@ -18,6 +18,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "Rendering/Frustum.h"
+#include "Rendering/PostProcessing.h"
 
 using namespace glm;
 using namespace std;
@@ -55,6 +56,8 @@ static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
 static bool _cell_shading = true;
+static bool _post_processing = true;
+static PostProcessing* postprocessor;
 
 static Model* asteroid_model01;
 static Model* asteroid_model02;
@@ -222,13 +225,18 @@ int main(int argc, char** argv)
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
 	RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(50.0f, 50.0f, 50.0f));
 	world.addChild(&sun_star);
+	initializeWorld(sun_star, shader.get(), enemies);
 
 	/* --------------------------------------------- */
 	// Light
 	/* --------------------------------------------- */
 	DirectionalLight sun(vec3(0.5, 0.5, 0.5), normalize(vec3(0.0f, 0.0f, 0.0f) - vec3(5000.0f, 1000.0f, -5000.0f)));
 
-	initializeWorld(sun_star, shader.get(), enemies);
+	/* --------------------------------------------- */
+	// Post-Processor
+	/* --------------------------------------------- */
+	postprocessor = new PostProcessing(_window_width, _window_height);
+	postprocessor->Init();
 
 	{
 		while (!glfwWindowShouldClose(_window)) {
@@ -268,11 +276,13 @@ int main(int argc, char** argv)
 			triangles = 0;
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 			triangles += world.draw();
-			//triangles += enemies.draw();
+			triangles += enemies.draw();
 			triangles += player.draw();
-
 			// Render HUD
 			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
+			if (_post_processing)
+				postprocessor->draw();
+
 
 			// Poll events and swap buffers
 			glfwPollEvents();
@@ -365,6 +375,11 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 	shader->setUniform("sun.direction", sun.direction);
 
 	shader->setUniform("cellshading", _cell_shading);
+
+	if (_post_processing)
+	{
+		postprocessor->use();
+	}
 }
 
 
@@ -418,6 +433,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	else if (key == GLFW_KEY_F6 && action == GLFW_RELEASE)
 	{
 		_cell_shading = !_cell_shading;
+	}
+
+	else if (key == GLFW_KEY_F7 && action == GLFW_RELEASE)
+	{
+		_post_processing = !_post_processing;
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
