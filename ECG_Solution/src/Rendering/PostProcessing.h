@@ -6,7 +6,7 @@
 class PostProcessing
 {
 private:
-	GLuint framebuffer, textureColorbuffer, rbo, quadVAO, quadVBO;;
+	GLuint framebuffer, textureColorbuffer, rbo, quadVAO, quadVBO;
 	unsigned int _width, _height;
 	std::shared_ptr<_Shader> shader;
 public:

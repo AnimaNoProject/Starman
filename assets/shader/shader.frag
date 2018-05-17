@@ -1,6 +1,6 @@
 #version 430 core
 
-layout(location = 0) out vec4 color;
+out vec4 color;
 
 in VertexData {
 	vec3 position_world;
