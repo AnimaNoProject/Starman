@@ -55,8 +55,8 @@ static bool _debug_camera = false;
 static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
-static bool _cell_shading = true;
-static bool _post_processing = true;
+static bool _cell_shading = false;
+static bool _post_processing = false;
 static PostProcessing* postprocessor;
 
 static Model* asteroid_model01;
@@ -275,14 +275,16 @@ int main(int argc, char** argv)
 			// Render
 			triangles = 0;
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
+
 			triangles += world.draw();
 			triangles += enemies.draw();
 			triangles += player.draw();
-			// Render HUD
-			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
+
 			if (_post_processing)
 				postprocessor->draw();
 
+			// Render HUD
+			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
 
 			// Poll events and swap buffers
 			glfwPollEvents();
@@ -365,6 +367,12 @@ void destroyPhysics()
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 {
 	glEnable(GL_DEPTH_TEST);
+
+	if (_post_processing)
+	{
+		postprocessor->use();
+	}
+
 	// shader
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
@@ -375,11 +383,6 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 	shader->setUniform("sun.direction", sun.direction);
 
 	shader->setUniform("cellshading", _cell_shading);
-
-	if (_post_processing)
-	{
-		postprocessor->use();
-	}
 }
 
 

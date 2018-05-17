@@ -6,12 +6,8 @@
 class PostProcessing
 {
 private:
-	GLuint vbo_fbo_vertices;
-	GLuint framebuffer = 0;
-	GLuint renderedTexture;
-	int _width, _height;
-	GLuint depthbuffer;
-	GLenum DrawBuffers[1];
+	GLuint framebuffer, textureColorbuffer, rbo, quadVAO, quadVBO;;
+	unsigned int _width, _height;
 	std::shared_ptr<_Shader> shader;
 public:
 	PostProcessing(int width, int height);
