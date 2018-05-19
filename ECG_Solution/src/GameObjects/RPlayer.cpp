@@ -84,15 +84,21 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 	timepassedL += deltaTime;
 	timepassedR += deltaTime;
 
+	vec3 dir = normalize(_dir);
+	vec3 up = normalize(_up);
+	vec3 right = normalize(_right);
+
 	if (timepassedL > cooldown && shootL)
 	{
-		shots.push_back(new Shots(_shot, _dir, _position, _up, -_right));
+		shots.push_back(new Shots(_shot, _dir, _position + (8.5f*dir - 3.2f*up + 4.5f*right)));
+		shots.push_back(new Shots(_shot, _dir, _position + (8.5f*dir - 1.5f*up + 4.5f*right)));
 		timepassedL = 0;
 	}
 
 	if (timepassedR > cooldown && shootR)
 	{
-		shots.push_back(new Shots(_shot, _dir, _position, _up, _right));
+		shots.push_back(new Shots(_shot, _dir, _position + (8.5f*dir - 3.2f*up - 4.5f*right)));
+		shots.push_back(new Shots(_shot, _dir, _position + (8.5f*dir - 1.5f*up - 4.5f*right)));
 		timepassedR = 0;
 	}
 }
