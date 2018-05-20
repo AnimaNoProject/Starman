@@ -19,6 +19,11 @@ string _Shader::readFile(const char *filePath) {
 	return content;
 }
 
+_Shader::_Shader(const char * compute_path)
+{
+	LoadShader(compute_path);
+}
+
 _Shader::_Shader(const char *vertex_path, const char *fragment_path)
 {
 	LoadShader(vertex_path, fragment_path);
@@ -36,6 +41,45 @@ _Shader::~_Shader()
 unsigned int _Shader::getUniform(string uniform)
 {
 	return glGetUniformLocation(shader, uniform.c_str());
+}
+
+void _Shader::LoadShader(const char * compute_path)
+{
+	GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
+
+	string computeShaderStr = readFile(compute_path);
+	const char *computeShaderSrc = computeShaderStr.c_str();
+
+	GLint success;
+
+	// Compile compute shader
+	cout << "Compiling vertex shader." << endl;
+	glShaderSource(computeShader, 1, (const GLchar**)&computeShaderSrc, 0);
+	glCompileShader(computeShader);
+
+	// Check compute shader
+	glGetShaderiv(computeShader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		GLchar InfoLog[1024];
+		glGetShaderInfoLog(computeShader, sizeof(InfoLog), NULL, InfoLog);
+		fprintf(stderr, "Error compiling shader type %d: '%s'\n", computeShader, InfoLog);
+	}
+
+	cout << "Linking program" << endl;
+	shader = glCreateProgram();
+	glAttachShader(shader, computeShader);
+
+	glLinkProgram(shader);
+
+	glGetProgramiv(shader, GL_LINK_STATUS, &success);
+	if (success == 0) {
+		GLchar ErrorLog[1024];
+		glGetProgramInfoLog(shader, sizeof(ErrorLog), NULL, ErrorLog);
+		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+
+		glDeleteShader(fragmentShader);
+		glDeleteShader(vertexShader);
+	}
 }
 
 void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
@@ -105,6 +149,7 @@ void _Shader::LoadShader(const char * vertex_path, const char * fragment_path, c
 	string vertShaderStr = readFile(vertex_path);
 	string fragShaderStr = readFile(fragment_path);
 	string geomShaderStr = readFile(geometry_path);
+
 	const char *vertShaderSrc = vertShaderStr.c_str();
 	const char *fragShaderSrc = fragShaderStr.c_str();
 	const char *geomShaderSrc = geomShaderStr.c_str();
@@ -137,12 +182,12 @@ void _Shader::LoadShader(const char * vertex_path, const char * fragment_path, c
 		fprintf(stderr, "Error compiling shader type %d: '%s'\n", fragShader, InfoLog);
 	}
 
-	// Compile fragment shader
+	// Compile geoemtry shader
 	cout << "Compiling fragment shader." << endl;
 	glShaderSource(geomShader, 1, (const GLchar**)&geomShaderSrc, 0);
 	glCompileShader(geomShader);
 
-	// Check fragment shader
+	// Check geometry shader
 	glGetShaderiv(geomShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		GLchar InfoLog[1024];

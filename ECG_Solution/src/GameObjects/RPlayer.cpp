@@ -15,9 +15,8 @@ RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _re
 	_model->transform(translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)));
 	_camera = camera;
 	_shader = shader;
-	_position = vec3(0.0f, 0.0f, -5.0f);
+	_position = vec3(0.0f, 0.0f, 5.0f);
 	_shot = new Model("assets/objects/starman_ship/shots.obj", _shader);
-	//_shot->transform(translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)));
 	timepassedR = timepassedL = 0;
 }
 

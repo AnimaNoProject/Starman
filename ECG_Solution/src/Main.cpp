@@ -19,6 +19,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "Rendering/Frustum.h"
 #include "Rendering/PostProcessing.h"
+#include "Rendering/ParticleSystem.h"
 
 using namespace glm;
 using namespace std;
@@ -55,8 +56,8 @@ static bool _debug_camera = false;
 static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
-static bool _cell_shading = false;
-static bool _post_processing = false;
+static bool _cell_shading = true;
+static bool _post_processing = true;
 static PostProcessing* postprocessor;
 
 static Model* asteroid_model01;
@@ -162,7 +163,6 @@ int main(int argc, char** argv)
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// set some GL defaults
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -172,7 +172,6 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
 	std::shared_ptr<_Shader> hud_shader = std::make_shared<_Shader>("assets/shader/shaderHUD.vert", "assets/shader/shaderHUD.frag");
-
 
 	/* --------------------------------------------- */
 	// World
@@ -238,6 +237,15 @@ int main(int argc, char** argv)
 	postprocessor = new PostProcessing(_window_width, _window_height);
 	postprocessor->Init();
 
+	/* --------------------------------------------- */
+	// Particle-System
+	/* --------------------------------------------- */
+	std::shared_ptr<_Shader> particle_shader = std::make_shared<_Shader>("assets/shader/shaderParticle.vert", "assets/shader/shaderParticle.frag", "assets/shader/shaderParticle.geom");
+	ParticleSystem particleSystem(1024 * 1024 * 2);
+	particleSystem.Init(1024 / 32, 1024 / 32, 1);
+
+	glPointSize(5.0f);
+
 	{
 		while (!glfwWindowShouldClose(_window)) {
 
@@ -271,6 +279,7 @@ int main(int argc, char** argv)
 
 			_world->stepSimulation(t_delta, 10);
 			world.update(mat4(1), t_now);
+			particleSystem.Update(t_delta);
 
 			// Render
 			triangles = 0;
@@ -279,6 +288,12 @@ int main(int argc, char** argv)
 			triangles += world.draw();
 			triangles += enemies.draw();
 			triangles += player.draw();
+
+			// Particle System
+			particle_shader.get()->use();
+			particle_shader.get()->setUniform("viewProj", camera.getViewProjectionMatrix());
+			particleSystem.Draw();
+			//
 
 			if (_post_processing)
 				postprocessor->draw();
