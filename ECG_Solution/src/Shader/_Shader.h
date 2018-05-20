@@ -16,13 +16,15 @@ using namespace std;
 class _Shader
 {
 protected:
-	GLuint vertexShader, fragmentShader, shader;
+	GLuint vertexShader, fragmentShader, geometryShader, shader;
 	const GLchar* vertex_shader_source;
 	const GLchar* fragment_shader_source;
+	GLchar* geometry_shader_source;
 	void LoadShader(const char *vertex_path, const char *fragment_path);
-
+	void LoadShader(const char *vertex_path, const char *fragment_path, const char *geometry_path);
 public:
 	_Shader(const char *vertex_path, const char *fragment_path);
+	_Shader(const char *vertex_path, const char *fragment_path, const char *geometry_path);
 	~_Shader();
 	string readFile(const char *filePath);
 	GLuint getShader();
