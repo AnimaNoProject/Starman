@@ -20,6 +20,7 @@
 #include "Rendering/PostProcessing.h"
 #include "Rendering/ParticleSystem.h"
 #include "Rendering/Skybox.h"
+#include "Rendering/Frustum.h"
 
 using namespace glm;
 using namespace std;
@@ -248,6 +249,10 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Skybox* skybox = new Skybox();
 
+	/* --------------------------------------------- */
+	// Frustum
+	/* --------------------------------------------- */
+	Frustum* frustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
 	{
 		while (!glfwWindowShouldClose(_window)) {
@@ -268,10 +273,12 @@ int main(int argc, char** argv)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
+				frustum->Update(camera._eye, camera._center, camera._up);
 			}
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
+				frustum->Update(pcamera._eye, pcamera._center, pcamera._up);
 			}
 
 			//world.update(mat4(1), t_now);
@@ -287,7 +294,7 @@ int main(int argc, char** argv)
 			triangles = 0;
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 
-			triangles += world.draw();
+			triangles += world.draw(frustum);
 			triangles += enemies.draw();
 			triangles += player.draw();
 
@@ -297,7 +304,9 @@ int main(int argc, char** argv)
 			particleSystem.Draw();
 			//
 
+			// Draw Skybox
 			skybox->Draw(_debug_camera ? camera._viewMatrix, camera._projMatrix : pcamera._viewMatrix, pcamera._projMatrix);
+			//
 
 			if (_post_processing)
 				postprocessor->draw();
