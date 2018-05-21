@@ -104,8 +104,8 @@ void _Shader::LoadShader(const char *vertex_path, const char *fragment_path) {
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		GLchar InfoLog[1024];
-		glGetShaderInfoLog(vertexShader, sizeof(InfoLog), NULL, InfoLog);
-		fprintf(stderr, "Error compiling shader type %d: '%s'\n", vertexShader, InfoLog);
+		glGetShaderInfoLog(vertShader, sizeof(InfoLog), NULL, InfoLog);
+		fprintf(stderr, "Error compiling shader type %d: '%s'\n", vertShader, InfoLog);
 	}
 
 	// Compile fragment shader
@@ -165,8 +165,8 @@ void _Shader::LoadShader(const char * vertex_path, const char * fragment_path, c
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		GLchar InfoLog[1024];
-		glGetShaderInfoLog(vertexShader, sizeof(InfoLog), NULL, InfoLog);
-		fprintf(stderr, "Error compiling shader type %d: '%s'\n", vertexShader, InfoLog);
+		glGetShaderInfoLog(vertShader, sizeof(InfoLog), NULL, InfoLog);
+		fprintf(stderr, "Error compiling shader type %d: '%s'\n", vertShader, InfoLog);
 	}
 
 	// Compile fragment shader

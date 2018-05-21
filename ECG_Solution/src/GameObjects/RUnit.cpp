@@ -171,4 +171,3 @@ void RUnit::update(mat4 transformation, float time)
 		this->children.at(i)->update(transformation, time);
 	}
 }
-

@@ -17,9 +17,9 @@
 #include "Rendering/HUD.h"
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-#include "Rendering/Frustum.h"
 #include "Rendering/PostProcessing.h"
 #include "Rendering/ParticleSystem.h"
+#include "Rendering/Skybox.h"
 
 using namespace glm;
 using namespace std;
@@ -67,8 +67,6 @@ static Model* enemy_model;
 static Model* station_model;
 static Model* sun_model;
 static Model* pickup_model;
-
-static Frustum* Rfrustum;
 
 btBroadphaseInterface*                  _broadphase;
 btDefaultCollisionConfiguration*        _collisionConfiguration;
@@ -184,7 +182,6 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Camera camera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
-	Rfrustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* --------------------------------------------- */
 	// Player
@@ -246,6 +243,12 @@ int main(int argc, char** argv)
 
 	glPointSize(5.0f);
 
+	/* --------------------------------------------- */
+	// Skybox
+	/* --------------------------------------------- */
+	Skybox* skybox = new Skybox();
+
+
 	{
 		while (!glfwWindowShouldClose(_window)) {
 
@@ -265,12 +268,10 @@ int main(int argc, char** argv)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
-				Rfrustum->calculatePlanes(camera._eye, camera._center, camera._up);
 			}
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
-				Rfrustum->calculatePlanes(player._camera->_eye, player._camera->_center, player._camera->_up);
 			}
 
 			//world.update(mat4(1), t_now);
@@ -282,6 +283,7 @@ int main(int argc, char** argv)
 			particleSystem.Update(t_delta);
 
 			// Render
+
 			triangles = 0;
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 
@@ -291,16 +293,18 @@ int main(int argc, char** argv)
 
 			// Particle System
 			particle_shader.get()->use();
-			particle_shader.get()->setUniform("viewProj", camera.getViewProjectionMatrix());
+			particle_shader.get()->setUniform("viewProj", _debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
 			particleSystem.Draw();
 			//
+
+			skybox->Draw(_debug_camera ? camera._viewMatrix, camera._projMatrix : pcamera._viewMatrix, pcamera._projMatrix);
 
 			if (_post_processing)
 				postprocessor->draw();
 
 			// Render HUD
 			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
-
+			
 			// Poll events and swap buffers
 			glfwPollEvents();
 			glfwSwapBuffers(_window);

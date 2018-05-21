@@ -9,7 +9,7 @@ using namespace glm;
 class Camera
 {
 protected:
-	mat4 _viewMatrix, _projMatrix;
+
 	float _pitch, _yaw, _fov;
 
 	float _speed = 5.00f;
@@ -19,6 +19,7 @@ protected:
 	mat4 lookAt(vec3 const & eye, vec3 const & center, vec3 const & up);
 
 public:
+	mat4 _viewMatrix, _projMatrix;
 	vec3 _eye, _center, _up;
 	Camera(float fov, float aspect, float nearZ, float farZ);
 	~Camera();
