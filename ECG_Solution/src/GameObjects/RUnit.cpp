@@ -9,6 +9,8 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	_position = translate(mat4(1), position);
 	_scale = scale(mat4(1), scaleIt);
 
+	//model->transform(_scale);
+
 	_shape = new btConvexHullShape();
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
@@ -24,8 +26,6 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	{
 		numberOfVertices += model->meshes.at(i)._vertices.size();
 	}
-
-	float normalizeFactor = 1.0f / numberOfVertices;
 	vec3 average(0, 0, 0);
 
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
@@ -38,8 +38,28 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 			average.z += newPos.z;
 		}
 	}
-
+	average.x /= numberOfVertices;
+	average.y /= numberOfVertices;
+	average.z /= numberOfVertices;
 	bbmiddle = average;
+
+	float farthest = 0.0f;
+
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			float dist = distance(newPos, bbmiddle);
+
+			if (dist > farthest)
+			{
+				farthest = dist;
+			}
+		}
+	}
+
+	radius = sqrt(farthest);
 
 	btQuaternion rotationQuat;
 	rotationQuat.setEulerZYX(rotation.x, rotation.y, rotation.z);
@@ -128,6 +148,9 @@ RUnit::RUnit(Model * model)
 			average.z += newPos.z;
 		}
 	}
+	average.x /= numberOfVertices;
+	average.y /= numberOfVertices;
+	average.z /= numberOfVertices;
 
 	bbmiddle = average;
 
@@ -138,7 +161,7 @@ RUnit::RUnit(Model * model)
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
 			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
-			float dist = distance(bbmiddle, newPos);
+			float dist = distance(newPos, bbmiddle);
 
 			if (dist > farthest)
 			{
@@ -147,7 +170,7 @@ RUnit::RUnit(Model * model)
 		}
 	}
 
-	radius = farthest;
+	radius = sqrt(farthest);
 
 	btQuaternion rotation;
 	rotation.setEulerZYX(rz, ry, rx);
@@ -200,12 +223,12 @@ long RUnit::draw(Frustum* frustum)
 		_model->setTransformMatrix(_transformation);
 
 		
-		vec4 middle = vec4(bbmiddle, 1.0f);
-		middle = _transformation * middle;
-		if (frustum->Inside(middle, radius))
-		{
+		//vec4 middle = vec4(bbmiddle, 1.0f);
+		//middle = _transformation * middle;
+		//if (frustum->Inside(middle, radius))
+		//{
 			triangle += _model->Draw();
-		}
+		//}
 	
 	}
 	for (int i = 0; i < this->children.size(); i++)
