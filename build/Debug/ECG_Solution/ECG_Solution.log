@@ -1,5 +1,72 @@
-﻿  HUD.cpp
+﻿  PostProcessing.cpp
+  Plane.cpp
+  Frustum.cpp
+  REnemy.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(8): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(9): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(23): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(67): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(71): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(88): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\renemy.cpp(93): warning C4018: '<': signed/unsigned mismatch
+  Shots.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  HUD.cpp
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
   c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.cpp(71): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.cpp(73): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+  Mesh.cpp
+  Model.cpp
+  PlayerCamera.cpp
+  RPlayer.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(61): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(67): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(110): warning C4018: '<': signed/unsigned mismatch
+  RUnit.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(48): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(50): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(52): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(67): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(68): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(70): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(71): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(109): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(139): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(169): warning C4018: '<': signed/unsigned mismatch
+  Camera.cpp
+  _Shader.cpp
+  Main.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
+  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(117): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(199): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(209): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(247): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(258): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(264): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(287): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(337): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+  LINK : C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe not found or not built by the last incremental link; performing full link
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

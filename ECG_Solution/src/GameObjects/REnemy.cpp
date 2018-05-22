@@ -43,7 +43,7 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 
 				vec3 _up(glm::cross(_right, _dir));
 
-				_shots.push_back(new Shots(_shot, normalize(_dir), _posVec, normalize(_up), normalize(_right)));
+				_shots.push_back(new Shots(_shot, normalize(_dir), _posVec));
 				timepassed = 0;
 			}
 		}

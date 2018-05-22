@@ -2,68 +2,65 @@
 
 #define ANG2RAD 3.14159265358979323846/180.0
 
-Frustum::Frustum(float fov, float aspect, float nearZ, float farZ)
+Frustum::Frustum(float fov, float aspect, float nearZ, float farZ) : _fov(fov), _aspect(aspect), _nearZ(nearZ), _farZ(farZ)
 {
-	this->fov = fov;
-	this->aspect = aspect;
-	this->nearZ = nearZ;
-	this->farZ = farZ;
-
-	float tang = (float)tan(ANG2RAD * fov * 0.5);
-	hNear = nearZ * tang;
-	wNear = hNear * aspect;
-	hFar = farZ * tang;
-	wFar = hFar * aspect;
+	_tang = (float)tan(fov* ANG2RAD * 0.5);
+	nh = nearZ * _tang;
+	nw = nh * aspect;
+	fh = farZ * _tang;
+	fw = fh * aspect;
 }
-
 
 Frustum::~Frustum()
 {
 }
 
-void Frustum::calculatePlanes(vec3 const & eye, vec3 const & center, vec3 const & up)
+void Frustum::Update(vec3 eye, vec3 dir, vec3 up)
 {
-	vec3 x, y, z, nearCenter, farCenter, aux, normal;
+	vec3  nc, fc, X, Y, Z;
 
-	z = normalize(eye - center);
-	x = normalize(up * z);
-	y = z * x;
-	nearCenter = eye - z * nearZ;
-	farCenter = eye - z * farZ;
+	Z = normalize(eye - dir);
 
-	planes[0] = Plane(-z, nearCenter);
-	planes[1] = Plane(z, farCenter);
+	X = normalize(up * Z);
 
-	aux = normalize((nearCenter + y * hNear) - eye);
-	normal = aux * x;
+	Y = Z * X;
 
-	planes[2] = Plane(normal, nearCenter + y * hNear);
+	nc = eye - Z * _nearZ;
+	fc = eye - Z * _farZ;
 
-	aux = normalize((nearCenter - y * hNear) - eye);
-	normal = x * aux;
-	
-	planes[3] = Plane(normal, nearCenter - y * hNear);
+	ntl = nc + Y * nh - X * nw;
+	ntr = nc + Y * nh + X * nw;
+	nbl = nc - Y * nh - X * nw;
+	nbr = nc - Y * nh + X * nw;
 
-	aux = normalize((nearCenter - x * wNear) - eye);
-	normal = aux * y;
+	ftl = fc + Y * fh - X * fw;
+	ftr = fc + Y * fh + X * fw;
+	fbl = fc - Y * fh - X * fw;
+	fbr = fc - Y * fh + X * fw;
 
-	planes[4] = Plane(normal, nearCenter - x * wNear);
-
-	aux = normalize((nearCenter + x * wNear) - eye);
-	normal = y * aux;
-
-	planes[5] = Plane(normal, nearCenter + x * wNear);
+	planes[TOP].setPoints(ntr, ntl, ftl);
+	planes[BOTTOM].setPoints(nbl, nbr, fbr);
+	planes[LEFT].setPoints(ntl, nbl, fbl);
+	planes[RIGHT].setPoints(nbr, ntr, fbr);
+	planes[NEAR].setPoints(ntl, ntr, nbr);
+	planes[FAR].setPoints(ftr, ftl, fbl);
 }
 
-bool Frustum::isVisible(vec3 position, float radius)
+bool Frustum::Inside(vec3 point, float radius)
 {
-	float distance;
+	float distance = 0;
+	for (int i = 0; i < 6; i++) {
 
-	for (int i = 0; i < 6; i++)
-	{
-		distance = planes[i].distance(position);
-		if (distance < -radius || distance < radius)
+		distance = planes[i].distance(point);
+
+		if (distance < -radius)
+		{
+			return false;
+		}
+		else if (distance < radius)
+		{
 			return true;
+		}
 	}
-	return false;
+	return true;
 }

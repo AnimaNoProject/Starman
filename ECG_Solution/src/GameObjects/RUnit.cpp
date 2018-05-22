@@ -9,6 +9,8 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	_position = translate(mat4(1), position);
 	_scale = scale(mat4(1), scaleIt);
 
+	//model->transform(_scale);
+
 	_shape = new btConvexHullShape();
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
@@ -18,6 +20,46 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 			((btConvexHullShape*)_shape)->addPoint(btv);
 		}
 	}
+
+	float numberOfVertices = 0;
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		numberOfVertices += model->meshes.at(i)._vertices.size();
+	}
+	vec3 average(0, 0, 0);
+
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			average.x += newPos.x;
+			average.y += newPos.y;
+			average.z += newPos.z;
+		}
+	}
+	average.x /= numberOfVertices;
+	average.y /= numberOfVertices;
+	average.z /= numberOfVertices;
+	bbmiddle = average;
+
+	float farthest = 0.0f;
+
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			float dist = distance(newPos, bbmiddle);
+
+			if (dist > farthest)
+			{
+				farthest = dist;
+			}
+		}
+	}
+
+	radius = sqrt(farthest);
 
 	btQuaternion rotationQuat;
 	rotationQuat.setEulerZYX(rotation.x, rotation.y, rotation.z);
@@ -75,6 +117,8 @@ RUnit::RUnit(Model * model)
 	_scale = scale(mat4(1), vec3(s, s, s));
 	_degree = r;
 
+	//model->transform(_scale);
+
 	_shape = new btConvexHullShape();
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
@@ -84,6 +128,49 @@ RUnit::RUnit(Model * model)
 			((btConvexHullShape*)_shape)->addPoint(btv);
 		}
 	}
+
+	float numberOfVertices = 0;
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		numberOfVertices += model->meshes.at(i)._vertices.size();
+	}
+
+	float normalizeFactor = 1.0f / numberOfVertices;
+	vec3 average(0, 0, 0);
+
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			average.x += newPos.x;
+			average.y += newPos.y;
+			average.z += newPos.z;
+		}
+	}
+	average.x /= numberOfVertices;
+	average.y /= numberOfVertices;
+	average.z /= numberOfVertices;
+
+	bbmiddle = average;
+
+	float farthest = 0.0f;
+
+	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			float dist = distance(newPos, bbmiddle);
+
+			if (dist > farthest)
+			{
+				farthest = dist;
+			}
+		}
+	}
+
+	radius = sqrt(farthest);
 
 	btQuaternion rotation;
 	rotation.setEulerZYX(rz, ry, rx);
@@ -128,17 +215,25 @@ RUnit::~RUnit()
 	delete _shape;
 }
 
-long RUnit::draw()
+long RUnit::draw(Frustum* frustum)
 {
 	unsigned int triangle = 0;
 	if (_model != nullptr)
 	{
 		_model->setTransformMatrix(_transformation);
-		triangle += _model->Draw();
+
+		
+		//vec4 middle = vec4(bbmiddle, 1.0f);
+		//middle = _transformation * middle;
+		//if (frustum->Inside(middle, radius))
+		//{
+			triangle += _model->Draw();
+		//}
+	
 	}
 	for (int i = 0; i < this->children.size(); i++)
 	{
-		triangle += this->children.at(i)->draw();
+		triangle += this->children.at(i)->draw(frustum);
 	}
 	return triangle;
 }
@@ -161,6 +256,7 @@ void RUnit::update(mat4 transformation, float time)
 	{
 		btTransform transform = _body->getWorldTransform();
 		btQuaternion rota = transform.getRotation();
+		_translation = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
 		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
 		_degree = rota.getAngle();
 		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
@@ -171,4 +267,3 @@ void RUnit::update(mat4 transformation, float time)
 		this->children.at(i)->update(transformation, time);
 	}
 }
-

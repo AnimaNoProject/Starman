@@ -1,6 +1,6 @@
 #include "Shots.h"
 
-Shots::Shots(Model* model, vec3 direction, vec3 position, vec3 up, vec3 right)
+Shots::Shots(Model* model, vec3 direction, vec3 position)
 {
 	_model = model;
 
@@ -9,9 +9,6 @@ Shots::Shots(Model* model, vec3 direction, vec3 position, vec3 up, vec3 right)
 	// set starting position
 	_direction = direction;
 	_position = position;
-	_position += direction * 8.0f;
-	_position -= up * 2.0f;
-	_position -= right;
 	// rotate into shooting direction
 	vec3 dirA(0.0f, 1.0f, 0.0f);
 	vec3 dirB(direction);

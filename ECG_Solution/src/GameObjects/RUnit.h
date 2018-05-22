@@ -2,6 +2,7 @@
 #include "../Rendering/Model.h"
 #include "Shots.h"
 #include "btBulletDynamicsCommon.h"
+#include "../Rendering/Frustum.h"
 
 class RUnit
 {
@@ -16,6 +17,8 @@ protected:
 	mat4 _position;
 	Model* _model;
 	mat4 _transformation;
+	vec3 bbmiddle;
+	float radius;
 public:
 	btRigidBody * _body;
 	btCollisionShape* _shape;
@@ -24,7 +27,7 @@ public:
 	RUnit(mat4 defaultTransformation);
 	RUnit();
 	~RUnit();
-	virtual long draw();
+	virtual long draw(Frustum* frustum);
 	void addChild(RUnit* unit);
 	virtual void setDefaultTransformation(vec3 translation, vec3 rotation, float degree);
 	virtual void update(mat4 transformation, float time);
