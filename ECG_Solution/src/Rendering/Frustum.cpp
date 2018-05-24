@@ -48,6 +48,7 @@ void Frustum::Update(vec3 eye, vec3 dir, vec3 up)
 
 bool Frustum::Inside(vec3 point, float radius)
 {
+	//return true;
 	float distance = 0;
 	for (int i = 0; i < 6; i++) {
 

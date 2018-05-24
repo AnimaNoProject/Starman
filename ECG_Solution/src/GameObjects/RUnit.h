@@ -21,7 +21,8 @@ protected:
 	float radius;
 public:
 	btRigidBody * _body;
-	btCollisionShape* _shape;
+	btConvexHullShape* _shape;
+	vector<btScalar> shapeVector;
 	RUnit(Model* model, vec3 translation, vec3 rotation, float degree, vec3 position, vec3 scaleIt);
 	RUnit(Model* model);
 	RUnit(mat4 defaultTransformation);

@@ -1,70 +1,118 @@
 #include "DebugDrawer.h"
 
-DebugDrawer::DebugDrawer() : _debugMode(1)
+DebugDrawer::DebugDrawer() : m_debugMode(1)
 {
 }
 
-DebugDrawer::~DebugDrawer()
+DebugDrawer::~DebugDrawer(void)
 {
 }
 
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	LINES.push_back(_LINE(vec3(from.getX(), from.getY(), from.getZ()), vec3(to.getX(), to.getY(), to.getZ())));
-	COLORS.push_back(_COLOR(vec3(color.getX(), color.getY(), color.getZ())));
+	/*
+	vec3 src(from.x(), from.y(), from.z());
+	vec3 dst(to.x(), to.y(), to.z());
+	vec3 col(color.x(), color.y(), color.z());
 
-	setupDrawing();
-	render();
-	cleanDrawing();
-}
+	LINE l(src, dst, col);
 
-void DebugDrawer::setupDrawing()
-{
+	//vec3 _from(from.x(), from.y(), from.z());
+	//vec3 _to(to.x(), to.y(), to.z());
+
+	//LINE line;
+	//line.a = _from;
+	//line.b = _to;
+	lines.push_back(l);
+	//lines.push_back(line);
+	*/
+	btLine lines(from, to);
+
+	btVector3 result = to - from;
+	glm::vec3 colors = { result.x(), result.y(), result.z() };
+	colors = glm::normalize(colors);
+
+	GLuint indices[] = { 0,1 };
+
 	glGenVertexArrays(1, &vao);
-	glGenBuffers(2, vbo);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
 
 	glBindVertexArray(vao);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, LINES.size() * sizeof(_LINE), &LINES[0], GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, COLORS.size() * sizeof(_COLOR), &COLORS[0], GL_STATIC_DRAW);
-
+	//UPLOADING VERTEX
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6, lines.vertices, GL_STATIC_DRAW);
+	//UPLOADING INDEXES
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 2, indices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(LINES), 0);
-	
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, sizeof(COLORS), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, (GLvoid*)0);
+	glBindVertexArray(0);
+
+	_shader->use();
+	_shader->setUniform("viewProj", viewProj);
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	//delete buffers
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ebo);
+
+	//setupDrawing();
+	//render();
+	//cleanDrawing();
+}
+
+void DebugDrawer::setSader(_Shader* shader)
+{
+	_shader = shader;
+}
+
+void DebugDrawer::setViewProj(mat4 matrix)
+{
+	viewProj = matrix;
+}
+
+
+/*
+void DebugDrawer::setupDrawing()
+{
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, lines.size() * sizeof(LINE), &lines[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(lines), (void*)0);
 	
 	glBindVertexArray(0);
 }
 
 void DebugDrawer::render()
 {
-	/*glBindVertexArray(vao);
-	glDrawArrays(GL_LINES, 0, LINES.size() * 2);
-	// Clear vectors
-	LINES.clear();
-	COLORS.clear();*/
-
-	//_shader->use();
-	//_shader->setUniform("viewProj", camera.getViewProjectionMatrix());
 	vector<GLfloat> vertices;
 	vector<GLuint> indices;
 	unsigned int indexI = 0;
 
-	for (vector<DebugDrawer::_LINE>::iterator it = LINES.begin(); it != LINES.end(); it++)
+	for (vector<DebugDrawer::LINE>::iterator it = lines.begin(); it != lines.end(); it++)
 	{
-		DebugDrawer::_LINE l = *it;
+		DebugDrawer::LINE l = *it;
 
-		vertices.push_back(l.from.x);
-		vertices.push_back(l.from.y);
-		vertices.push_back(l.from.z);
+		vertices.push_back(l.a.x);
+		vertices.push_back(l.a.y);
+		vertices.push_back(l.a.z);
 
-		vertices.push_back(l.to.x);
-		vertices.push_back(l.to.y);
-		vertices.push_back(l.to.z);
+		vertices.push_back(l.b.x);
+		vertices.push_back(l.b.y);
+		vertices.push_back(l.b.z);
 
 		indices.push_back(indexI);
 		indices.push_back(indexI + 1);
@@ -72,39 +120,15 @@ void DebugDrawer::render()
 	}
 	glBindVertexArray(vao);
 	glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, (void*)&indices[0]);
-}
-
-void DebugDrawer::setShader(_Shader* shader)
-{
-	_shader = shader;
-}
-
-void DebugDrawer::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
-{
-}
-
-void DebugDrawer::reportErrorWarning(const char* warningString)
-{
-}
-
-void DebugDrawer::draw3dText(const btVector3& location, const char* textString)
-{
-}
-
-void DebugDrawer::setDebugMode(int m_debugMode)
-{
-	_debugMode = m_debugMode;
-}
-
-int DebugDrawer::getDebugMode() const
-{
-	return _debugMode;
+	glBindVertexArray(0);
 }
 
 void DebugDrawer::cleanDrawing()
 {
 	// delete buffers
-	glDeleteBuffers(2, vbo);
+	glDeleteBuffers(1, &vbo);
 	glDeleteBuffers(1, &vao);
 }
+
+*/
 

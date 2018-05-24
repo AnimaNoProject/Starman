@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\Rendering\DebugDrawer.cpp" />
     <ClCompile Include="src\Rendering\Frustum.cpp" />
     <ClCompile Include="src\Rendering\Skybox.cpp" />
     <ClCompile Include="src\Rendering\ParticleSystem.cpp" />
@@ -15,6 +16,7 @@
     <ClCompile Include="src\GameObjects\RUnit.cpp" />
     <ClCompile Include="src\GameObjects\Camera.cpp" />
     <ClCompile Include="src\Shader\_Shader.cpp" />
+    <ClInclude Include="src\Rendering\DebugDrawer.h" />
     <ClInclude Include="src\Rendering\Frustum.h" />
     <ClInclude Include="src\Rendering\Skybox.h" />
     <ClInclude Include="src\Rendering\ParticleSystem.h" />

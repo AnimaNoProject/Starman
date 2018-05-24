@@ -2,55 +2,69 @@
 #include <LinearMath/btIDebugDraw.h>
 #include "../Shader/_Shader.h"
 #include "../GameObjects/Camera.h"
+#include "../GameObjects/Camera.h"
 
 using namespace glm;
-
 
 class DebugDrawer : public btIDebugDraw
 {
 
-private:
-	int _debugMode;
-	_Shader* _shader;
-
 public:
-	GLuint vao, vbo[2];
+	/*
+	struct LINE {
+		GLfloat vertices[6];
+		LINE(vec3 a, vec3 b, vec3 color) : a(a), b(b), color(color)
+		{
+		};
 
+		vec3 a;
+		vec3 b;
+		vec3 color;
+	};
+	*/
+	struct btLine {
+		GLfloat vertices[6];
+		btLine(const btVector3& f, const btVector3& t) {
+			vertices[0] = f.x();
+			vertices[1] = f.y();
+			vertices[2] = f.z();
 
-	DebugDrawer(void);
-	virtual ~DebugDrawer(void);
-
-	struct _LINE {
-		vec3 from;
-		vec3 to;
-
-		_LINE(vec3 f, vec3 t) {
-			from = f;
-			to = t;
+			vertices[3] = t.x();
+			vertices[4] = t.y();
+			vertices[5] = t.z();
 		}
 	};
 
-	vector<_LINE> LINES;
-
-	struct _COLOR {
-		vec3 col;
-
-		_COLOR(vec3 c) {
-			col = c;
-		}
-	};
-
-	vector<_COLOR> COLORS;
+	DebugDrawer();
+	~DebugDrawer(void);
 
 	virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
-	virtual void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);
-	virtual void reportErrorWarning(const char* warningString);
-	virtual void draw3dText(const btVector3& location, const char* textString);
-	virtual void setDebugMode(int m_debugMode);
-	virtual int getDebugMode() const;
+	virtual void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color) {}
+	virtual void drawTriangle(const btVector3 & a, const btVector3 & b, const btVector3 & c, const btVector3 & color, btScalar alpha) {}
+
+	void reportErrorWarning(const char * warningString) { std::cout << "Physics debugger warning: " << warningString << std::endl; }
+
+	virtual void draw3dText(const btVector3& location, const char* textString) {}
+	virtual void setDebugMode(int debugMode) { m_debugMode = debugMode; }
+	virtual int getDebugMode() const { return m_debugMode; }
+
+	//std::vector<LINE> & GetLines() { return lines; }
 
 	void setupDrawing();
-	void cleanDrawing();
-	void setShader(_Shader* shader);
 	void render();
+	void cleanDrawing();
+	void setViewProj(mat4 matrix);
+
+	void setSader(_Shader* shader);
+
+private:
+	//std::vector<LINE> lines;
+
+	int m_debugMode;
+
+	GLuint vao;
+	GLuint vbo;
+	GLuint ebo;
+	_Shader* _shader;
+	mat4 viewProj;
 };

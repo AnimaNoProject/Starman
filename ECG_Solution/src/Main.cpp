@@ -21,6 +21,7 @@
 #include "Rendering/ParticleSystem.h"
 #include "Rendering/Skybox.h"
 #include "Rendering/Frustum.h"
+#include "Rendering\DebugDrawer.h"
 
 using namespace glm;
 using namespace std;
@@ -69,11 +70,13 @@ static Model* station_model;
 static Model* sun_model;
 static Model* pickup_model;
 
-btBroadphaseInterface*                  _broadphase;
-btDefaultCollisionConfiguration*        _collisionConfiguration;
+btDynamicsWorld*						_world;
 btCollisionDispatcher*                  _dispatcher;
+btBroadphaseInterface*                  _broadphase;
 btSequentialImpulseConstraintSolver*    _solver;
-btDiscreteDynamicsWorld*                _world;
+btDefaultCollisionConfiguration*        _collisionConfiguration;
+DebugDrawer*							bulletDebugDrawer;
+
 
 /* --------------------------------------------- */
 // Main
@@ -210,6 +213,9 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Initialize scene and render loop
 	/* --------------------------------------------- */
+	std::shared_ptr<_Shader> bulletShader = std::make_shared<_Shader>("assets/shader/shaderBulletDebug.vert", "assets/shader/shaderBulletDebug.frag");
+	bulletDebugDrawer = new DebugDrawer();
+	bulletDebugDrawer->setSader(bulletShader.get());
 	initPhysics();
 
 	/* --------------------------------------------- */
@@ -254,6 +260,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Frustum* frustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
+
 	{
 		while (!glfwWindowShouldClose(_window)) {
 
@@ -285,7 +292,9 @@ int main(int argc, char** argv)
 			//enemies.takeHint(player.getPosition(), t_delta);
 			//enemies.update(mat4(1), t_delta);
 
+			bulletDebugDrawer->setViewProj(_debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
 			_world->stepSimulation(t_delta, 10);
+			_world->debugDrawWorld();
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 
@@ -299,9 +308,9 @@ int main(int argc, char** argv)
 			triangles += player.draw();
 
 			// Particle System
-			particle_shader.get()->use();
-			particle_shader.get()->setUniform("viewProj", _debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
-			particleSystem.Draw();
+			//particle_shader.get()->use();
+			//particle_shader.get()->setUniform("viewProj", _debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
+			//particleSystem.Draw();
 			//
 
 			// Draw Skybox
@@ -339,13 +348,26 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-	for (unsigned int i = 0; i < 100; i++)
+	
+	for (unsigned int i = 0; i < 2; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
+	
 
+	/*
+	RUnit* n = new RUnit(asteroid_model01, vec3(-1, 0, 0), vec3(0, 0, 0), 0.0f, vec3(25.0f, 0.0f, -2.0f), vec3(1,1,1));
+	world.addChild(n);
+	_world->addRigidBody(n->_body);
+	RUnit* n1 = new RUnit(asteroid_model01, vec3(1, 0, 0), vec3(0, 0, 0), 0.0f, vec3(-25.0f, 0.0f, -2.0f), vec3(1, 1, 1));
+	world.addChild(n1);
+	_world->addRigidBody(n1->_body);
+	*/
+
+
+	/*
 	for (unsigned int i = 0; i < 75; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -371,16 +393,22 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	{
 		enemies.addChild(new REnemy(enemy_model, shader));
 	}
+	*/
 }
 
 void initPhysics()
 {
-	_broadphase = new btDbvtBroadphase();
 	_collisionConfiguration = new btDefaultCollisionConfiguration();
 	_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
+
+	_broadphase = new btDbvtBroadphase();
 	_solver = new btSequentialImpulseConstraintSolver();
+
 	_world = new btDiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConfiguration);
 	_world->setGravity(btVector3(0, 0, 0));
+
+	_world->setDebugDrawer(bulletDebugDrawer);
+
 }
 
 void destroyPhysics()
@@ -412,7 +440,6 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 
 	shader->setUniform("cellshading", _cell_shading);
 }
-
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {

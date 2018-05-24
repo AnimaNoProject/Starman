@@ -11,15 +11,22 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 
 	//model->transform(_scale);
 
-	_shape = new btConvexHullShape();
+
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
-			((btConvexHullShape*)_shape)->addPoint(btv);
+			//btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
+			//((btConvexHullShape*)_shape)->addPoint(btv);
+			//((btConvexHullShape*)_shape)->addPoint(btv);//btv[j] = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
+			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.x * scaleIt.x);
+			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.y * scaleIt.x);
+			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.z * scaleIt.x);
 		}
 	}
+
+	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
+
 
 	float numberOfVertices = 0;
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
@@ -72,8 +79,8 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 
 	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
 
-	bodyCI.m_restitution = 0.5f;
-	bodyCI.m_friction = 0.001f;
+	bodyCI.m_restitution = 0.05f;
+	bodyCI.m_friction = 0.005f;
 
 	_body = new btRigidBody(bodyCI);
 
@@ -86,12 +93,17 @@ RUnit::RUnit(Model * model)
 {
 	_model = model;
 	float px, py, pz, r, tx, ty, tz, rx, ry, rz, s;
-	tx = rand() & 1;
-	ty = rand() & 1;
-	tz = rand() & 1;
+	tx = rand() & 10;
+	ty = rand() & 10;
+	tz = rand() & 10;
+	/*
 	px = rand() % 500;
 	py = rand() % 500;
 	pz = rand() % 500;
+	*/
+	px = rand() % 2;
+	py = rand() % 2;
+	pz = rand() % 2;
 
 	if ((rand() & 1) == 1)
 	{
@@ -106,9 +118,13 @@ RUnit::RUnit(Model * model)
 		pz = -pz;
 	}
 
-	rx = rand() & 1;
-	ry = rand() & 1;
-	rz = rand() & 1;
+	px = py = pz = 0;
+
+	rx = rand() & 10;
+	ry = rand() & 10;
+	rz = rand() & 10;
+
+
 	s = rand() % 25;
 	r = rand() % 25 / 100;
 	_translation = vec3(tx, ty, tz);
@@ -116,26 +132,30 @@ RUnit::RUnit(Model * model)
 	_rotation = vec3(rx, ry, rz);
 	_scale = scale(mat4(1), vec3(s, s, s));
 	_degree = r;
+	_model = model;
 
 	//model->transform(_scale);
 
-	_shape = new btConvexHullShape();
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
-			((btConvexHullShape*)_shape)->addPoint(btv);
+			//btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
+			//((btConvexHullShape*)_shape)->addPoint(btv);
+			//((btConvexHullShape*)_shape)->addPoint(btv);//btv[j] = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
+			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.x * s);
+			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.y * s);
+			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.z * s);
 		}
 	}
+
+	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
 
 	float numberOfVertices = 0;
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
 		numberOfVertices += model->meshes.at(i)._vertices.size();
 	}
-
-	float normalizeFactor = 1.0f / numberOfVertices;
 	vec3 average(0, 0, 0);
 
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
@@ -151,7 +171,6 @@ RUnit::RUnit(Model * model)
 	average.x /= numberOfVertices;
 	average.y /= numberOfVertices;
 	average.z /= numberOfVertices;
-
 	bbmiddle = average;
 
 	float farthest = 0.0f;
@@ -172,28 +191,25 @@ RUnit::RUnit(Model * model)
 
 	radius = sqrt(farthest);
 
-	btQuaternion rotation;
-	rotation.setEulerZYX(rz, ry, rx);
-	btVector3 position = btVector3(px, py, pz);
-	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
+	btQuaternion rotationQuat;
+	rotationQuat.setEulerZYX(_rotation.x, _rotation.y, _rotation.z);
+	btVector3 positionbT = btVector3(px, py, pz);
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotationQuat, positionbT));
 
-	btScalar mass = s;
+	btScalar mass = 1500;
 	btVector3 bodyInertia;
 	_shape->calculateLocalInertia(mass, bodyInertia);
 
 	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
 
 	bodyCI.m_restitution = 0.5f;
-	bodyCI.m_friction = 0.001f;
+	bodyCI.m_friction = 0.005f;
 
 	_body = new btRigidBody(bodyCI);
 
 	_body->setLinearFactor(btVector3(1, 1, 0));
 
-	_body->setLinearVelocity(btVector3(tx, ty, tz));
-
-	_body->setAngularFactor(btVector3(rx, ry, rz));
-	_body->setAngularVelocity(btVector3(0.001, 0.001, 0.001));
+	_body->setLinearVelocity(btVector3(_translation.x, _translation.y, _translation.z));
 }
 
 RUnit::RUnit(mat4 defaultTransformation)
