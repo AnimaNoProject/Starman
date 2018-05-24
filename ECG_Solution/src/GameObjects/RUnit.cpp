@@ -238,13 +238,12 @@ long RUnit::draw(Frustum* frustum)
 	{
 		_model->setTransformMatrix(_transformation);
 
-		
-		//vec4 middle = vec4(bbmiddle, 1.0f);
-		//middle = _transformation * middle;
-		//if (frustum->Inside(middle, radius))
-		//{
+		vec4 middle = vec4(bbmiddle, 1.0f);
+		middle = _transformation * middle;
+		if (frustum->Inside(middle, radius))
+		{
 			triangle += _model->Draw();
-		//}
+		}
 	
 	}
 	for (int i = 0; i < this->children.size(); i++)
