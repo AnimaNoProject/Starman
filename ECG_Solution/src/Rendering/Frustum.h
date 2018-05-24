@@ -44,10 +44,11 @@ private:
 	float nw, nh, fw, fh;
 	vec3 ntl, ntr, nbl, nbr, ftl, ftr, fbl, fbr;
 	enum { TOP = 0, BOTTOM, RIGHT, LEFT, NEAR, FAR };
+	bool _on;
 public:
 	Frustum(float fov, float aspect, float nearZ, float farZ);
 	~Frustum();
-	void Update(vec3 eye, vec3 dir, vec3 up);
+	void Update(vec3 eye, vec3 dir, vec3 up, bool on);
 	bool Inside(vec3 point, float radius);
 };
 

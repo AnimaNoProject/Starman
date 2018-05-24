@@ -63,6 +63,7 @@ static bool _cell_shading = true;
 static bool _post_processing = true;
 static PostProcessing* postprocessor;
 static double x, y;
+static bool _frustum_culling = false;
 
 static Model* asteroid_model01;
 static Model* asteroid_model02;
@@ -279,12 +280,12 @@ int main(int argc, char** argv)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
-				frustum->Update(camera._eye, camera._center, camera._up);
+				frustum->Update(camera._eye, camera._center, camera._up, _frustum_culling);
 			}
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
-				frustum->Update(pcamera._eye, pcamera._center, pcamera._up);
+				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
 			}
 
 			//enemies.takeHint(player.getPosition(), t_delta);
@@ -473,6 +474,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	else if (key == GLFW_KEY_F9 && action == GLFW_RELEASE)
 	{
 		_debug_camera = !_debug_camera;
+	}
+
+	else if (key == GLFW_KEY_F10 && action == GLFW_RELEASE)
+	{
+		_frustum_culling = !_frustum_culling;
 	}
 }
 
