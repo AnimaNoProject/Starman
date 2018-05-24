@@ -10,18 +10,7 @@ class DebugDrawer : public btIDebugDraw
 {
 
 public:
-	/*
-	struct LINE {
-		GLfloat vertices[6];
-		LINE(vec3 a, vec3 b, vec3 color) : a(a), b(b), color(color)
-		{
-		};
 
-		vec3 a;
-		vec3 b;
-		vec3 color;
-	};
-	*/
 	struct btLine {
 		GLfloat vertices[6];
 		btLine(const btVector3& f, const btVector3& t) {
@@ -48,11 +37,6 @@ public:
 	virtual void setDebugMode(int debugMode) { m_debugMode = debugMode; }
 	virtual int getDebugMode() const { return m_debugMode; }
 
-	//std::vector<LINE> & GetLines() { return lines; }
-
-	void setupDrawing();
-	void render();
-	void cleanDrawing();
 	void setViewProj(mat4 matrix);
 
 	void setSader(_Shader* shader);

@@ -16,9 +16,6 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			//btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
-			//((btConvexHullShape*)_shape)->addPoint(btv);
-			//((btConvexHullShape*)_shape)->addPoint(btv);//btv[j] = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
 			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.x * scaleIt.x);
 			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.y * scaleIt.x);
 			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.z * scaleIt.x);
@@ -79,7 +76,7 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 
 	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
 
-	bodyCI.m_restitution = 0.05f;
+	bodyCI.m_restitution = 0.5f;
 	bodyCI.m_friction = 0.005f;
 
 	_body = new btRigidBody(bodyCI);
@@ -118,7 +115,7 @@ RUnit::RUnit(Model * model)
 		pz = -pz;
 	}
 
-	px = py = pz = 0;
+	//px = py = pz = 0;
 
 	rx = rand() & 10;
 	ry = rand() & 10;
@@ -140,9 +137,6 @@ RUnit::RUnit(Model * model)
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			//btVector3 btv = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
-			//((btConvexHullShape*)_shape)->addPoint(btv);
-			//((btConvexHullShape*)_shape)->addPoint(btv);//btv[j] = btVector3(model->meshes.at(i)._vertices.at(j).Position.x, model->meshes.at(i)._vertices.at(j).Position.y, model->meshes.at(i)._vertices.at(j).Position.z);
 			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.x * s);
 			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.y * s);
 			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.z * s);

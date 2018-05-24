@@ -346,14 +346,23 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	srand(12348);
 	
 
-	for (unsigned int i = 0; i < 2; i++)
+	/* For Bullet Physics debugging purposes
+	RUnit* m1 = new RUnit(asteroid_model01, vec3(1.0f, 0.0f, 0.0f), vec3(2.0f, 0.4f, 3.1f), 2.0f, vec3(-20,0,0), vec3(2.0f, 2.0f, 2.0f));
+	world.addChild(m1);
+	_world->addRigidBody(m1->_body);
+	RUnit* m2 = new RUnit(asteroid_model01, vec3(-1.0f, 0.0f, 0.0f), vec3(4.2f, 3.0f , 0), 2.0f, vec3(20, 0, 0), vec3(2.0f, 2.0f, 2.0f));
+	world.addChild(m2);
+	_world->addRigidBody(m2->_body);
+	*/
+	
+	for (unsigned int i = 0; i < 20; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
+
 	
-	/*
 	for (unsigned int i = 0; i < 75; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -379,7 +388,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	{
 		enemies.addChild(new REnemy(enemy_model, shader));
 	}
-	*/
+	
 }
 
 void initPhysics()
