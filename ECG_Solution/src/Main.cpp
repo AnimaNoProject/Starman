@@ -39,6 +39,7 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
 void initPhysics();
 void destroyPhysics();
+void handleInput();
 
 /* --------------------------------------------- */
 // Global variables
@@ -61,6 +62,8 @@ static float _brightness;
 static bool _cell_shading = true;
 static bool _post_processing = true;
 static PostProcessing* postprocessor;
+static double x, y;
+static bool _frustum_culling = false;
 
 static Model* asteroid_model01;
 static Model* asteroid_model02;
@@ -207,7 +210,6 @@ int main(int argc, char** argv)
 	// Frame Independency
 	/* --------------------------------------------- */
 	float t_delta, t_now, t_start = glfwGetTime();
-	double x, y;
 	long triangles;
 
 	/* --------------------------------------------- */
@@ -271,20 +273,19 @@ int main(int argc, char** argv)
 
 			t_start = t_now;
 
-			glfwGetCursorPos(_window, &x, &y);
-			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
+			handleInput();
 			
 			// Update
 			if (_debug_camera)
 			{
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
-				frustum->Update(camera._eye, camera._center, camera._up);
+				frustum->Update(camera._eye, camera._center, camera._up, _frustum_culling);
 			}
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
-				frustum->Update(pcamera._eye, pcamera._center, pcamera._up);
+				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
 			}
 
 			//enemies.takeHint(player.getPosition(), t_delta);
@@ -438,15 +439,6 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
-		_shootL = true;
-	else if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
-		_shootL = false;
-
-	if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS)
-		_shootR = true;
-	else if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_RELEASE)
-		_shootR = false;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -460,10 +452,25 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, true);
 	}
 
+	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
+	{
+		_debug_hud = !_debug_hud;
+	}
+
 	else if (key == GLFW_KEY_F3 && action == GLFW_RELEASE)
 	{
 		_wireframe = !_wireframe;
 		glPolygonMode(GL_FRONT_AND_BACK, _wireframe ? GL_LINE : GL_FILL);
+	}
+
+	else if (key == GLFW_KEY_F6 && action == GLFW_RELEASE)
+	{
+		_cell_shading = !_cell_shading;
+	}
+
+	else if (key == GLFW_KEY_F7 && action == GLFW_RELEASE)
+	{
+		_post_processing = !_post_processing;
 	}
 
 	else if (key == GLFW_KEY_F8 && action == GLFW_RELEASE)
@@ -478,53 +485,34 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		_debug_camera = !_debug_camera;
 	}
 
-	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
+	else if (key == GLFW_KEY_F10 && action == GLFW_RELEASE)
 	{
-		_debug_hud = !_debug_hud;
+		_frustum_culling = !_frustum_culling;
 	}
+}
 
-	else if (key == GLFW_KEY_F6 && action == GLFW_RELEASE)
-	{
-		_cell_shading = !_cell_shading;
-	}
+static void handleInput()
+{
+	// Handle User Input
+	_up = _down = _left = _right = _shootL = _shootR = false;
+	glfwGetCursorPos(_window, &x, &y);
+	glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 
-	else if (key == GLFW_KEY_F7 && action == GLFW_RELEASE)
-	{
-		_post_processing = !_post_processing;
-	}
-
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
-	{
-		_right = true;
-	}
-	else if (key == GLFW_KEY_D && action == GLFW_RELEASE)
-	{
-		_right = false;
-	}
-	if (key == GLFW_KEY_A && action == GLFW_PRESS)
-	{
-		_left = true;
-	}
-	else if (key == GLFW_KEY_A && action == GLFW_RELEASE)
-	{
-		_left = false;
-	}
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-	{
+	if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
 		_up = true;
-	}
-	else if (key == GLFW_KEY_W && action == GLFW_RELEASE)
-	{
-		_up = false;
-	}
-	if (key == GLFW_KEY_S && action == GLFW_PRESS)
-	{
+	else if (glfwGetKey(_window, GLFW_KEY_S) == GLFW_PRESS)
 		_down = true;
-	}
-	else if (key == GLFW_KEY_S && action == GLFW_RELEASE)
-	{
-		_down = false;
-	}
+
+	if (glfwGetKey(_window, GLFW_KEY_A) == GLFW_PRESS)
+		_left = true;
+	else if (glfwGetKey(_window, GLFW_KEY_D) == GLFW_PRESS)
+		_right = true;
+
+	if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+		_shootL = true;
+	if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
+		_shootR = true;
+	//
 }
 
 static void APIENTRY DebugCallbackDefault(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam) {

@@ -8,32 +8,32 @@ class RPlayer
 {
 private:
 	vec3 _position;
-	Model* _model;
-	double _speed;
-
-	float _yaw;
-	float _pitch;
-	const float _mouse_speed = 2.0f;
-	vec3 _right;
-	vec3 _up;
-	vec3 _dir;
+	Model* _model, *_shot;
 	_Shader* _shader;
-	Model* _shot;
-	float timepassedL;
-	float timepassedR;
-	float cooldown = 0.25f;
-public:
-	std::vector<Shots*> shots;
-	RPlayer();
-	RPlayer(Model* model);
-	RPlayer(Model* model, Camera* camera, _Shader* shader);
-	~RPlayer();
-	double _real_speed;
-	int _health;
-	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
+
+	vec3 _right, _up, _dir;
+
+	float timepassedL, timepassedR, _yaw, _pitch;
+
+	const float cooldown = 0.25f;
+	const float _mouse_speed = 2.0f;
+
 	void shoot(float deltaTime, bool shootL, bool shootR);
-	long draw();
+public:
+	vector<Shots*> shots;
 	Camera* _camera;
 	vec3 getPosition() { return _position; }
+
+	RPlayer();
+	RPlayer(Model* model, Camera* camera, _Shader* shader);
+	~RPlayer();
+
+	double _real_speed;
+	int _speed, _health;
+
+	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
+
+	long draw();
+
 };
 
