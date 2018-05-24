@@ -151,8 +151,6 @@ void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, uns
 		sprintf(buffer, "Frametime: %f", deltaTime);
 		renderText(buffer, 300.0f, 50.0f, 0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
 		sprintf(buffer, "FPS: %.0f", 1 / deltaTime);
-		if (1 / deltaTime < 100)
-			cout << "fps drop: " << 1 / deltaTime << endl;
 		renderText(buffer, 600.0f, 50.0f, 0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
 		sprintf(buffer, "Rendered: %i Triangles", triangles);
 		renderText(buffer, 300.0f, 25.0f, 0.5f, glm::vec3(0.5f, 0.5f, 0.5f));

@@ -1,20 +1,16 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(int number) : outputIndex(1)
+ParticleSystem::ParticleSystem(int number)
 {
-	particles_max = number;
-	velBuffer[0] = velBuffer[1] = 0;
-	posBuffer[0] = posBuffer[1] = 0;
+	velBuffer = colBuffer = posBuffer = 0;
 }
 
 ParticleSystem::~ParticleSystem()
 {
 	// delete buffers
-	glDeleteVertexArrays(2, vao);
-	glDeleteBuffers(1, &velBuffer[0]);
-	glDeleteBuffers(1, &velBuffer[1]);
-	glDeleteBuffers(1, &posBuffer[0]);
-	glDeleteBuffers(1, &posBuffer[1]);
+	glDeleteBuffers(1, &velBuffer);
+	glDeleteBuffers(1, &posBuffer);
+	glDeleteBuffers(1, &posBuffer);
 }
 
 void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, unsigned int workgroup_z)
@@ -22,108 +18,82 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	workGroup[0] = workgroup_x;
 	workGroup[1] = workgroup_y;
 	workGroup[2] = workgroup_z;
+	shader = new _Shader("assets/shader/shaderParticle.vert", "assets/shader/shaderParticle.frag");
+	compute_shader = new _Shader("assets/shader/shaderParticle.comp");
 
-	particles_alive = particles_max;
+	vec4* points;
+	vec4* velocities;
+	vec4* colors;
 
-	Position* positions = new Position[particles_max];
-	Velocity* velocities = new Velocity[particles_max];
-
-	memset(velocities, 0, particles_max * sizeof(Velocity));
-
-	Position* pPositions = positions;
-	Velocity* pSpeed = velocities;
-
-	for (unsigned int i = 0; i < particles_alive; i++)
+	points = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
+	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
-		// Position + Color bit
-		pPositions->x = 0.0f;
-		pPositions->y = 0.0f;
-		pPositions->z = 0.0f;
-		pPositions->w = 0.8;
-
-		// Speed + TimeToLive
-		pSpeed->vx = rand() % 5;
-		pSpeed->vz = rand() % 5;
-		pSpeed->vy = rand() % 5;
-		pSpeed->ttl = 10.0f;
+		points[i].x = rand() % 100;
+		points[i].y = rand() % 100;
+		points[i].z = rand() % 100;
+		points[i].w = 1;
 	}
+	glGenBuffers(1, &posBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(vec4), points, GL_DYNAMIC_COPY);
 
-	InitRender(positions, velocities);
+	velocities = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
+	for (int i = 0; i < MAX_PARTICLES; i++)
+	{
+		velocities[i].x = rand() % 4;
+		velocities[i].y = rand() % 4;
+		velocities[i].z = rand() % 4;
+		velocities[i].w = rand() % 4;
+	}
+	glGenBuffers(1, &velBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, velBuffer);
+	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(vec4), velocities, GL_DYNAMIC_COPY);
 
-	delete[] positions;
-	delete[] velocities;
+	colors = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
+	for (int i = 0; i < MAX_PARTICLES; i++)
+	{
+		colors[i].x = rand() % 100 / 100;
+		colors[i].y = rand() % 100 / 100;
+		colors[i].z = rand() % 100 / 100;
+		colors[i].w = 1;
+	}
+	glGenBuffers(1, &colBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colBuffer);
+	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(vec4), colors, GL_DYNAMIC_COPY);
 }
 
 void ParticleSystem::Update(float d_time)
 {
 	compute_shader->use();
-
+	glDisable(GL_CULL_FACE);
+	glPointSize(4.5f);
 	// bind uniforms
 	compute_shader->setUniform("d_time", d_time);
-	compute_shader->setUniform("particles_alive", particles_alive);
 
-	// bind buffers
-	glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, posBuffer[!outputIndex], 0, particles_alive * sizeof(Position));
-	glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, velBuffer[!outputIndex], 0, particles_alive * sizeof(Velocity));
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, posBuffer);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velBuffer);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, colBuffer);
 
-	glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 2, posBuffer[outputIndex], 0, particles_alive * sizeof(Position));
-	glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 3, velBuffer[outputIndex], 0, particles_alive * sizeof(Velocity));
+	glDispatchCompute(MAX_PARTICLES / WORK_GROUP_SIZE, 1, 1);
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-	//execute the compute shader
-	glDispatchCompute(workGroup[0], workGroup[1], workGroup[2]);
-	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
-
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	glUseProgram(0);
-
-	//Swap input and output
-	outputIndex = !outputIndex;
 }
 
-void ParticleSystem::InitRender(const Position * positions, const Velocity * velocities)
+void ParticleSystem::Draw(mat4 viewproj)
 {
-	compute_shader = new _Shader("assets/shader/shaderParticle.comp");
+	shader->use();
+	shader->setUniform("viewProj", viewproj);
 
-	// Generate Position / Velocity Buffers
-	glGenBuffers(1, &posBuffer[0]);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer[0]);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, particles_alive * sizeof(positions), (float*)positions, GL_STATIC_DRAW);
-	
-	glGenBuffers(1, &posBuffer[1]);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer[1]);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, particles_alive * sizeof(positions), (float*)positions, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &velBuffer[0]);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velBuffer[0]);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, particles_alive * sizeof(velocities), (float*)velocities, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &velBuffer[1]);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velBuffer[1]);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, particles_alive*sizeof(velocities), (float*)velocities, GL_STATIC_DRAW);
-	//
-
-	// VAOs
-	glGenVertexArrays(2, vao);
-
-	glBindVertexArray(vao[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, posBuffer[0]);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, colBuffer);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
 
-	glBindVertexArray(vao[1]);
-	glBindBuffer(GL_ARRAY_BUFFER, posBuffer[1]);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
 
-	glBindVertexArray(0);
-	//
-}
-
-void ParticleSystem::Draw()
-{
-	// draw vaos
-	glBindVertexArray(vao[outputIndex]);
-	glDrawArrays(GL_POINTS, 0, particles_alive);
-	glBindVertexArray(0);
+	glEnable(GL_CULL_FACE);
 	glUseProgram(0);
 }

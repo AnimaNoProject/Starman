@@ -14,19 +14,19 @@ void main(void)
 
     for ( i = 0; i < gl_in.length(); i++)
     {
-		gl_Position = gl_in[i].gl_Position + vec4(-1, -1, 0, 0);
+		gl_Position = gl_in[i].gl_Position;
 		color = out_color[i];
         EmitVertex();
 
-        gl_Position = gl_in[i].gl_Position + vec4(1, -1, 0, 0);
+        gl_Position = gl_in[i].gl_Position;
         color = out_color[i];
         EmitVertex();
 
-        gl_Position = gl_in[i].gl_Position + vec4(-1, 1, 0, 0);
+        gl_Position = gl_in[i].gl_Position;
         color = out_color[i];
         EmitVertex();
 
-		gl_Position = gl_in[i].gl_Position + vec4(1, 1, 0, 0);
+		gl_Position = gl_in[i].gl_Position;
         color = out_color[i];
         EmitVertex();
 

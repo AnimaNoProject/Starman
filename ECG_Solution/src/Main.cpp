@@ -244,11 +244,10 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Particle-System
 	/* --------------------------------------------- */
-	std::shared_ptr<_Shader> particle_shader = std::make_shared<_Shader>("assets/shader/shaderParticle.vert", "assets/shader/shaderParticle.frag", "assets/shader/shaderParticle.geom");
-	ParticleSystem particleSystem(1024 * 1024 * 2);
-	particleSystem.Init(1024 / 32, 1024 / 32, 1);
+	ParticleSystem particleSystem(1024 * 1024);
+	particleSystem.Init(128, 1, 1);
 
-	glPointSize(5.0f);
+	//glPointSize(5.0f);
 
 	/* --------------------------------------------- */
 	// Skybox
@@ -288,7 +287,6 @@ int main(int argc, char** argv)
 				frustum->Update(pcamera._eye, pcamera._center, pcamera._up);
 			}
 
-			//world.update(mat4(1), t_now);
 			//enemies.takeHint(player.getPosition(), t_delta);
 			//enemies.update(mat4(1), t_delta);
 
@@ -308,9 +306,7 @@ int main(int argc, char** argv)
 			triangles += player.draw();
 
 			// Particle System
-			//particle_shader.get()->use();
-			//particle_shader.get()->setUniform("viewProj", _debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
-			//particleSystem.Draw();
+			particleSystem.Draw(_debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
 			//
 
 			// Draw Skybox
@@ -349,6 +345,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 	
+
 	for (unsigned int i = 0; i < 2; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
@@ -356,17 +353,6 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 	
-
-	/*
-	RUnit* n = new RUnit(asteroid_model01, vec3(-1, 0, 0), vec3(0, 0, 0), 0.0f, vec3(25.0f, 0.0f, -2.0f), vec3(1,1,1));
-	world.addChild(n);
-	_world->addRigidBody(n->_body);
-	RUnit* n1 = new RUnit(asteroid_model01, vec3(1, 0, 0), vec3(0, 0, 0), 0.0f, vec3(-25.0f, 0.0f, -2.0f), vec3(1, 1, 1));
-	world.addChild(n1);
-	_world->addRigidBody(n1->_body);
-	*/
-
-
 	/*
 	for (unsigned int i = 0; i < 75; i++)
 	{

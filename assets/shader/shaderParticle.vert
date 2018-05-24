@@ -1,12 +1,11 @@
 #version 420
 
 in layout (location = 0) vec4 position; 
-in layout (location = 1) vec3 color;
+in layout (location = 2) vec3 color;
 
 uniform mat4 viewProj;
 
 out vec4 out_color;
-
 
 void main()
 {

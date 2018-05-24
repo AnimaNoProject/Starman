@@ -6,20 +6,22 @@
 #include <vector>
 #include <ctime>
 
+#define MAX_PARTICLES 1024 * 1024
+#define WORK_GROUP_SIZE 128
+
 struct Position
 {
-	float x;
-	float y;
-	float z;
-	float w;
+	float x, y, z, w;
 };
 
 struct Velocity
 {
-	float vx;
-	float vy;
-	float vz;
-	float ttl;
+	float vx, vy, vz, vw;
+};
+
+struct Color
+{
+	float r, g, b, a;
 };
 
 class ParticleSystem
@@ -29,16 +31,13 @@ public:
 	~ParticleSystem();
 	void Init(unsigned int workgroup_x, unsigned int workgroup_y, unsigned int workgroup_z);
 	void Update(float d_time);
-	void InitRender(const Position* positions, const Velocity* velocities);
-	void Draw();
+	void Draw(mat4 viewproj);
 private:
-	unsigned int particles_alive;
-	unsigned int particles_max;
-	int outputIndex;
 	unsigned int workGroup[3];
-
+	_Shader* shader;
 	_Shader* compute_shader;
-	GLuint posBuffer[2];
-	GLuint velBuffer[2];
-	GLuint vao[2];
+	GLuint posBuffer;
+	GLuint velBuffer;
+	GLuint colBuffer;
+	GLuint vao;
 };
