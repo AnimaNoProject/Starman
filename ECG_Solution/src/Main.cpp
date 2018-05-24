@@ -271,8 +271,27 @@ int main(int argc, char** argv)
 
 			t_start = t_now;
 
+
+			_up = _down = _left = _right = _shootL = _shootR = false;
+			//
 			glfwGetCursorPos(_window, &x, &y);
 			glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
+
+			if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
+				_up = true;
+			else if (glfwGetKey(_window, GLFW_KEY_S) == GLFW_PRESS)
+				_down = true;
+
+			if (glfwGetKey(_window, GLFW_KEY_A) == GLFW_PRESS)
+				_left = true;
+			else if (glfwGetKey(_window, GLFW_KEY_D) == GLFW_PRESS)
+				_right = true;
+
+			if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+				_shootL = true;
+			if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
+				_shootR = true;
+			//
 			
 			// Update
 			if (_debug_camera)
@@ -429,15 +448,6 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
-		_shootL = true;
-	else if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
-		_shootL = false;
-
-	if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS)
-		_shootR = true;
-	else if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_RELEASE)
-		_shootR = false;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -451,27 +461,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, true);
 	}
 
+	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
+	{
+		_debug_hud = !_debug_hud;
+	}
+
 	else if (key == GLFW_KEY_F3 && action == GLFW_RELEASE)
 	{
 		_wireframe = !_wireframe;
 		glPolygonMode(GL_FRONT_AND_BACK, _wireframe ? GL_LINE : GL_FILL);
-	}
-
-	else if (key == GLFW_KEY_F8 && action == GLFW_RELEASE)
-	{
-		_culling = !_culling;
-		if (_culling) glEnable(GL_CULL_FACE);
-		else glDisable(GL_CULL_FACE);
-	}
-
-	else if (key == GLFW_KEY_F9 && action == GLFW_RELEASE)
-	{
-		_debug_camera = !_debug_camera;
-	}
-
-	else if (key == GLFW_KEY_F2 && action == GLFW_RELEASE)
-	{
-		_debug_hud = !_debug_hud;
 	}
 
 	else if (key == GLFW_KEY_F6 && action == GLFW_RELEASE)
@@ -484,37 +482,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		_post_processing = !_post_processing;
 	}
 
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	else if (key == GLFW_KEY_F8 && action == GLFW_RELEASE)
 	{
-		_right = true;
+		_culling = !_culling;
+		if (_culling) glEnable(GL_CULL_FACE);
+		else glDisable(GL_CULL_FACE);
 	}
-	else if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+
+	else if (key == GLFW_KEY_F9 && action == GLFW_RELEASE)
 	{
-		_right = false;
-	}
-	if (key == GLFW_KEY_A && action == GLFW_PRESS)
-	{
-		_left = true;
-	}
-	else if (key == GLFW_KEY_A && action == GLFW_RELEASE)
-	{
-		_left = false;
-	}
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-	{
-		_up = true;
-	}
-	else if (key == GLFW_KEY_W && action == GLFW_RELEASE)
-	{
-		_up = false;
-	}
-	if (key == GLFW_KEY_S && action == GLFW_PRESS)
-	{
-		_down = true;
-	}
-	else if (key == GLFW_KEY_S && action == GLFW_RELEASE)
-	{
-		_down = false;
+		_debug_camera = !_debug_camera;
 	}
 }
 
