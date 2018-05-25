@@ -32,7 +32,7 @@ void Frustum::Update(vec3 eye, vec3 dir, vec3 up, bool on)
 
 	nc = eye - Z * _nearZ;
 	fc = eye - Z * _farZ;
-
+	/*
 	ntl = nc + Y * nh - X * nw;
 	ntr = nc + Y * nh + X * nw;
 	nbl = nc - Y * nh - X * nw;
@@ -48,14 +48,39 @@ void Frustum::Update(vec3 eye, vec3 dir, vec3 up, bool on)
 	planes[LEFT].setPoints(ntl, nbl, fbl);
 	planes[RIGHT].setPoints(nbr, ntr, fbr);
 	planes[NEAR].setPoints(ntl, ntr, nbr);
-	planes[FAR].setPoints(ftr, ftl, fbl);
+	planes[FAR].setPoints(ftr, ftl, fbl);*/
+
+	planes[NEAR].setUp(-Z, nc);
+	planes[FAR].setUp(Z, fc);
+
+	vec3 aux, normal;
+
+	aux = (nc + Y * nh) - eye;
+	aux = normalize(aux);
+	normal = aux * X;
+	planes[TOP].setUp(normal, nc + Y * nh);
+
+	aux = (nc - Y * nh) - eye;
+	aux = normalize(aux);
+	normal = X * aux;
+	planes[BOTTOM].setUp(normal, nc - Y * nh);
+
+	aux = (nc - X * nw) - eye;
+	aux = normalize(aux);
+	normal = aux * Y;
+	planes[LEFT].setUp(normal, nc - X * nw);
+
+	aux = (nc + X * nw) - eye;
+	aux = normalize(aux);
+	normal = Y * aux;
+	planes[RIGHT].setUp(normal, nc + X * nw);
 }
 
 bool Frustum::Inside(vec3 point, float radius)
 {
 	if (!_on)
 		return true;
-	//return true;
+
 	float distance = 0;
 	for (int i = 0; i < 6; i++) {
 

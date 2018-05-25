@@ -249,8 +249,6 @@ int main(int argc, char** argv)
 	ParticleSystem particleSystem(1024 * 1024);
 	particleSystem.Init(128, 1, 1);
 
-	//glPointSize(5.0f);
-
 	/* --------------------------------------------- */
 	// Skybox
 	/* --------------------------------------------- */
@@ -288,17 +286,16 @@ int main(int argc, char** argv)
 				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
 			}
 
-			//enemies.takeHint(player.getPosition(), t_delta);
-			//enemies.update(mat4(1), t_delta);
+			enemies.takeHint(player.getPosition(), t_delta);
+			enemies.update(mat4(1), t_delta);
 
-			bulletDebugDrawer->setViewProj(_debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
+			//bulletDebugDrawer->setViewProj(_debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
 			_world->stepSimulation(t_delta, 10);
-			_world->debugDrawWorld();
+			//_world->debugDrawWorld();
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 
 			// Render
-
 			triangles = 0;
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 
@@ -346,17 +343,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 	
-
-	/* For Bullet Physics debugging purposes
-	RUnit* m1 = new RUnit(asteroid_model01, vec3(1.0f, 0.0f, 0.0f), vec3(2.0f, 0.4f, 3.1f), 2.0f, vec3(-20,0,0), vec3(2.0f, 2.0f, 2.0f));
-	world.addChild(m1);
-	_world->addRigidBody(m1->_body);
-	RUnit* m2 = new RUnit(asteroid_model01, vec3(-1.0f, 0.0f, 0.0f), vec3(4.2f, 3.0f , 0), 2.0f, vec3(20, 0, 0), vec3(2.0f, 2.0f, 2.0f));
-	world.addChild(m2);
-	_world->addRigidBody(m2->_body);
-	*/
-	
-	for (unsigned int i = 0; i < 20; i++)
+	for (unsigned int i = 0; i < 200; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);

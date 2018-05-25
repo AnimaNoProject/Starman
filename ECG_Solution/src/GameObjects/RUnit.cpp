@@ -9,9 +9,6 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	_position = translate(mat4(1), position);
 	_scale = scale(mat4(1), scaleIt);
 
-	//model->transform(_scale);
-
-
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
@@ -93,14 +90,10 @@ RUnit::RUnit(Model * model)
 	tx = rand() & 10;
 	ty = rand() & 10;
 	tz = rand() & 10;
-	/*
+
 	px = rand() % 500;
 	py = rand() % 500;
 	pz = rand() % 500;
-	*/
-	px = rand() % 2;
-	py = rand() % 2;
-	pz = rand() % 2;
 
 	if ((rand() & 1) == 1)
 	{
@@ -115,12 +108,9 @@ RUnit::RUnit(Model * model)
 		pz = -pz;
 	}
 
-	//px = py = pz = 0;
-
 	rx = rand() & 10;
 	ry = rand() & 10;
 	rz = rand() & 10;
-
 
 	s = rand() % 25;
 	r = rand() % 25 / 100;
@@ -130,8 +120,6 @@ RUnit::RUnit(Model * model)
 	_scale = scale(mat4(1), vec3(s, s, s));
 	_degree = r;
 	_model = model;
-
-	//model->transform(_scale);
 
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{

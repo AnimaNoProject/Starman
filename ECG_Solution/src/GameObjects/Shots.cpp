@@ -14,7 +14,6 @@ Shots::Shots(Model* model, vec3 direction, vec3 position)
 	vec3 dirB(direction);
 	float angle = acos(dot(dirA, dirB));
 	_rotation = rotate(mat4(1), angle, cross(dirA, dirB));
-
 }
 
 Shots::~Shots()
