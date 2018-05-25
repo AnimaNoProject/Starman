@@ -90,10 +90,6 @@ bool Frustum::Inside(vec3 point, float radius)
 		{
 			return false;
 		}
-		else if (distance < radius)
-		{
-			return true;
-		}
 	}
 	return true;
 }

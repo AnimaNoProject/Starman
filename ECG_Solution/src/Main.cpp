@@ -259,7 +259,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Frustum* frustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
-
+	mat4 viewProj;
 	{
 		while (!glfwWindowShouldClose(_window)) {
 
@@ -279,17 +279,19 @@ int main(int argc, char** argv)
 				camera.update(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, t_delta);
 				player.move(0, 0, false, false, false, false, _shootR, _shootL, t_delta);
 				frustum->Update(camera._eye, camera._center, camera._up, _frustum_culling);
+				viewProj = camera.getViewProjectionMatrix();
 			}
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
-				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
+				frustum->Update(player._camera->_eye, player._camera->_center, player._camera->_up, _frustum_culling);
+				viewProj =  player._camera->getViewProjectionMatrix();
 			}
 
 			enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
 
-			//bulletDebugDrawer->setViewProj(_debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
+			//bulletDebugDrawer->setViewProj(viewProj);
 			_world->stepSimulation(t_delta, 10);
 			//_world->debugDrawWorld();
 			world.update(mat4(1), t_now);
@@ -304,7 +306,7 @@ int main(int argc, char** argv)
 			triangles += player.draw();
 
 			// Particle System
-			particleSystem.Draw(_debug_camera ? camera.getViewProjectionMatrix() : pcamera.getViewProjectionMatrix());
+			particleSystem.Draw(viewProj);
 			//
 
 			// Draw Skybox
@@ -343,7 +345,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 	
-	for (unsigned int i = 0; i < 200; i++)
+	for (unsigned int i = 0; i < 500; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
@@ -351,14 +353,14 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	}
 
 	
-	for (unsigned int i = 0; i < 75; i++)
+	for (unsigned int i = 0; i < 150; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 125; i++)
+	for (unsigned int i = 0; i < 250; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model03);
 		world.addChild(n);
@@ -372,7 +374,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 7; i++)
+	for (unsigned int i = 0; i < 15; i++)
 	{
 		enemies.addChild(new REnemy(enemy_model, shader));
 	}

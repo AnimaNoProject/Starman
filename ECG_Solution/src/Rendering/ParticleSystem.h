@@ -36,8 +36,8 @@ private:
 	unsigned int workGroup[3];
 	_Shader* shader;
 	_Shader* compute_shader;
-	GLuint posBuffer;
-	GLuint velBuffer;
-	GLuint colBuffer;
-	GLuint vao;
+	vec3* points;
+	vec4* velocities;
+	float* life;
+	GLuint posBuffer, velBuffer, lifeBuffer;
 };

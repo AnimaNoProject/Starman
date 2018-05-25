@@ -13,6 +13,7 @@ RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _re
 	_position = vec3(0.0f, 0.0f, 5.0f);
 	_shot = new Model("assets/objects/starman_ship/shots.obj", _shader);
 	timepassedR = timepassedL = 0;
+	spotLight = new SpotLight(vec3(0.8f, 0.5f, 0.3f), vec3(0.0f, -1.5f, 10.5f), vec3(1.0f, 0.8f, 0.2f), vec3(0.0f, 0.0f, -1.0f), 25.0f);
 }
 
 RPlayer::~RPlayer()

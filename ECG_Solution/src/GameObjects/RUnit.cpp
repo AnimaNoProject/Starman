@@ -189,7 +189,7 @@ RUnit::RUnit(Model * model)
 
 	_body = new btRigidBody(bodyCI);
 
-	_body->setLinearFactor(btVector3(1, 1, 0));
+	_body->setLinearFactor(btVector3(1, 1, 1));
 
 	_body->setLinearVelocity(btVector3(_translation.x, _translation.y, _translation.z));
 }

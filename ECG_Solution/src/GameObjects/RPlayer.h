@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "../Rendering/Model.h"
 #include <algorithm>
+#include "Light.h"
 
 class RPlayer
 {
@@ -23,6 +24,7 @@ public:
 	vector<Shots*> shots;
 	Camera* _camera;
 	vec3 getPosition() { return _position; }
+	SpotLight* spotLight;
 
 	RPlayer();
 	RPlayer(Model* model, Camera* camera, _Shader* shader);

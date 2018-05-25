@@ -30,6 +30,15 @@ struct PointLight {
 	vec3 attenuation;
 };
 
+struct SpotLight {
+	vec3 position;
+	bool enabled;
+	vec3 color;
+	vec3 attentuation;
+	float coneAngle;
+	vec3 coneDirection;
+};
+
 uniform float MAX_LIGHTS;
 uniform PointLight[20] lights;
 
@@ -39,11 +48,8 @@ vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC
 	float d = length(l);
 	l = normalize(l);
 	float att = 1.0;	
-
 	if(attenuate) 
 		att = 1.0f / (attenuation.x + d * attenuation.y + d * d * attenuation.z);
-
-
 	float intensity = max(0, dot(n, l));
 	if(cellshading)
 	{
@@ -51,14 +57,12 @@ vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC
 		intensity = level / levels;
 	}
 	vec3 r = reflect(-l, n);
-
 	float intensity_spec = pow(max(0, dot(r, v)), alpha);
 	if(cellshading)
 	{
 		float level = floor(intensity_spec * levels);
 		intensity_spec = level / levels;
 	}
-
 	return (diffuseF * diffuseC * intensity + specularF * specularC * intensity_spec) * att; 
 }
 
