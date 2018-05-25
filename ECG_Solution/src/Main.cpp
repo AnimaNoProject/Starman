@@ -228,9 +228,10 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(50.0f, 50.0f, 50.0f));
-	world.addChild(&sun_star);
-	initializeWorld(sun_star, shader.get(), enemies);
+	//RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(100.0f, 100.0f, 100.0f));
+	//world.addChild(&sun_star);
+	//initializeWorld(sun_star, shader.get(), enemies);
+	initializeWorld(world, shader.get(), enemies);
 
 	/* --------------------------------------------- */
 	// Light
@@ -284,7 +285,7 @@ int main(int argc, char** argv)
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
-				frustum->Update(player._camera->_eye, player._camera->_center, player._camera->_up, _frustum_culling);
+				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
 				viewProj =  player._camera->getViewProjectionMatrix();
 			}
 
@@ -344,7 +345,12 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-	
+
+	RUnit* n = new RUnit(asteroid_model01, vec3(0,0,0), vec3(1,1,1), 0, vec3(1,1,1), vec3(1,1,1));
+	world.addChild(n);
+	_world->addRigidBody(n->_body);
+
+	/*
 	for (unsigned int i = 0; i < 500; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
@@ -377,7 +383,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	for (unsigned int i = 0; i < 15; i++)
 	{
 		enemies.addChild(new REnemy(enemy_model, shader));
-	}
+	}*/
 	
 }
 

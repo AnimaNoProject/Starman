@@ -9,58 +9,41 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 	_position = translate(mat4(1), position);
 	_scale = scale(mat4(1), scaleIt);
 
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
-		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
-		{
-			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.x * scaleIt.x);
-			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.y * scaleIt.x);
-			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.z * scaleIt.x);
-		}
-	}
-
-	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
-
-
 	float numberOfVertices = 0;
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
-		numberOfVertices += model->meshes.at(i)._vertices.size();
-	}
 	vec3 average(0, 0, 0);
 
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			numberOfVertices++;
+			vec3 newPos = _scale * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			shapeVector.push_back(newPos.x);
+			shapeVector.push_back(newPos.y);
+			shapeVector.push_back(newPos.z);
 			average.x += newPos.x;
 			average.y += newPos.y;
 			average.z += newPos.z;
 		}
 	}
-	average.x /= numberOfVertices;
-	average.y /= numberOfVertices;
-	average.z /= numberOfVertices;
-	bbmiddle = average;
+	bbmiddle = average / numberOfVertices;
 
+	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
+
+	// radius of bounding sphere
 	float farthest = 0.0f;
-
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = _scale * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
 			float dist = distance(newPos, bbmiddle);
-
 			if (dist > farthest)
-			{
 				farthest = dist;
-			}
 		}
-	}
-
 	radius = sqrt(farthest);
+	//
+
+	cout << radius << endl;
 
 	btQuaternion rotationQuat;
 	rotationQuat.setEulerZYX(rotation.x, rotation.y, rotation.z);
@@ -78,7 +61,7 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 
 	_body = new btRigidBody(bodyCI);
 
-	_body->setLinearFactor(btVector3(1, 1, 0));
+	_body->setLinearFactor(btVector3(1, 1, 1));
 
 	_body->setLinearVelocity(btVector3(translation.x, translation.y, translation.z));
 }
@@ -121,57 +104,38 @@ RUnit::RUnit(Model * model)
 	_degree = r;
 	_model = model;
 
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
-		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
-		{
-			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.x * s);
-			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.y * s);
-			shapeVector.push_back(model->meshes.at(i)._vertices.at(j).Position.z * s);
-		}
-	}
-
-	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
-
 	float numberOfVertices = 0;
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
-		numberOfVertices += model->meshes.at(i)._vertices.size();
-	}
 	vec3 average(0, 0, 0);
-
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			numberOfVertices++;
+			vec3 newPos = s * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			shapeVector.push_back(newPos.x);
+			shapeVector.push_back(newPos.y);
+			shapeVector.push_back(newPos.z);
 			average.x += newPos.x;
 			average.y += newPos.y;
 			average.z += newPos.z;
 		}
 	}
-	average.x /= numberOfVertices;
-	average.y /= numberOfVertices;
-	average.z /= numberOfVertices;
-	bbmiddle = average;
+	bbmiddle = average / numberOfVertices;
 
+	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
+
+	// radius of bounding sphere
 	float farthest = 0.0f;
-
 	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
 		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = _scale * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
 			float dist = distance(newPos, bbmiddle);
-
 			if (dist > farthest)
-			{
 				farthest = dist;
-			}
 		}
-	}
-
 	radius = sqrt(farthest);
+	//
 
 	btQuaternion rotationQuat;
 	rotationQuat.setEulerZYX(_rotation.x, _rotation.y, _rotation.z);
@@ -219,19 +183,12 @@ long RUnit::draw(Frustum* frustum)
 	if (_model != nullptr)
 	{
 		_model->setTransformMatrix(_transformation);
-
-		vec4 middle = vec4(bbmiddle, 1.0f);
-		middle = _transformation * middle;
+		vec4 middle = _transformation * mat4(1) * vec4(0,0,0,1);
 		if (frustum->Inside(middle, radius))
-		{
 			triangle += _model->Draw();
-		}
-	
 	}
 	for (int i = 0; i < this->children.size(); i++)
-	{
 		triangle += this->children.at(i)->draw(frustum);
-	}
 	return triangle;
 }
 

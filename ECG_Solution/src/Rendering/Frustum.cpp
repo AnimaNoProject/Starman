@@ -32,23 +32,6 @@ void Frustum::Update(vec3 eye, vec3 dir, vec3 up, bool on)
 
 	nc = eye - Z * _nearZ;
 	fc = eye - Z * _farZ;
-	/*
-	ntl = nc + Y * nh - X * nw;
-	ntr = nc + Y * nh + X * nw;
-	nbl = nc - Y * nh - X * nw;
-	nbr = nc - Y * nh + X * nw;
-
-	ftl = fc + Y * fh - X * fw;
-	ftr = fc + Y * fh + X * fw;
-	fbl = fc - Y * fh - X * fw;
-	fbr = fc - Y * fh + X * fw;
-
-	planes[TOP].setPoints(ntr, ntl, ftl);
-	planes[BOTTOM].setPoints(nbl, nbr, fbr);
-	planes[LEFT].setPoints(ntl, nbl, fbl);
-	planes[RIGHT].setPoints(nbr, ntr, fbr);
-	planes[NEAR].setPoints(ntl, ntr, nbr);
-	planes[FAR].setPoints(ftr, ftl, fbl);*/
 
 	planes[NEAR].setUp(-Z, nc);
 	planes[FAR].setUp(Z, fc);

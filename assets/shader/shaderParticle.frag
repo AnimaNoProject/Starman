@@ -1,4 +1,4 @@
-#version 420 core
+#version 430 core
 
 in float color;
 out vec4 FragColor;

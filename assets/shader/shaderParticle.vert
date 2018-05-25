@@ -1,4 +1,4 @@
-#version 420 core
+#version 430 core
 
 in layout (location = 0) vec3 position; 
 in layout (location = 1) float life;
