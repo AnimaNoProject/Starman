@@ -228,10 +228,13 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	//RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(100.0f, 100.0f, 100.0f));
-	//world.addChild(&sun_star);
-	//initializeWorld(sun_star, shader.get(), enemies);
-	initializeWorld(world, shader.get(), enemies);
+	station_model = new Model("assets/objects/station/station.obj", shader.get());
+	RUnit station(station_model, vec3(0, 0, 0), vec3(1, 0, 0), 0, vec3(25, 0, 0), vec3(5, 5, 5));
+	RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(100.0f, 100.0f, 100.0f));
+	world.addChild(&sun_star);
+	sun_star.addChild(&station);
+	_world->addRigidBody(station._body);
+	initializeWorld(sun_star, shader.get(), enemies);
 
 	/* --------------------------------------------- */
 	// Light
