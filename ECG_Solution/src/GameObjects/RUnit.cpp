@@ -1,23 +1,17 @@
 #include "RUnit.h"
 
-RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 position, vec3 scaleIt)
+void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation, float degree, mat4 scale, float weight)
 {
-	_model = model;
-	_translation = translation;
-	_rotation = rotation;
-	_degree = degree;
-	_position = translate(mat4(1), position);
-	_scale = scale(mat4(1), scaleIt);
-
 	float numberOfVertices = 0;
 	vec3 average(0, 0, 0);
 
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
+	// convex hull shape
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
 	{
-		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
 			numberOfVertices++;
-			vec3 newPos = _scale * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = scale * mat4(1) * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
 			shapeVector.push_back(newPos.x);
 			shapeVector.push_back(newPos.y);
 			shapeVector.push_back(newPos.z);
@@ -26,145 +20,87 @@ RUnit::RUnit(Model * model, vec3 translation, vec3 rotation, float degree, vec3 
 			average.z += newPos.z;
 		}
 	}
-	bbmiddle = average / numberOfVertices;
-
+	_middle = average / numberOfVertices;
 	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
+	//
 
 	// radius of bounding sphere
 	float farthest = 0.0f;
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
-			float dist = distance(newPos, bbmiddle);
+			vec3 newPos = _scale * mat4(1) * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			float dist = distance(newPos, _middle);
 			if (dist > farthest)
 				farthest = dist;
 		}
 	radius = sqrt(farthest);
 	//
 
-	cout << radius << endl;
-
+	// Motion State
 	btQuaternion rotationQuat;
 	rotationQuat.setEulerZYX(rotation.x, rotation.y, rotation.z);
 	btVector3 positionbT = btVector3(position.x, position.y, position.z);
 	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotationQuat, positionbT));
+	//
 
-	btScalar mass = 1500;
+	// Weight
+	btScalar mass = weight;
 	btVector3 bodyInertia;
 	_shape->calculateLocalInertia(mass, bodyInertia);
+	//
 
+	// Rigid Body
 	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
-
 	bodyCI.m_restitution = 0.5f;
 	bodyCI.m_friction = 0.005f;
-
 	_body = new btRigidBody(bodyCI);
+	//
 
+	// Translation & Rotation
 	_body->setLinearFactor(btVector3(1, 1, 1));
-
 	_body->setLinearVelocity(btVector3(translation.x, translation.y, translation.z));
+	//_body->setAngularFactor(degree); 
+	//_body->setAngularVelocity(btVector3(rotation.x / 100, rotation.y / 100, rotation.z / 100));
+	//
+}
+
+RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight)
+{
+	_model = model;
+	_scale = glm::scale(mat4(1), scale);
+
+	// Init Physics
+	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
 }
 
 RUnit::RUnit(Model * model)
 {
 	_model = model;
-	float px, py, pz, r, tx, ty, tz, rx, ry, rz, s;
-	tx = rand() & 10;
-	ty = rand() & 10;
-	tz = rand() & 10;
-
-	px = rand() % 500;
-	py = rand() % 500;
-	pz = rand() % 500;
-
-	if ((rand() & 1) == 1)
-	{
-		px = -px;
-	}
-	if ((rand() & 1) == 1)
-	{
-		py = -py;
-	}
-	if ((rand() & 1) == 1)
-	{
-		pz = -pz;
-	}
-
-	rx = rand() & 10;
-	ry = rand() & 10;
-	rz = rand() & 10;
-
-	s = rand() % 25;
-	r = rand() % 25 / 100;
-	_translation = vec3(tx, ty, tz);
-	_position = translate(mat4(1), vec3(px, py, pz));
-	_rotation = vec3(rx, ry, rz);
-	_scale = scale(mat4(1), vec3(s, s, s));
-	_degree = r;
-	_model = model;
-
-	float numberOfVertices = 0;
-	vec3 average(0, 0, 0);
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-	{
-		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
-		{
-			numberOfVertices++;
-			vec3 newPos = s * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
-			shapeVector.push_back(newPos.x);
-			shapeVector.push_back(newPos.y);
-			shapeVector.push_back(newPos.z);
-			average.x += newPos.x;
-			average.y += newPos.y;
-			average.z += newPos.z;
-		}
-	}
-	bbmiddle = average / numberOfVertices;
-
-	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
-
-	// radius of bounding sphere
-	float farthest = 0.0f;
-	for (unsigned int i = 0; i < model->meshes.size(); i++)
-		for (unsigned int j = 0; j < model->meshes.at(i)._vertices.size(); j++)
-		{
-			vec3 newPos = _scale * mat4(1) * vec4(model->meshes.at(i)._vertices.at(j).Position, 1.0f);
-			float dist = distance(newPos, bbmiddle);
-			if (dist > farthest)
-				farthest = dist;
-		}
-	radius = sqrt(farthest);
-	//
-
-	btQuaternion rotationQuat;
-	rotationQuat.setEulerZYX(_rotation.x, _rotation.y, _rotation.z);
-	btVector3 positionbT = btVector3(px, py, pz);
-	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotationQuat, positionbT));
-
-	btScalar mass = 1500;
-	btVector3 bodyInertia;
-	_shape->calculateLocalInertia(mass, bodyInertia);
-
-	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
-
-	bodyCI.m_restitution = 0.5f;
-	bodyCI.m_friction = 0.005f;
-
-	_body = new btRigidBody(bodyCI);
-
-	_body->setLinearFactor(btVector3(1, 1, 1));
-
-	_body->setLinearVelocity(btVector3(_translation.x, _translation.y, _translation.z));
+	InitRandom();
 }
 
-RUnit::RUnit(mat4 defaultTransformation)
+void RUnit::InitRandom()
 {
-	_defaultTransformation = defaultTransformation;
+	// Generate Random Properties
+	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
+	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
+	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
+	float scaleFactor = Random::randomNumber(1, 225);
+	float degree = Random::randomNumber(1, 45);
+	float weight = scaleFactor * 100;
+
+	//
+	_scale = scale(mat4(1), vec3(scaleFactor, scaleFactor, scaleFactor));
+	//
+
+	// Init Physics
+	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
 }
 
 RUnit::RUnit()
 {
+	_model = nullptr;
 }
 
 RUnit::~RUnit()
@@ -195,13 +131,6 @@ long RUnit::draw(Frustum* frustum)
 void RUnit::addChild(RUnit* unit)
 {
 	this->children.push_back(unit);
-}
-
-void RUnit::setDefaultTransformation(vec3 translation, vec3 rotation, float degree)
-{
-	_translation = translation;
-	_rotation = rotation;
-	_degree = degree;
 }
 
 void RUnit::update(mat4 transformation, float time)

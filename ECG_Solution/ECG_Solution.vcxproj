@@ -34,6 +34,7 @@
     <ClInclude Include="src\INIReader.h" />
     <ClCompile Include="src\Main.cpp" />
     <ClInclude Include="src\Shader\_Shader.h" />
+    <ClInclude Include="src\Utility\Random.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup Label="ProjectConfigurations">

@@ -181,7 +181,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World
 	/* --------------------------------------------- */
-	RUnit world(mat4(1));
+	RUnit world = RUnit();
 	REnemy enemies(mat4(1));
 
 	/* --------------------------------------------- */
@@ -229,11 +229,14 @@ int main(int argc, char** argv)
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
 	station_model = new Model("assets/objects/station/station.obj", shader.get());
-	RUnit station(station_model, vec3(0, 0, 0), vec3(1, 0, 0), 0, vec3(25, 0, 0), vec3(5, 5, 5));
-	RUnit sun_star(sun_model, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f), 12.0f, vec3(5000.0f, 1000.0f, -5000.0f), vec3(100.0f, 100.0f, 100.0f));
+
+	RUnit station(station_model, vec3(25, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(50, 50, 50), 50000);
+	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
+
 	world.addChild(&sun_star);
-	sun_star.addChild(&station);
+	sun_star.addChild(&station);	
 	_world->addRigidBody(station._body);
+
 	initializeWorld(sun_star, shader.get(), enemies);
 
 	/* --------------------------------------------- */
@@ -349,11 +352,6 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 
-	RUnit* n = new RUnit(asteroid_model01, vec3(0,0,0), vec3(1,1,1), 0, vec3(1,1,1), vec3(1,1,1));
-	world.addChild(n);
-	_world->addRigidBody(n->_body);
-
-	/*
 	for (unsigned int i = 0; i < 500; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
@@ -378,16 +376,16 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 
 	for (unsigned int i = 0; i < 25; i++)
 	{
-		RUnit* n = new RUnit(pickup_model, vec3(0.0f, 0.0f, 0.0f), vec3(rand() & 1, rand() & 1, rand() & 1), rand() % 25, vec3(rand() % 500, rand() % 500, rand() % 500), vec3(1.0f, 1.0f, 1.0f));
+		RUnit* n = new RUnit(pickup_model);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
 	for (unsigned int i = 0; i < 15; i++)
 	{
-		enemies.addChild(new REnemy(enemy_model, shader));
-	}*/
-	
+		REnemy* e = new REnemy(enemy_model, shader);
+		enemies.addChild(e);
+	}
 }
 
 void initPhysics()

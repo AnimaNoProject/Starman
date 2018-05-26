@@ -19,6 +19,7 @@ Frustum::~Frustum()
 void Frustum::Update(vec3 eye, vec3 dir, vec3 up, bool on)
 {
 	_on = on;
+
 	if (!_on)
 		return;
 
