@@ -80,6 +80,7 @@ void ParticleSystem::Draw(mat4 viewproj)
 	shader->setUniform("viewProj", viewproj);
 	glPointSize(10.0f);
 	glDisable(GL_CULL_FACE);
+
 	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
@@ -89,8 +90,8 @@ void ParticleSystem::Draw(mat4 viewproj)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
 
-	glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
+	//glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
+	//glDrawBuffer(GL_POINTS);
 
-	glEnable(GL_CULL_FACE);
 	glUseProgram(0);
 }

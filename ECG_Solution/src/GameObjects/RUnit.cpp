@@ -45,7 +45,7 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	//
 
 	// Weight
-	btScalar mass = weight;
+	btScalar mass = weight;		
 	btVector3 bodyInertia;
 	_shape->calculateLocalInertia(mass, bodyInertia);
 	//

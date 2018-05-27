@@ -1,15 +1,10 @@
-﻿  Main.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: Unerwartete Token nach Präprozessordirektive - Zeilenvorschub erwartet.
-c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
-c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
-c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: "GLEW_STATIC": Makro-Neudefinition
-  c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: Befehlszeilenargumente: siehe vorherige Definition von "GLEW_STATIC"
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(120): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(199): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(209): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(269): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(280): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(286): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(320): warning C4244: "Argument": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
-  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  ParticleSystem.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(53): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
