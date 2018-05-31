@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Rendering/Model.h";
+#include "btBulletDynamicsCommon.h"
 
 class Shots
 {
@@ -11,7 +12,14 @@ private:
 	vec3 _startposition;
 	mat4 _rotation;
 	const unsigned int damage = 2;
+
+	void InitPhysicProperties(vec3 position, vec3 translation, vec3 dirA, vec3 dirB, float angle);
+
 public:
+	btRigidBody * _body;
+	btConvexHullShape* _shape;
+	vector<btScalar> shapeVector;
+
 	bool _toofar;
 	Shots(Model* model, vec3 direction, vec3 position);
 	~Shots();

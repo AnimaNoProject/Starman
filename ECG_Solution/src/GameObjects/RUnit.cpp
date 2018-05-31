@@ -1,4 +1,38 @@
 #include "RUnit.h"
+RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight)
+{
+	_model = model;
+	_scale = glm::scale(mat4(1), scale);
+
+	// Init Physics
+	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
+}
+
+RUnit::RUnit(Model * model)
+{
+	_model = model;
+	InitRandom();
+}
+
+void RUnit::InitRandom()
+{
+	// Generate Random Properties
+	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
+	//DEBUG: vec3 position(Random::randomNumber(-50, 50), Random::randomNumber(-50, 50), Random::randomNumber(-50, 50));
+	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
+	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
+	float scaleFactor = Random::randomNumber(1, 225);
+	//DEBUG: float scaleFactor = Random::randomNumber(1, 50);
+	float degree = Random::randomNumber(1, 45);
+	float weight = scaleFactor * 100;
+
+	//
+	_scale = scale(mat4(1), vec3(scaleFactor, scaleFactor, scaleFactor));
+	//
+
+	// Init Physics
+	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
+}
 
 void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation, float degree, mat4 scale, float weight)
 {
@@ -45,7 +79,7 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	//
 
 	// Weight
-	btScalar mass = weight;		
+	btScalar mass = weight;
 	btVector3 bodyInertia;
 	_shape->calculateLocalInertia(mass, bodyInertia);
 	//
@@ -63,39 +97,6 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	//_body->setAngularFactor(degree); 
 	//_body->setAngularVelocity(btVector3(rotation.x / 100, rotation.y / 100, rotation.z / 100));
 	//
-}
-
-RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight)
-{
-	_model = model;
-	_scale = glm::scale(mat4(1), scale);
-
-	// Init Physics
-	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
-}
-
-RUnit::RUnit(Model * model)
-{
-	_model = model;
-	InitRandom();
-}
-
-void RUnit::InitRandom()
-{
-	// Generate Random Properties
-	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
-	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
-	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
-	float scaleFactor = Random::randomNumber(1, 225);
-	float degree = Random::randomNumber(1, 45);
-	float weight = scaleFactor * 100;
-
-	//
-	_scale = scale(mat4(1), vec3(scaleFactor, scaleFactor, scaleFactor));
-	//
-
-	// Init Physics
-	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
 }
 
 RUnit::RUnit()

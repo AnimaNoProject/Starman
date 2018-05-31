@@ -191,12 +191,6 @@ int main(int argc, char** argv)
 	PlayerCamera pcamera(fov * pi<float>() / 180, (float)_window_width / _window_height, nearZ, farZ);
 
 	/* --------------------------------------------- */
-	// Player
-	/* --------------------------------------------- */
-	Model playerModel("assets/objects/starman_ship/player.obj", shader.get());
-	RPlayer player(&playerModel, &pcamera, shader.get());
-
-	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
 	HUD hud(hud_shader.get(), _window_height, _window_width);
@@ -221,6 +215,14 @@ int main(int argc, char** argv)
 	initPhysics();
 
 	/* --------------------------------------------- */
+	// Player
+	/* --------------------------------------------- */
+	Model playerModel("assets/objects/starman_ship/player.obj", shader.get());
+	RPlayer player(&playerModel, &pcamera, shader.get());
+	player._world = _world;
+	player.addToPhysics();
+
+	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
 	asteroid_model01 = new Model("assets/objects/asteroid/asteroid01.obj", shader.get());
@@ -228,14 +230,14 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	station_model = new Model("assets/objects/station/station.obj", shader.get());
+	//station_model = new Model("assets/objects/station/station.obj", shader.get());
 
-	RUnit station(station_model, vec3(25, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(50, 50, 50), 50000);
+	//RUnit station(station_model, vec3(25, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(50, 50, 50), 50000);
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
 
 	world.addChild(&sun_star);
-	sun_star.addChild(&station);	
-	_world->addRigidBody(station._body);
+	//sun_star.addChild(&station);	
+	//_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
 
@@ -291,6 +293,7 @@ int main(int argc, char** argv)
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
+
 				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
 				viewProj =  player._camera->getViewProjectionMatrix();
 			}
@@ -298,9 +301,9 @@ int main(int argc, char** argv)
 			enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
 
-			//bulletDebugDrawer->setViewProj(viewProj);
+			bulletDebugDrawer->setViewProj(viewProj);
 			_world->stepSimulation(t_delta, 10);
-			//_world->debugDrawWorld();
+			_world->debugDrawWorld();
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 
@@ -352,14 +355,14 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 
-	for (unsigned int i = 0; i < 5; i++)
+	for (unsigned int i = 0; i < 10; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	
+	/*
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -386,6 +389,8 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 	}
+
+	*/
 }
 
 void initPhysics()
@@ -508,7 +513,6 @@ static void handleInput()
 		_shootL = true;
 	if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
 		_shootR = true;
-	//
 }
 
 static void APIENTRY DebugCallbackDefault(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam) {
