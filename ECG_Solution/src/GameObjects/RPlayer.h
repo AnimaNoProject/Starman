@@ -24,6 +24,7 @@ private:
 	void InitPhysicProperties(vec3 position);
 public:
 	// Physics related stuff
+	btRaycastVehicle * _player;
 	btDynamicsWorld * _world;
 	btRigidBody * _body;
 	btConvexHullShape* _shape;

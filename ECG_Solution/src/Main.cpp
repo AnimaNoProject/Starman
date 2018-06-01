@@ -301,9 +301,10 @@ int main(int argc, char** argv)
 			enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
 
-			bulletDebugDrawer->setViewProj(viewProj);
+
 			_world->stepSimulation(t_delta, 10);
-			_world->debugDrawWorld();
+			//bulletDebugDrawer->setViewProj(viewProj);
+			//_world->debugDrawWorld();
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 

@@ -31,9 +31,11 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	{
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			shapeVector.push_back(_model->meshes.at(i)._vertices.at(j).Position.x);
-			shapeVector.push_back(_model->meshes.at(i)._vertices.at(j).Position.y);
-			shapeVector.push_back(_model->meshes.at(i)._vertices.at(j).Position.z);
+			vec4 temp = vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0);
+			temp = translate(mat4(1), vec3(0.0f, +1.5f, -5.5f)) * mat4(1) * temp;
+			shapeVector.push_back(temp.x);
+			shapeVector.push_back(temp.y);
+			shapeVector.push_back(temp.z);
 		}
 	}
 	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
@@ -63,8 +65,6 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	// Translation & Rotation
 	_body->setLinearFactor(btVector3(1, 1, 1));
 	//_body->setLinearVelocity(btVector3(0,0,0));
-
-	
 }
 
 void RPlayer::addToPhysics()
