@@ -32,7 +32,7 @@ void RPlayer::InitPhysicProperties(vec3 position)
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
 			vec4 temp = vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0);
-			temp = translate(mat4(1), vec3(0.0f, +1.5f, -5.5f)) * mat4(1) * temp;
+			temp = translate(mat4(1), _position) * translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)) * mat4(1) * temp;
 			shapeVector.push_back(temp.x);
 			shapeVector.push_back(temp.y);
 			shapeVector.push_back(temp.z);
@@ -61,10 +61,6 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	bodyCI.m_friction = 0.5f;
 	_body = new btRigidBody(bodyCI);
 	//
-
-	// Translation & Rotation
-	_body->setLinearFactor(btVector3(1, 1, 1));
-	//_body->setLinearVelocity(btVector3(0,0,0));
 }
 
 void RPlayer::addToPhysics()
@@ -74,12 +70,6 @@ void RPlayer::addToPhysics()
 
 void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, bool shootL, bool shootR, float deltaTime)
 {
-	btTransform transform = _body->getWorldTransform();
-	btQuaternion rota = transform.getRotation();
-	//_position = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
-	//_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
-	
-	//////////////////////////////////////////////////////////////////////////
 	if (up)
 		(_real_speed >= 25) ? _real_speed = 25 : _real_speed += 5 * deltaTime;
 	else if (down)
@@ -106,39 +96,46 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 
 	_position += _dir * (float)(deltaTime * _speed);
 
-	//_body->setLinearVelocity(btVector3(_dir.x, _dir.y, _dir.z));
-	//_body->applyImpulse(btVector3(_dir.x, _dir.y, _dir.z), btVector3(_position.x, _position.y, _position.z));
-	//_body->translate(btVector3(_dir.x, _dir.y, _dir.z));
-	//_body->applyForce(btVector3(_dir.x, _dir.y, _dir.z), btVector3(_position.x, _position.y, _position.z));
-
 	if (right)
 		_position -= _right * (float)(deltaTime * _speed);
 	else if (left)
 		_position += _right * (float)(deltaTime * _speed);
 
-	_camera->setSpeed(_speed);
+
+	_body->setLinearFactor(btVector3(_speed, _speed, _speed));
+	_body->setLinearVelocity(btVector3(_dir.x, _dir.y, _dir.z));
+
+	btQuaternion rotationQuat;
+	rotationQuat.setRotation(btVector3(0.0f, 1.0f, 0.0f), btScalar(_yaw));
+
+	_body->setAngularVelocity(btVector3(0.0f, _yaw, 0.0f));
+	_body->setAngularFactor(btScalar(1));
 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
-
+	
+	_camera->setSpeed(_speed);
 	_camera->update(x, y, up, down, left, right, deltaTime);
 
+	updateShots(deltaTime);
+	if(shootL || shootR)
+		shoot(deltaTime, shootL, shootR);
+}
+
+void RPlayer::updateShots(int deltaTime)
+{
 	for (int i = 0; i < this->shots.size(); i++)
 	{
 		this->shots.at(i)->update(deltaTime);
-		//collisionCheck(shots.at(i), i);
 	}
 
 	for (int i = shots.size() - 1; i >= 0; i--)
 	{
-		if (shots.at(i)->_toofar /*|| collisionCheck*/)
+		if (shots.at(i)->_toofar)
 		{
 			_world->removeRigidBody(shots.at(i)->_body);
 			shots.erase(shots.begin() + i);
 		}
 	}
-
-	if(shootL || shootR)
-		shoot(deltaTime, shootL, shootR);
 }
 
 void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)

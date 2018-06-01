@@ -230,14 +230,14 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	//station_model = new Model("assets/objects/station/station.obj", shader.get());
+	station_model = new Model("assets/objects/station/station.obj", shader.get());
+	RUnit station(station_model, vec3(25, 0, 0), vec3(0,0,0), vec3(0,0,0), 0, vec3(50, 50, 50), 50000);
 
-	//RUnit station(station_model, vec3(25, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(50, 50, 50), 50000);
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
 
 	world.addChild(&sun_star);
-	//sun_star.addChild(&station);	
-	//_world->addRigidBody(station._body);
+	sun_star.addChild(&station);	
+	_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
 
@@ -315,6 +315,7 @@ int main(int argc, char** argv)
 			triangles += world.draw(frustum);
 			triangles += enemies.draw();
 			triangles += player.draw();
+			//triangles += station.draw(frustum);
 
 			// Particle System
 			particleSystem.Draw(viewProj);
@@ -363,7 +364,6 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	/*
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -390,8 +390,6 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 	}
-
-	*/
 }
 
 void initPhysics()

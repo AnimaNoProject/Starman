@@ -45,7 +45,7 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
 			numberOfVertices++;
-			vec3 newPos = scale * mat4(1) * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = scale * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
 			shapeVector.push_back(newPos.x);
 			shapeVector.push_back(newPos.y);
 			shapeVector.push_back(newPos.z);
@@ -63,12 +63,12 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	for (unsigned int i = 0; i < _model->meshes.size(); i++)
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * mat4(1) * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = _scale * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
 			float dist = distance(newPos, _middle);
 			if (dist > farthest)
 				farthest = dist;
 		}
-	radius = sqrt(farthest);
+	radius = farthest;
 	//
 
 	// Motion State
@@ -120,7 +120,7 @@ long RUnit::draw(Frustum* frustum)
 	if (_model != nullptr)
 	{
 		_model->setTransformMatrix(_transformation);
-		vec4 middle = _transformation * mat4(1) * vec4(0,0,0,1);
+		vec4 middle = _transformation * vec4(_middle ,1);
 		if (frustum->Inside(middle, radius))
 			triangle += _model->Draw();
 	}

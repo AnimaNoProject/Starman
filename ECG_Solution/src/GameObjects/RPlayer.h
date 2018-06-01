@@ -22,9 +22,9 @@ private:
 	void shoot(float deltaTime, bool shootL, bool shootR);
 	void collisionCheck();
 	void InitPhysicProperties(vec3 position);
+	void updateShots(int deltaTime);
 public:
 	// Physics related stuff
-	btRaycastVehicle * _player;
 	btDynamicsWorld * _world;
 	btRigidBody * _body;
 	btConvexHullShape* _shape;
