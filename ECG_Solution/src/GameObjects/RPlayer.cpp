@@ -166,7 +166,7 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 		_world->addRigidBody(rightShot2->_body);
 		shots.push_back(rightShot1);
 		shots.push_back(rightShot2);
-		timepassedL = 0;
+		timepassedR = 0;
 	}
 }
 

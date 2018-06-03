@@ -5,6 +5,7 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
+uniform sampler2D depthTexture;
 
 mat3 sobel_x = mat3( 
     1.0, 0.0, -1.0, 
@@ -35,7 +36,8 @@ void main()
 
 
 	float g = sqrt(pow(gx, 2.0)+pow(gy, 2.0));
-	FragColor = vec4(colorDiff - vec3(g), 1.);
+	//FragColor = vec4(colorDiff - vec3(g), 1.);
+	FragColor = vec4(texture(depthTexture, TexCoords).rgb, 1.0);
 }
 
 

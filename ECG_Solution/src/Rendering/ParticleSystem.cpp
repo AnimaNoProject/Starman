@@ -32,8 +32,8 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	}
 
 	glGenBuffers(1, &posBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(vec3), points, GL_DYNAMIC_COPY);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec3), points, GL_DYNAMIC_COPY);
 
 	velocities = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
 	for (int i = 0; i < MAX_PARTICLES; i++)
@@ -44,8 +44,8 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 		velocities[i].w = rand() % 4;
 	}
 	glGenBuffers(1, &velBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, velBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(vec4), velocities, GL_DYNAMIC_COPY);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velBuffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec4), velocities, GL_DYNAMIC_COPY);
 
 	life = (float*)calloc(MAX_PARTICLES, sizeof(float));
 	for (int i = 0; i < MAX_PARTICLES; i++)
@@ -53,8 +53,8 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 		life[i] = rand() % 15;
 	}
 	glGenBuffers(1, &lifeBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, lifeBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(float), life, GL_DYNAMIC_COPY);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(float), life, GL_DYNAMIC_COPY);
 }
 
 void ParticleSystem::Update(float d_time)
@@ -75,23 +75,23 @@ void ParticleSystem::Update(float d_time)
 }
 
 void ParticleSystem::Draw(mat4 viewproj)
-{
+{	/*
 	shader->use();
 	shader->setUniform("viewProj", viewproj);
 	glPointSize(10.0f);
 	glDisable(GL_CULL_FACE);
 
-	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
 	
 	
-	glBindBuffer(GL_ARRAY_BUFFER, lifeBuffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
 
 	//glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
 	//glDrawBuffer(GL_POINTS);
 
-	glUseProgram(0);
+	glUseProgram(0);*/
 }
