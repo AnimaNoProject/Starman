@@ -2,6 +2,7 @@
 
 #include "../Rendering/Model.h";
 #include "btBulletDynamicsCommon.h"
+#include "CollisionData.h"
 
 class Shots
 {
@@ -12,6 +13,7 @@ private:
 	vec3 _startposition;
 	mat4 _rotation;
 	const unsigned int damage = 2;
+	CollisionData* _collisionData;
 
 	void InitPhysicProperties(vec3 position, vec3 translation, vec3 dirA, vec3 dirB, float angle);
 

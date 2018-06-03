@@ -303,8 +303,8 @@ int main(int argc, char** argv)
 
 
 			_world->stepSimulation(t_delta, 10);
-			//bulletDebugDrawer->setViewProj(viewProj);
-			//_world->debugDrawWorld();
+			bulletDebugDrawer->setViewProj(viewProj);
+			_world->debugDrawWorld();
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 
@@ -357,13 +357,13 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 
-	for (unsigned int i = 0; i < 10; i++)
+	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-
+	/*
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -390,6 +390,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 	}
+	*/
 }
 
 void initPhysics()

@@ -4,11 +4,13 @@
 #include "btBulletDynamicsCommon.h"
 #include "../Rendering/Frustum.h"
 #include "../Utility/Random.h"
+#include "CollisionData.h"
 
 class RUnit
 {
 private:
 	std::vector<RUnit*> children;
+	CollisionData* _collisionData;
 protected:
 	Model* _model;
 

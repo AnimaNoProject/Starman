@@ -66,7 +66,10 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 	// Translation & Rotation
 	_body->setLinearFactor(btVector3(1, 1, 1));
 	_body->setLinearVelocity(btVector3(direction.x * 50, direction.y * 50, direction.z * 50));
-	//_body->setCollisionFlags(_body->getCollisionFlags | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+
+	//Shots* shotPointer;
+	_collisionData = new CollisionData("shot", 1);
+	_body->setUserPointer(_collisionData);
 
 }
 

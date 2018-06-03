@@ -17,8 +17,9 @@ RUnit::RUnit(Model * model)
 void RUnit::InitRandom()
 {
 	// Generate Random Properties
-	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
-	//DEBUG: vec3 position(Random::randomNumber(-50, 50), Random::randomNumber(-50, 50), Random::randomNumber(-50, 50));
+	//vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
+	//DEBUG:
+	vec3 position(Random::randomNumber(-100, 100), Random::randomNumber(-100, 100), Random::randomNumber(-100, 100));
 	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
 	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
 	float scaleFactor = Random::randomNumber(1, 225);
@@ -90,6 +91,8 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	bodyCI.m_friction = 0.005f;
 	_body = new btRigidBody(bodyCI);
 	//
+	_collisionData = new CollisionData("RUnit", 1);
+	_body->setUserPointer(_collisionData);
 
 	// Translation & Rotation
 	_body->setLinearFactor(btVector3(1, 1, 1));
