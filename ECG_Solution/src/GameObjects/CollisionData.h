@@ -5,18 +5,23 @@
 #include <utility>
 
 class RUnit;
+class Shots;
+class RPlayer;
 
 class CollisionData
 {
 private:
 	string _type;
-	RUnit* _parentRUnit;
-	
 public:
+	RUnit * _parentRUnit;
+	Shots* _parentShot;
+	RPlayer* _parentPlayer;
 	CollisionData(string t);
 	~CollisionData();
 
 	string getType();
 	
-	void setParentRUnit(RUnit* _p);
+	void setParentRUnit(RUnit* unit);
+	void setParentShot(Shots* shot);
+	void setParentPlayer(RPlayer* player);
 };

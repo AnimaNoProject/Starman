@@ -237,8 +237,8 @@ int main(int argc, char** argv)
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
 
 	world.addChild(&sun_star);
-	sun_star.addChild(&station);	
-	_world->addRigidBody(station._body);
+	//sun_star.addChild(&station);	
+	//_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
 
@@ -359,7 +359,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 
-	for (unsigned int i = 0; i < 2; i++)
+	for (unsigned int i = 0; i < 1; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
@@ -427,24 +427,24 @@ void performCollisionCheck(RPlayer& player)
 		for (int j = 0; j < numContacts; j++)
 		{
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
-			if (pt.getDistance() < 0.f)
+			if (pt.getDistance() < 1.0f)
 			{
-				/*
-				cout << "Collision between: " << obA_model->getType() << " and " << obB_model->getType() << endl;
-
+				
 				if (obA_model != NULL && obB_model != NULL)
 				{
-					if ( (obA_model->getType() == "shot") && (obB_model->getType() == "RUnit") )
+					cout << "Collision between: " << obA_model->getType() << " and " << obB_model->getType() << endl;
+					
+					if ( (obA_model->getType() == "Shot") && (obB_model->getType() == "RUnit") )
 					{
-						//obA_model->_parentShot->_collisionFlag = true;
+						obA_model->_parentShot->_collisionFlag = true;
 					}
 
-					else if ((obA_model->getType() == "RUnit") && (obB_model->getType() == "shot"))
+					else if ((obA_model->getType() == "RUnit") && (obB_model->getType() == "Shot"))
 					{
-						//obB_model->_parentShot->_collisionFlag = true;
+						obB_model->_parentShot->_collisionFlag = true;
 					}
 				}
-				*/
+				
 			
 				//const btVector3& ptA = pt.getPositionWorldOnA();
 				//const btVector3& ptB = pt.getPositionWorldOnB();

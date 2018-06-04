@@ -18,6 +18,7 @@
     <ClCompile Include="src\GameObjects\Camera.cpp" />
     <ClCompile Include="src\Shader\_Shader.cpp" />
     <ClInclude Include="src\GameObjects\CollisionData.h" />
+    <ClInclude Include="src\GameObjects\PlayerConfig.h" />
     <ClInclude Include="src\Rendering\DebugDrawer.h" />
     <ClInclude Include="src\Rendering\Frustum.h" />
     <ClInclude Include="src\Rendering\Skybox.h" />

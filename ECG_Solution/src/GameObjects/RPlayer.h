@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "Light.h"
 #include "CollisionData.h"
+#include "PlayerConfig.h"
 
 class RPlayer
 {
@@ -25,11 +26,10 @@ private:
 	void updateShots(int deltaTime);
 public:
 	// Physics related stuff
-	btDynamicsWorld * _world;
-	btRigidBody * _body;
-	btConvexHullShape* _shape;
-	vector<btScalar> shapeVector;
-
+	btDynamicsWorld*			_world;
+	btRigidBody*				_body;
+	btConvexHullShape*			_shape;
+	vector<btScalar>			shapeVector;
 
 	vector<Shots*> shots;
 	Camera* _camera;

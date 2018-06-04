@@ -17,9 +17,19 @@ std::string CollisionData::getType()
 }
 
 
-void CollisionData::setParentRUnit(RUnit* _p)
+void CollisionData::setParentRUnit(RUnit* unit)
 {
-	_parentRUnit = _p;
+	_parentRUnit = unit;
+}
+
+void CollisionData::setParentShot(Shots* shot)
+{
+	_parentShot = shot;
+}
+
+void CollisionData::setParentPlayer(RPlayer* player)
+{
+	_parentPlayer = player;
 }
 
 

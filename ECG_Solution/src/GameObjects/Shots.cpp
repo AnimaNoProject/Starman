@@ -72,8 +72,8 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 	_body->setLinearVelocity(btVector3(direction.x * 50, direction.y * 50, direction.z * 50));
 
 	//Shots* shotPointer;
-	_collisionData = new CollisionData("shot");
-	//_collisionData->setParentShot(this);
+	_collisionData = new CollisionData("Shot");
+	_collisionData->setParentShot(this);
 	_body->setUserPointer(_collisionData);
 
 }

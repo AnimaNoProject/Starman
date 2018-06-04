@@ -91,8 +91,9 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	bodyCI.m_friction = 0.005f;
 	_body = new btRigidBody(bodyCI);
 	//
-	//_collisionData = new CollisionData("RUnit", 1);
-	//_body->setUserPointer(_collisionData);
+	_collisionData = new CollisionData("RUnit");
+	_collisionData->setParentRUnit(this);
+	_body->setUserPointer(_collisionData);
 
 	// Translation & Rotation
 	_body->setLinearFactor(btVector3(1, 1, 1));
