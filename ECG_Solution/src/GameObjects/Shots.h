@@ -4,6 +4,8 @@
 #include "btBulletDynamicsCommon.h"
 #include "CollisionData.h"
 
+class CollisionData;
+
 class Shots
 {
 private:

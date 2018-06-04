@@ -1,9 +1,7 @@
 #include "CollisionData.h"
-//#include "Shots.h"
-//#include "RUnit.h"
 
 
-CollisionData::CollisionData(string t)
+CollisionData::CollisionData(std::string t)
 {
 	_type = t;
 }
@@ -13,7 +11,7 @@ CollisionData::~CollisionData()
 }
 
 
-string CollisionData::getType()
+std::string CollisionData::getType()
 {
 	return _type;
 }

@@ -1,7 +1,10 @@
 #pragma once
+
 #include "RUnit.h"
 #include <string>
+#include <utility>
 
+class RUnit;
 
 class CollisionData
 {

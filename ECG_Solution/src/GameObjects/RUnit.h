@@ -6,6 +6,8 @@
 #include "../Utility/Random.h"
 #include "CollisionData.h"
 
+class CollisionData;
+
 class RUnit
 {
 private:
