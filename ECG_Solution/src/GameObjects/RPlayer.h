@@ -46,7 +46,6 @@ public:
 	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
 	void addToPhysics();
 	long draw();
-	void collisionCheck(Shots* shot);
 
 };
 

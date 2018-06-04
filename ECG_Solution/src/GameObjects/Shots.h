@@ -18,11 +18,13 @@ private:
 	void InitPhysicProperties(vec3 position, vec3 translation, vec3 dirA, vec3 dirB, float angle);
 
 public:
-	btRigidBody * _body;
+	btRigidBody* _body;
 	btConvexHullShape* _shape;
 	vector<btScalar> shapeVector;
 
 	bool _toofar;
+	bool _collisionFlag;
+	Shots();
 	Shots(Model* model, vec3 direction, vec3 position);
 	~Shots();
 	long draw();

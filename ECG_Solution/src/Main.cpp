@@ -40,6 +40,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
 void initPhysics();
 void destroyPhysics();
 void handleInput();
+void performCollisionCheck(RPlayer& player);
 
 /* --------------------------------------------- */
 // Global variables
@@ -305,6 +306,7 @@ int main(int argc, char** argv)
 			_world->stepSimulation(t_delta, 10);
 			bulletDebugDrawer->setViewProj(viewProj);
 			_world->debugDrawWorld();
+			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 
@@ -357,7 +359,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 
-	for (unsigned int i = 0; i < 5; i++)
+	for (unsigned int i = 0; i < 2; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
@@ -406,6 +408,50 @@ void initPhysics()
 
 	_world->setDebugDrawer(bulletDebugDrawer);
 
+}
+
+void performCollisionCheck(RPlayer& player)
+{
+	int numManifolds = _world->getDispatcher()->getNumManifolds();
+	for (int i = 0; i < numManifolds; i++)
+	{
+		btPersistentManifold* contactManifold = _world->getDispatcher()->getManifoldByIndexInternal(i);
+		const btCollisionObject* obA = contactManifold->getBody0();
+		const btCollisionObject* obB = contactManifold->getBody1();
+
+		CollisionData* obA_model = (CollisionData*)obA->getUserPointer();
+		CollisionData* obB_model = (CollisionData*)obB->getUserPointer();
+
+
+		int numContacts = contactManifold->getNumContacts();
+		for (int j = 0; j < numContacts; j++)
+		{
+			btManifoldPoint& pt = contactManifold->getContactPoint(j);
+			if (pt.getDistance() < 0.f)
+			{
+				/*
+				cout << "Collision between: " << obA_model->getType() << " and " << obB_model->getType() << endl;
+
+				if (obA_model != NULL && obB_model != NULL)
+				{
+					if ( (obA_model->getType() == "shot") && (obB_model->getType() == "RUnit") )
+					{
+						//obA_model->_parentShot->_collisionFlag = true;
+					}
+
+					else if ((obA_model->getType() == "RUnit") && (obB_model->getType() == "shot"))
+					{
+						//obB_model->_parentShot->_collisionFlag = true;
+					}
+				}
+				*/
+			
+				//const btVector3& ptA = pt.getPositionWorldOnA();
+				//const btVector3& ptB = pt.getPositionWorldOnB();
+				//const btVector3& normalOnB = pt.m_normalWorldOnB;
+			}
+		}
+	}
 }
 
 void destroyPhysics()

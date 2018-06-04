@@ -61,8 +61,8 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	bodyCI.m_friction = 0.5f;
 	_body = new btRigidBody(bodyCI);
 
-	_collisionData = new CollisionData("RPlayer", 1);
-	_body->setUserPointer(_collisionData);
+	//_collisionData = new CollisionData("RPlayer");
+	//_body->setUserPointer(_collisionData);
 }
 
 void RPlayer::addToPhysics()
@@ -136,13 +136,12 @@ void RPlayer::updateShots(int deltaTime)
 	for (int i = 0; i < this->shots.size(); i++)
 	{
 		this->shots.at(i)->update(deltaTime);
-		collisionCheck(shots.at(i));
 	}
 
 
 	for (int i = shots.size() - 1; i >= 0; i--)
 	{
-		if (shots.at(i)->_toofar)
+		if (shots.at(i)->_toofar || shots.at(i)->_collisionFlag)
 		{
 			_world->removeRigidBody(shots.at(i)->_body);
 			shots.erase(shots.begin() + i);
@@ -192,29 +191,4 @@ long RPlayer::draw()
 			triangles += this->shots.at(i)->draw();
 	}
 	return triangles;
-}
-
-void RPlayer::collisionCheck(Shots* shot)
-{
-	int numManifolds = _world->getDispatcher()->getNumManifolds();
-	for (int i = 0; i < numManifolds; i++)
-	{
-		btPersistentManifold* contactManifold = _world->getDispatcher()->getManifoldByIndexInternal(i);
-		const btCollisionObject* obA = contactManifold->getBody0();
-		const btCollisionObject* obB = contactManifold->getBody1();
-
-		CollisionData* obA_model = (CollisionData*)obA->getUserPointer();
-		CollisionData* obB_model = (CollisionData*)obB->getUserPointer();
-
-
-		if (obA_model != NULL && obB_model != NULL)
-		{
-			if ((obA_model->getType() == "shot") || obB_model->getType() == "shot")
-			{
-				shot->_toofar = true;
-				cout << "Collision between: " << obA_model->getType() << " and " << obB_model->getType() << endl;
-			}
-		}
-	}
-
 }
