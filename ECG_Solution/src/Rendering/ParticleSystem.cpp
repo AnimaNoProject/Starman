@@ -44,6 +44,7 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec3), points, GL_DYNAMIC_COPY);
 
+	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
 
@@ -68,10 +69,9 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(float), life, GL_DYNAMIC_COPY);
 
+	glBindBuffer(GL_ARRAY_BUFFER, lifeBuffer);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
-
-
 
 	glBindVertexArray(0);
 }
