@@ -60,7 +60,7 @@ static bool _debug_hud = false;
 static double _fps;
 static float _brightness;
 static bool _cell_shading = true;
-static bool _post_processing = true;
+static bool _post_processing = false;
 static PostProcessing* postprocessor;
 static double x, y;
 static bool _frustum_culling = false;
@@ -315,7 +315,6 @@ int main(int argc, char** argv)
 			triangles += world.draw(frustum);
 			triangles += enemies.draw();
 			triangles += player.draw();
-			//triangles += station.draw(frustum);
 
 			// Particle System
 			particleSystem.Draw(viewProj);

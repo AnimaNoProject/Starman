@@ -21,7 +21,11 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	shader = new _Shader("assets/shader/shaderParticle.vert", "assets/shader/shaderParticle.frag");
 	compute_shader = new _Shader("assets/shader/shaderParticle.comp");
 
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &ibo);
+	glBindVertexArray(vao);
 
+	indices = (float*)calloc(MAX_PARTICLES, sizeof(float));
 
 	points = (vec3*)calloc(MAX_PARTICLES, sizeof(vec3));
 	for (int i = 0; i < MAX_PARTICLES; i++)
@@ -29,11 +33,19 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 		points[i].x = rand() % 50;
 		points[i].y = rand() % 50;
 		points[i].z = rand() % 50;
+		
+		indices[i] = i;
 	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_PARTICLES * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &posBuffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec3), points, GL_DYNAMIC_COPY);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
 
 	velocities = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
 	for (int i = 0; i < MAX_PARTICLES; i++)
@@ -50,11 +62,18 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	life = (float*)calloc(MAX_PARTICLES, sizeof(float));
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
-		life[i] = rand() % 15;
+		life[i] = 500;
 	}
 	glGenBuffers(1, &lifeBuffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(float), life, GL_DYNAMIC_COPY);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
+
+
+
+	glBindVertexArray(0);
 }
 
 void ParticleSystem::Update(float d_time)
@@ -75,23 +94,15 @@ void ParticleSystem::Update(float d_time)
 }
 
 void ParticleSystem::Draw(mat4 viewproj)
-{	/*
+{
 	shader->use();
 	shader->setUniform("viewProj", viewproj);
-	glPointSize(10.0f);
+	glPointSize(2.0f);
 	glDisable(GL_CULL_FACE);
 
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
-	
-	
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), 0);
+	glBindVertexArray(vao);
+	glDrawElements(GL_POINTS, MAX_PARTICLES, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 
-	//glDrawArrays(GL_POINTS, 0, MAX_PARTICLES);
-	//glDrawBuffer(GL_POINTS);
-
-	glUseProgram(0);*/
+	glUseProgram(0);
 }

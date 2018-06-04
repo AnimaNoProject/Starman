@@ -38,6 +38,7 @@ private:
 	_Shader* compute_shader;
 	vec3* points;
 	vec4* velocities;
+	float* indices;
 	float* life;
-	GLuint posBuffer, velBuffer, lifeBuffer;
+	GLuint posBuffer, velBuffer, lifeBuffer, vao, ibo;
 };

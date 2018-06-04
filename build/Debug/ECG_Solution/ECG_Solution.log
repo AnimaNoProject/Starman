@@ -1,2 +1,10 @@
-﻿  PostProcessing.cpp
+﻿  ParticleSystem.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(37): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(53): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(54): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(56): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
