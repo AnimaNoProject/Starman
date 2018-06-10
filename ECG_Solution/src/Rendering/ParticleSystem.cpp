@@ -24,6 +24,7 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &ibo);
 
+
 	points = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
@@ -36,6 +37,9 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	glGenBuffers(1, &posBuffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec4), points, GL_DYNAMIC_COPY);
+
+
+
 
 	velocities = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
 	for (int i = 0; i < MAX_PARTICLES; i++)
@@ -59,15 +63,16 @@ void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, un
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(float), life, GL_DYNAMIC_COPY);
 
-
 	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), 0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, lifeBuffer);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), 0);
+
 	glBindVertexArray(0);
 }
 

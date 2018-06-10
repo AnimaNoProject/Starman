@@ -45,10 +45,11 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
 			numberOfVertices++;
-			vec3 newPos = scale * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = _model->meshes.at(i)._vertices.at(j).Position;
 			shapeVector.push_back(newPos.x);
 			shapeVector.push_back(newPos.y);
 			shapeVector.push_back(newPos.z);
+
 			average.x += newPos.x;
 			average.y += newPos.y;
 			average.z += newPos.z;
@@ -63,12 +64,16 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	for (unsigned int i = 0; i < _model->meshes.size(); i++)
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _scale * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			vec3 newPos = _model->meshes.at(i)._vertices.at(j).Position;
 			float dist = distance(newPos, _middle);
 			if (dist > farthest)
 				farthest = dist;
 		}
+
+
 	radius = farthest;
+
+
 	//
 
 	// Motion State
