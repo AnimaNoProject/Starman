@@ -3,7 +3,7 @@ RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, floa
 {
 	_model = model;
 	_scale = glm::scale(mat4(1), scale);
-
+	_scaleFactor = scale.x;
 	// Init Physics
 	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
 }
@@ -23,7 +23,7 @@ void RUnit::InitRandom()
 	float scaleFactor = Random::randomNumber(1, 225);
 	float degree = Random::randomNumber(1, 45);
 	float weight = scaleFactor * 100;
-
+	_scaleFactor = scaleFactor;
 	//
 	_scale = scale(mat4(1), vec3(scaleFactor, scaleFactor, scaleFactor));
 	//
@@ -37,40 +37,45 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	float numberOfVertices = 0;
 	vec3 average(0, 0, 0);
 
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+	{
+		numberOfVertices += _model->meshes.at(i)._vertices.size();
+	}
+
 	// convex hull shape
 	for (unsigned int i = 0; i < _model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			numberOfVertices++;
 			vec3 newPos = _model->meshes.at(i)._vertices.at(j).Position;
 			shapeVector.push_back(newPos.x);
 			shapeVector.push_back(newPos.y);
 			shapeVector.push_back(newPos.z);
 
-			average.x += newPos.x;
-			average.y += newPos.y;
-			average.z += newPos.z;
+			average += newPos * (1 / numberOfVertices);
 		}
 	}
-	_middle = average / numberOfVertices;
+	_middle = average;
 	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
 	//
 
 	// radius of bounding sphere
 	float farthest = 0.0f;
 	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+	{
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
 			vec3 newPos = _model->meshes.at(i)._vertices.at(j).Position;
 			float dist = distance(newPos, _middle);
 			if (dist > farthest)
+			{
 				farthest = dist;
+				mostDistant = _model->meshes.at(i)._vertices.at(j).Position;
+			}
 		}
-
+	}
 
 	radius = farthest;
-
 
 	//
 
@@ -124,7 +129,12 @@ long RUnit::draw(Frustum* frustum)
 	{
 		_model->setTransformMatrix(_transformation);
 		vec4 middle = _transformation * vec4(_middle ,1);
-		if (frustum->Inside(middle, radius))
+		vec3 temp_dist = _transformation * vec4(mostDistant, 1);
+		vec3 temp_middle = vec3(middle.x, middle.y, middle.z);
+
+		float temp_radius = distance(temp_middle, temp_dist);
+
+		if (frustum->Inside(temp_middle, temp_radius))
 			triangle += _model->Draw();
 	}
 	for (int i = 0; i < this->children.size(); i++)

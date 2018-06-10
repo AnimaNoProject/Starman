@@ -15,7 +15,8 @@ protected:
 	vec3 _translation, _rotation, _middle;
 	mat4 _scale, _position, _transformation;
 	float _degree, radius;
-
+	float _scaleFactor;
+	vec3 mostDistant;
 	void InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation, float degree, mat4 scale, float weight);
 public:
 	btRigidBody * _body;

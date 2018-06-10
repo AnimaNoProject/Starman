@@ -21,6 +21,7 @@
 #include "Rendering/ParticleSystem.h"
 #include "Rendering/Skybox.h"
 #include "Rendering/Frustum.h"
+#include <iostream>
 #include "Rendering\DebugDrawer.h"
 
 using namespace glm;

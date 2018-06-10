@@ -70,10 +70,10 @@ bool Frustum::Inside(vec3 point, float radius)
 	for (int i = 0; i < 6; i++) {
 
 		distance = planes[i].distance(point);
-		if (distance < radius)
+		if (distance < -radius)
 		{
-			return true;
+			return false;
 		}
 	}
-	return false;
+	return true;
 }
