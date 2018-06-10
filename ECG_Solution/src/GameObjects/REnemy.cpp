@@ -12,10 +12,10 @@ REnemy::REnemy(Model* model, _Shader* shader)
 void REnemy::InitRandom()
 {
 	// Generate Random Properties
-	vec3 position(Random::randomNumber(-51, 51), Random::randomNumber(-51, 51), Random::randomNumber(-51, 51));
+	vec3 position(Random::randomNumber(-101, 100), Random::randomNumber(-100, 100), Random::randomNumber(-100, 100));
 	vec3 translation(0,0,0);
 	vec3 rotation(0,0,0);
-	float scaleFactor = Random::randomNumber(1, 5);
+	float scaleFactor = Random::randomNumber(3, 3);
 	float degree = Random::randomNumber(1, 45);
 	float weight = scaleFactor * 100;
 	_scaleFactor = scaleFactor;
@@ -169,7 +169,7 @@ long REnemy::draw()
 void REnemy::addChild(REnemy* unit)
 {
 	this->children.push_back(unit);
-	unit->_world = _world;
+	//unit->_world = _world;
 }
 
 void REnemy::update(mat4 transformation, float time)

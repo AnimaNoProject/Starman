@@ -302,8 +302,7 @@ int main(int argc, char** argv)
 				viewProj =  player._camera->getViewProjectionMatrix();
 			}
 
-			enemies.takeHint(player.getPosition(), t_delta);
-			enemies.update(mat4(1), t_delta);
+
 
 
 			_world->stepSimulation(t_delta, 1);
@@ -312,6 +311,8 @@ int main(int argc, char** argv)
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
+			enemies.takeHint(player.getPosition(), t_delta);
+			enemies.update(mat4(1), t_delta);
 
 			// Render
 			triangles = 0;
@@ -368,34 +369,33 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 5; i++)
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 5; i++)
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model03);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 5; i++)
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		RUnit* n = new RUnit(pickup_model);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-
-	for (unsigned int i = 0; i < 5; i++)
+	
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}
-	
 }
 
 void initPhysics()

@@ -35,7 +35,7 @@ public:
 
 	REnemy(Model* model, _Shader* shader);
 	REnemy(mat4 default);
-	bool takeHint(vec3 position, float deltaTime);
+	void takeHint(vec3 position, float deltaTime);
 	~REnemy();
 
 	float health = 100;

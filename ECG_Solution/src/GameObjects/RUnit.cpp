@@ -17,7 +17,7 @@ RUnit::RUnit(Model * model)
 void RUnit::InitRandom()
 {
 	// Generate Random Properties
-	vec3 position(Random::randomNumber(-501, 501), Random::randomNumber(-501, 501), Random::randomNumber(-501, 5001));
+	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
 	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
 	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
 	float scaleFactor = Random::randomNumber(1, 225);

@@ -10,7 +10,7 @@ Shots::Shots(Model* model, vec3 direction, vec3 position)
 
 	_toofar = false;
 	_collisionFlag = false;
-
+	_startposition = position;
 	// set starting position
 	_direction = direction;
 	_position = position;
