@@ -56,6 +56,9 @@ long Mesh::Draw() {
 		else if (name == "texture_height")
 			// Transfer unsigned int to stream
 			number = std::to_string(heightNr++); 
+		else if (name == "texture_light")
+			// Transfer unsigned int to stream
+			number = std::to_string(heightNr++);
 
 		// Set the sampler to the correct texture unit
 		glUniform1i(glGetUniformLocation(_shader->getShader(), (name + number).c_str()), i);

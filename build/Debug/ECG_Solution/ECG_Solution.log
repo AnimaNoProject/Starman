@@ -1,13 +1,16 @@
-﻿  ParticleSystem.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(7): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(10): warning C4244: 'argument': conversion from 'float' to 'GLsizeiptr', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(14): warning C4244: 'argument': conversion from 'float' to 'GLsizeiptr', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(18): warning C4244: 'argument': conversion from 'float' to 'GLsizeiptr', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(22): warning C4244: 'argument': conversion from 'float' to 'GLsizeiptr', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(46): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(49): warning C4244: 'argument': conversion from 'float' to 'GLsizeiptr', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(51): warning C4244: 'argument': conversion from 'float' to 'GLsizeiptr', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(88): warning C4244: 'initializing': conversion from 'float' to 'GLuint', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(96): warning C4244: '=': conversion from 'GLuint' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(115): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
-  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  Main.cpp
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: Unerwartete Token nach Präprozessordirektive - Zeilenvorschub erwartet.
+c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
+c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
+c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: "return": Konvertierung von "float" in "int", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: "GLEW_STATIC": Makro-Neudefinition
+  c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: Befehlszeilenargumente: siehe vorherige Definition von "GLEW_STATIC"
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(125): warning C4244: "Argument": Konvertierung von "double" in "int", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(198): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(208): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(281): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(291): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(298): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\main.cpp(338): warning C4244: "Argument": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
+  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

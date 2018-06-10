@@ -109,6 +109,9 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	// Height maps
 	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+	// Light maps
+	std::vector<Texture> lightMaps = loadMaterialTextures(material, aiTextureType_LIGHTMAP, "texture_light");
+	textures.insert(textures.end(), lightMaps.begin(), lightMaps.end());
 
 	// Return the complete generated mesh object
 	return Mesh(vertices, indices, textures, this->_shader);
