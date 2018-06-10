@@ -222,7 +222,7 @@ int main(int argc, char** argv)
 	Model playerModel("assets/objects/starman_ship/player.obj", shader.get());
 	RPlayer player(&playerModel, &pcamera, shader.get());
 	player._world = _world;
-	player.addToPhysics();
+	//player.addToPhysics();
 
 	/* --------------------------------------------- */
 	// World Objects
@@ -359,20 +359,14 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-	for (unsigned int i = 0; i < 1; i++)
-	{
-		RUnit* n = new RUnit(asteroid_model02, vec3(1,1,1), vec3(0,0,0), vec3(0,0,0), 0, vec3(50,50,50), 0);
-		world.addChild(n);
-		_world->addRigidBody(n->_body);
-	}
-
+	
 	for (unsigned int i = 0; i < 20; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-	
+
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -419,6 +413,7 @@ void initPhysics()
 void performCollisionCheck(RPlayer& player)
 {
 	int numManifolds = _world->getDispatcher()->getNumManifolds();
+
 	for (int i = 0; i < numManifolds; i++)
 	{
 		btPersistentManifold* contactManifold = _world->getDispatcher()->getManifoldByIndexInternal(i);
@@ -437,16 +432,39 @@ void performCollisionCheck(RPlayer& player)
 			{
 				if (obA_model != nullptr && obB_model != nullptr)
 				{
-					if ( (obA_model->_type == CollisionData::SHOT) && (obB_model->_type == CollisionData::ASTEROID) )
+
+					// SHOT GOES AWAY
+					if ( (obA_model->_type == SHOT) && (obB_model->_type == ASTEROID) )
 					{
 						obA_model->_parentShot->_collisionFlag = true;
-						obA_model->_parentShot->_toofar = true;
 					}
-					else if ((obA_model->_type == CollisionData::SHOT) && (obB_model->_type == CollisionData::ASTEROID))
+					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == SHOT))
 					{
 						obB_model->_parentShot->_collisionFlag = true;
-						obA_model->_parentShot->_toofar = true;
 					}
+					//
+
+					// SHOT DOES DAMAGE
+					else if ((obA_model->_type == ENEMY) && (obB_model->_type == SHOT))
+					{
+						
+					}
+					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == ENEMY))
+					{
+						
+					}
+					//
+
+					// PICKUP PICKUP
+					else if ((obA_model->_type == PLAYER) && (obB_model->_type == PICKUP))
+					{
+
+					}
+					else if ((obA_model->_type == PICKUP) && (obB_model->_type == PLAYER))
+					{
+
+					}
+					//
 				}
 			}
 		}

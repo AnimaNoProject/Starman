@@ -61,10 +61,9 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	_body = new btRigidBody(bodyCI);
 	_body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
-	_collisionData = new CollisionData(CollisionData::PLAYER);
+	_collisionData = new CollisionData(PLAYER);
 	_collisionData->_parentPlayer = this;
 	_body->setUserPointer(_collisionData);
-
 }
 
 void RPlayer::addToPhysics()
@@ -145,8 +144,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 	
 	if (timepassedL > cooldown && shootL)
 	{
-		Shots* leftShot1 = new Shots(_shot, _dir, _position + (9.0f*dir - 3.2f*up + 4.5f*right));
-		Shots* leftShot2 = new Shots(_shot, _dir, _position + (9.0f*dir - 1.5f*up + 4.5f*right));
+		Shots* leftShot1 = new Shots(_shot, _dir, _position + (10.0f*dir - 3.2f*up + 4.5f*right));
+		Shots* leftShot2 = new Shots(_shot, _dir, _position + (10.0f*dir - 1.5f*up + 4.5f*right));
 		_world->addRigidBody(leftShot1->_body);
 		_world->addRigidBody(leftShot2->_body);
 		shots.push_back(leftShot1);
@@ -156,8 +155,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 
 	if (timepassedR > cooldown && shootR)
 	{
-		Shots* rightShot1 = new Shots(_shot, _dir, _position + (9.0f*dir - 3.2f*up - 4.5f*right));
-		Shots* rightShot2 = new Shots(_shot, _dir, _position + (9.0f*dir - 1.5f*up - 4.5f*right));
+		Shots* rightShot1 = new Shots(_shot, _dir, _position + (10.0f*dir - 3.2f*up - 4.5f*right));
+		Shots* rightShot2 = new Shots(_shot, _dir, _position + (10.0f*dir - 1.5f*up - 4.5f*right));
 		_world->addRigidBody(rightShot1->_body);
 		_world->addRigidBody(rightShot2->_body);
 		shots.push_back(rightShot1);

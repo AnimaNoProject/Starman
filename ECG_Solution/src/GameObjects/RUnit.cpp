@@ -47,12 +47,12 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	{
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec3 newPos = _model->meshes.at(i)._vertices.at(j).Position;
+			vec3 newPos = scale * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
 			shapeVector.push_back(newPos.x);
 			shapeVector.push_back(newPos.y);
 			shapeVector.push_back(newPos.z);
 
-			average += newPos * (1 / numberOfVertices);
+			average += _model->meshes.at(i)._vertices.at(j).Position * (1 / numberOfVertices);
 		}
 	}
 	_middle = average;
@@ -98,7 +98,7 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	bodyCI.m_friction = 0.005f;
 	_body = new btRigidBody(bodyCI);
 	//
-	_collisionData = new CollisionData(CollisionData::ASTEROID);
+	_collisionData = new CollisionData(ASTEROID);
 	_collisionData->_parentRUnit = this;
 	_body->setUserPointer(_collisionData);
 

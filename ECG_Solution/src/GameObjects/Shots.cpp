@@ -9,6 +9,7 @@ Shots::Shots(Model* model, vec3 direction, vec3 position)
 	_model = model;
 
 	_toofar = false;
+	_collisionFlag = false;
 
 	// set starting position
 	_direction = direction;
@@ -71,7 +72,7 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 	_body->setLinearVelocity(btVector3(direction.x * 50, direction.y * 50, direction.z * 50));
 
 	//Shots* shotPointer;
-	_collisionData = new CollisionData(CollisionData::SHOT);
+	_collisionData = new CollisionData(SHOT);
 	_collisionData->_parentShot = this;
 	_body->setUserPointer(_collisionData);
 }
