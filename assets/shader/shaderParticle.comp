@@ -2,7 +2,7 @@
 layout( local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
 layout (std430, binding = 0) buffer PositionBuffer {
-	vec3 positions[ ];
+	vec4 positions[ ];
 };
 
 layout (std430, binding = 1) buffer VelocityBuffer {
@@ -10,7 +10,7 @@ layout (std430, binding = 1) buffer VelocityBuffer {
 };
 
 layout (std430, binding = 2) buffer LifeBuffer {
-	float lifes[ ];
+	vec4 lifes[ ];
 };
 
 uniform float d_time;
@@ -23,11 +23,11 @@ void main(void)
 {
 	uint index = gl_GlobalInvocationID.x;
 
-	vec3 pos = positions[index];
+	vec4 pos = positions[index];
     vec4 vel = velocities[index];
-	float lifetime = lifes[index];
+	vec4 lifetime = lifes[index];
 	
-	if ( lifetime <= 0 ) // reuse particle
+	if ( lifetime.x <= 0 ) // reuse particle
 	{
 		float random = rand(pos.xz);
 
@@ -35,19 +35,22 @@ void main(void)
 		pos.x = 0.0f;
 		pos.y = 0.0f;
 		pos.z = 0.0f;
+		pos.w = 1.0f;
 		
 		// generate speed between 0.1 and 5
 		vel.x = -5 + mod(random * 100.0f, 10.0);
 		vel.y = -5 + mod(random * 100.0f, 10.0);
 		vel.z = -5 + mod(random * 100.0f, 10.0);
 		vel.w = 1.0;
+
+		lifetime.x = 5.0f;
 	}
 	else // update particle position
 	{
 		pos.xyz = pos.xyz + vel.xyz * d_time;
 	}
 
-	lifetime -= d_time;
+	lifetime.x -= d_time;
 
 	positions[index] = pos;
 	velocities[index] = vel;
