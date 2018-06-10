@@ -1,108 +1,121 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(int number)
+ParticleSystem::ParticleSystem(int maxParticle)
 {
-	velBuffer = lifeBuffer = posBuffer = 0;
+	computeShader = new _Shader("assets/shader/shaderParticle.comp");
+	drawShader = new _Shader("assets/shader/shaderParticle.vert", "assets/shader/shaderParticle.frag", "assets/shader/shaderParticle.geom");
+	_maxParticle = maxParticle;
+	glGenBuffers(1, &ssbo_pos[0]);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_pos[0]);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, _maxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+
+	glGenBuffers(1, &ssbo_vel[0]);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_vel[0]);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, _maxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+
+	glGenBuffers(1, &ssbo_pos[1]);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_pos[1]);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, _maxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+
+	glGenBuffers(1, &ssbo_vel[1]);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_vel[1]);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, _maxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
+
+	glGenBuffers(1, &atomicCounter);
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounter);
+	glBufferData(GL_ATOMIC_COUNTER_BUFFER,sizeof(GLuint),NULL,GL_DYNAMIC_DRAW);
+
+	GLuint value = 0;
+	glBufferSubData(GL_ATOMIC_COUNTER_BUFFER, 0,sizeof(GLuint), &value);
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+
+	glGenBuffers(1, &temp_buffer);
+	glBindBuffer(GL_COPY_WRITE_BUFFER, temp_buffer);
+	glBufferData(GL_COPY_WRITE_BUFFER, sizeof(GLuint), NULL, GL_DYNAMIC_READ);
+	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
+
+	const int TTL = 10;
+	std::vector<glm::vec4> positions;
+	std::vector<glm::vec4> velocities;
+
+	positions.push_back(vec4(0, 0, 0, TTL));
+	positions.push_back(vec4(2, 0, 1, TTL));
+	velocities.push_back(vec4(0, 0, 0, 0));
+	velocities.push_back(vec4(0, 0, 0, 0));
+
+	particle_count = positions.size();
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_pos[0]);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(positions[0]), &positions[0]);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_vel[0]);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(velocities[0]), &velocities[0]);
+
+	glGenVertexArrays(2, vaos);
+
+	glBindVertexArray(vaos[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, ssbo_pos[0]);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindVertexArray(0);
+
+	glBindVertexArray(vaos[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, ssbo_pos[1]);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindVertexArray(0);
 }
 
 ParticleSystem::~ParticleSystem()
 {
-	// delete buffers
-	glDeleteBuffers(1, &velBuffer);
-	glDeleteBuffers(1, &posBuffer);
-	glDeleteBuffers(1, &lifeBuffer);
+
 }
 
-void ParticleSystem::Init(unsigned int workgroup_x, unsigned int workgroup_y, unsigned int workgroup_z)
+void ParticleSystem::calculate(float deltaTime)
 {
-	workGroup[0] = workgroup_x;
-	workGroup[1] = workgroup_y;
-	workGroup[2] = workgroup_z;
-	shader = new _Shader("assets/shader/shaderParticle.vert", "assets/shader/shaderParticle.frag");
-	compute_shader = new _Shader("assets/shader/shaderParticle.comp");
+	computeShader->use();
+	computeShader->setUniform("DeltaTime", deltaTime);
+	computeShader->setUniform("LastCount", particle_count);
+	computeShader->setUniform("MaximumCount", 1000.0f);
 
-	glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &ibo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo_pos[index]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo_vel[index]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, ssbo_pos[!index]);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo_vel[!index]);
+	
+	index = !index;
+	glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 4, atomicCounter);
 
+	GLuint groups = (particle_count / (16 * 16)) + 1;
+	glDispatchCompute(groups, 1, 1);
 
-	points = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
-	for (int i = 0; i < MAX_PARTICLES; i++)
-	{
-		points[i].x = rand() % 50;
-		points[i].y = rand() % 50;
-		points[i].z = rand() % 50;
-		points[i].w = 1.0f;
-	}
+	glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounter);
 
-	glGenBuffers(1, &posBuffer);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec4), points, GL_DYNAMIC_COPY);
+	GLuint *counterValue = (GLuint*)glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
+	particle_count = counterValue[0];
+	counterValue[0] = 0;
 
+	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
 
-
-	velocities = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
-	for (int i = 0; i < MAX_PARTICLES; i++)
-	{
-		velocities[i].x = rand() % 4;
-		velocities[i].y = rand() % 4;
-		velocities[i].z = rand() % 4;
-		velocities[i].w = rand() % 4;
-	}
-	glGenBuffers(1, &velBuffer);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(vec4), velocities, GL_DYNAMIC_COPY);
-
-	life = (vec4*)calloc(MAX_PARTICLES, sizeof(vec4));
-	for (int i = 0; i < MAX_PARTICLES; i++)
-	{
-		life[i].x = 5.0f;
-	}
-
-	glGenBuffers(1, &lifeBuffer);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, lifeBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_PARTICLES * sizeof(float), life, GL_DYNAMIC_COPY);
-
-	glBindVertexArray(vao);
-
-	glBindBuffer(GL_ARRAY_BUFFER, lifeBuffer);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), 0);
-
-	glBindVertexArray(0);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 }
 
-void ParticleSystem::Update(float d_time)
+void ParticleSystem::draw(mat4 viewProj)
 {
-	compute_shader->use();
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glDepthMask(GL_FALSE);
+	glBlendFunc(GL_SRC_COLOR, GL_SRC_COLOR);
+	glBlendEquation(GL_MAX);
+	drawShader->use();
 
-	// bind uniforms
-	compute_shader->setUniform("d_time", d_time);
+	drawShader->setUniform("viewProj", viewProj);
 
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, posBuffer);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velBuffer);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, lifeBuffer);
-
-	glDispatchCompute(MAX_PARTICLES / WORK_GROUP_SIZE, 1, 1);
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	glUseProgram(0);
-}
-
-void ParticleSystem::Draw(mat4 viewproj)
-{
-	glBindVertexArray(vao);
-	shader->use();
-	shader->setUniform("viewProj", viewproj);
-	glPointSize(2.0f);
-	//glDisable(GL_CULL_FACE);
-
-
-	glDrawElements(GL_POINTS, MAX_PARTICLES, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(vaos[index]);
+	glDrawArrays(GL_POINTS, 0, particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);
+
+	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
 }

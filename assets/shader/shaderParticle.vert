@@ -1,14 +1,16 @@
-#version 430 core
+#version 430
 
-in layout (location = 0) vec3 position; 
-in layout (location = 1) float life;
+in layout (location = 0) vec4 position; 
 
 uniform mat4 viewProj;
 
-out float color;
+out vData
+{
+	float TTL1;
+} vertex;
 
 void main()
 {
 	gl_Position = viewProj * vec4(position.xyz, 1.0);
-	color = life;
+	vertex.TTL1 = position.w;
 }

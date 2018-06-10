@@ -3,22 +3,36 @@
 layout (points) in;
 layout(points, max_vertices=4) out;
 
+uniform mat4 viewProj;
+
+in vData { float TTL1; } vertex[];
+
+flat out float TTL0;
+
 void main(void)
 {
-    for (int i = 0; i < gl_in.length(); i++)
-    {
-		gl_Position = gl_in[i].gl_Position + vec4(0.0, 0.0, 0.0, 0.0);
-        EmitVertex();
+	const vec2 size = vec2(5, 5);
 
-        gl_Position = gl_in[i].gl_Position + vec4(0.0, 5.0, 0.0, 0.0);
-        EmitVertex();
+	vec4 P = gl_in[0].gl_Position;
+	vec2 va = P.xy + vec2(-0.5, -0.5) * size;
+	gl_Position = viewProj * vec4(va, P.zw);
+	TTL0 = vertex[0].TTL1;
+	EmitVertex();
 
-        gl_Position = gl_in[i].gl_Position + vec4(5.0, 0.0, 0.0, 0.0);
-        EmitVertex();
+	va = P.xy + vec2(0.5, -0.5) * size;
+	gl_Position = viewProj * vec4(va, P.zw);
+	TTL0 = vertex[0].TTL1;
+	EmitVertex();
 
-		gl_Position = gl_in[i].gl_Position + vec4(5.0, 5.0, 0.0, 0.0);
-        EmitVertex();
+	va = P.xy + vec2(0.5, 0.5) * size;
+	gl_Position = viewProj * vec4(va, P.zw);
+	TTL0 = vertex[0].TTL1;
+	EmitVertex();
 
-        EndPrimitive();
-}
+	va = P.xy + vec2(-0.5, 0.5) * size;
+	gl_Position = viewProj * vec4(va, P.zw);
+	TTL0 = vertex[0].TTL1;
+	EmitVertex();
+
+    EndPrimitive();
 }

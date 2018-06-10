@@ -259,8 +259,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Particle-System
 	/* --------------------------------------------- */
-	ParticleSystem particleSystem(1024 * 1024);
-	particleSystem.Init(128, 1, 1);
+	ParticleSystem particleSystem(1000);
 
 	/* --------------------------------------------- */
 	// Skybox
@@ -310,7 +309,10 @@ int main(int argc, char** argv)
 			//_world->debugDrawWorld();
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
-			particleSystem.Update(t_delta);
+			
+			particleSystem.calculate(t_delta);
+
+
 			enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
 
@@ -323,8 +325,7 @@ int main(int argc, char** argv)
 			triangles += player.draw();
 
 			// Particle System
-			//particleSystem.Draw(viewProj);
-			//
+			particleSystem.draw(viewProj);
 
 			// Draw Skybox
 			skybox->Draw(_debug_camera ? camera._viewMatrix, camera._projMatrix : pcamera._viewMatrix, pcamera._projMatrix);

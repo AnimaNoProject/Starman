@@ -1,58 +1,58 @@
-#version 430 core
-layout( local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+#version 430
 
-layout (std430, binding = 0) buffer PositionBuffer {
-	vec4 positions[ ];
+layout( local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+
+layout(std430, binding = 0) buffer Pos1
+{
+	vec4 Position_In[];
 };
 
-layout (std430, binding = 1) buffer VelocityBuffer {
-	vec4 velocities[ ];
+layout(std430, binding = 1) buffer Vel1
+{
+	vec4 Velocity_In[];
 };
 
-layout (std430, binding = 2) buffer LifeBuffer {
-	vec4 lifes[ ];
+layout(std430, binding = 2) buffer Pos2
+{
+	vec4 Position_Out[];
 };
 
-uniform float d_time;
+layout(std430, binding = 3) buffer Vel2
+{
+	vec4 Velocity_Out[];
+};
 
-float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+layout (binding = 4, offset = 0) uniform atomic_uint Count;
+
+uniform float LastCount;
+uniform float MaximumCount;
+uniform float DeltaT;
+
+void addParticleToOutputList(vec3 pos, vec3 vel, float TTL)
+{
+	uint nr = atomicCounterIncrement(Count);
+	if (nr >= MaximumCount)
+	{
+		atomicCounterDecrement(Count);
+		return;
+	}
+	Position_Out[nr] = vec4(pos, TTL);
+	Velocity_Out[nr] = vec4(vel, 0);
 }
 
 void main(void)
 {
-	uint index = gl_GlobalInvocationID.x;
+	uint idx = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * gl_NumWorkGroups.x * gl_WorkGroupSize.x;
 
-	vec4 pos = positions[index];
-    vec4 vel = velocities[index];
-	vec4 lifetime = lifes[index];
-	
-	if ( lifetime.x <= 0 ) // reuse particle
+	if(idx >= LastCount) return;
+
+	vec3 position = Position_In[idx].xyz;
+	vec3 velocity = Position_In[idx].xyz;
+
+	position += velocity * DeltaT;
+	float TTL = Position_In[idx].w - DeltaT;
+	if(TTL > 0)
 	{
-		float random = rand(pos.xz);
-
-		// spawn from center
-		pos.x = 0.0f;
-		pos.y = 0.0f;
-		pos.z = 0.0f;
-		pos.w = 1.0f;
-		
-		// generate speed between 0.1 and 5
-		vel.x = -5 + mod(random * 100.0f, 10.0);
-		vel.y = -5 + mod(random * 100.0f, 10.0);
-		vel.z = -5 + mod(random * 100.0f, 10.0);
-		vel.w = 1.0;
-
-		lifetime.x = 5.0f;
+		addParticleToOutputList(position, velocity, TTL);
 	}
-	else // update particle position
-	{
-		pos.xyz = pos.xyz + vel.xyz * d_time;
-	}
-
-	lifetime.x -= d_time;
-
-	positions[index] = pos;
-	velocities[index] = vel;
-	lifes[index] = lifetime;
 }

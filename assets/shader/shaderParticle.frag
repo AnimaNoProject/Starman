@@ -1,6 +1,8 @@
 #version 430 core
 
 in float color;
+
+flat in float TTL0;
 out vec4 FragColor;
 
 void main()
