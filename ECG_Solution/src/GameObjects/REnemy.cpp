@@ -1,17 +1,105 @@
 #include "REnemy.h"
 
 
-REnemy::REnemy(Model* model, _Shader* _shader)
+REnemy::REnemy(Model* model, _Shader* shader)
 {
 	_model = model;
-	float px, py, pz;
-	px = rand() % 200;
-	py = rand() % 200;
-	pz = rand() % 200;
-	_posVec = vec3(px, py, pz);
-	_position = translate(mat4(1), _posVec);
-	_degree = 0;
+	InitRandom();
+	_shader = shader;
 	_shot = new Model("assets/objects/drone/shots.obj", _shader);
+}
+
+void REnemy::InitRandom()
+{
+	// Generate Random Properties
+	vec3 position(Random::randomNumber(-51, 51), Random::randomNumber(-51, 51), Random::randomNumber(-51, 51));
+	vec3 translation(0,0,0);
+	vec3 rotation(0,0,0);
+	float scaleFactor = Random::randomNumber(1, 5);
+	float degree = Random::randomNumber(1, 45);
+	float weight = scaleFactor * 100;
+	_scaleFactor = scaleFactor;
+	//
+	_scale = scale(mat4(1), vec3(scaleFactor, scaleFactor, scaleFactor));
+	//
+
+	// Init Physics
+	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
+}
+
+void REnemy::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation, float degree, mat4 scale, float weight)
+{
+	float numberOfVertices = 0;
+	vec3 average(0, 0, 0);
+
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+	{
+		numberOfVertices += _model->meshes.at(i)._vertices.size();
+	}
+
+	// convex hull shape
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = scale * vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0f);
+			shapeVector.push_back(newPos.x);
+			shapeVector.push_back(newPos.y);
+			shapeVector.push_back(newPos.z);
+
+			average += _model->meshes.at(i)._vertices.at(j).Position * (1 / numberOfVertices);
+		}
+	}
+	_middle = average;
+	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
+	//
+
+	// radius of bounding sphere
+	float farthest = 0.0f;
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+	{
+		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
+		{
+			vec3 newPos = _model->meshes.at(i)._vertices.at(j).Position;
+			float dist = distance(newPos, _middle);
+			if (dist > farthest)
+			{
+				farthest = dist;
+				mostDistant = _model->meshes.at(i)._vertices.at(j).Position;
+			}
+		}
+	}
+
+	radius = farthest;
+
+	//
+
+	// Motion State
+	btQuaternion rotationQuat;
+	rotationQuat.setEulerZYX(rotation.x, rotation.y, rotation.z);
+	btVector3 positionbT = btVector3(position.x, position.y, position.z);
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotationQuat, positionbT));
+	//
+
+	// Weight
+	btScalar mass = weight;
+	btVector3 bodyInertia;
+	_shape->calculateLocalInertia(mass, bodyInertia);
+	//
+
+	// Rigid Body
+	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(mass, motionState, _shape, bodyInertia);
+	bodyCI.m_restitution = 0.5f;
+	bodyCI.m_friction = 0.005f;
+	_body = new btRigidBody(bodyCI);
+	//
+	_collisionData = new CollisionData(ENEMY);
+	_collisionData->_parentEnemy = this;
+	_body->setUserPointer(_collisionData);
+
+	// Translation & Rotation
+	_body->setLinearFactor(btVector3(1, 1, 1));
+	_body->setLinearVelocity(btVector3(translation.x, translation.y, translation.z));
 }
 
 REnemy::REnemy(mat4 default)
@@ -83,21 +171,28 @@ void REnemy::addChild(REnemy* unit)
 void REnemy::update(mat4 transformation, float time)
 {
 	if (_model != nullptr)
-		_transformation = transformation * _position;
-
-	for (int i = 0; i < this->children.size(); i++)
 	{
-		this->children.at(i)->update(transformation, time);
+		btTransform transform = _body->getWorldTransform();
+		btQuaternion rota = transform.getRotation();
+		_translation = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
+		_degree = rota.getAngle();
+		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
 	}
 
-	for (int i = 0; i < this->_shots.size(); i++)
+	for (int i = this->children.size()-1; i >= 0; i--)
 	{
-		this->_shots.at(i)->update(time);
+		if (children.at(i)->health < 0)
+			children.erase(children.begin() + i);
+		else
+			this->children.at(i)->update(transformation, time);
 	}
 
 	for (int i = _shots.size() - 1; i >= 0; i--)
 	{
 		if (_shots.at(i)->_toofar)
 			_shots.erase(_shots.begin() + i);
+		else
+			this->_shots.at(i)->update(time);
 	}
 }

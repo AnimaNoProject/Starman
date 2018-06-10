@@ -392,6 +392,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
+		_world->addRigidBody(e->_body);
 	}
 	
 }
@@ -447,11 +448,13 @@ void performCollisionCheck(RPlayer& player)
 					// SHOT DOES DAMAGE
 					else if ((obA_model->_type == ENEMY) && (obB_model->_type == SHOT))
 					{
-						
+						obA_model->_parentEnemy->health -= 10;
+						obB_model->_parentShot->_collisionFlag = true;
 					}
-					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == ENEMY))
+					else if ((obA_model->_type == SHOT) && (obB_model->_type == ENEMY))
 					{
-						
+						obB_model->_parentEnemy->health -= 10;
+						obA_model->_parentShot->_collisionFlag = true;
 					}
 					//
 

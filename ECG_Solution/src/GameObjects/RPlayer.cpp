@@ -59,7 +59,7 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	bodyCI.m_restitution = 1.0f;
 	bodyCI.m_friction = 0.5f;
 	_body = new btRigidBody(bodyCI);
-	_body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	//_body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
 	_collisionData = new CollisionData(PLAYER);
 	_collisionData->_parentPlayer = this;
