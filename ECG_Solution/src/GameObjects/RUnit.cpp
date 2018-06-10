@@ -18,11 +18,9 @@ void RUnit::InitRandom()
 {
 	// Generate Random Properties
 	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
-	//DEBUG: vec3 position(Random::randomNumber(-50, 50), Random::randomNumber(-50, 50), Random::randomNumber(-50, 50));
 	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
 	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
 	float scaleFactor = Random::randomNumber(1, 225);
-	//DEBUG: float scaleFactor = Random::randomNumber(1, 50);
 	float degree = Random::randomNumber(1, 45);
 	float weight = scaleFactor * 100;
 

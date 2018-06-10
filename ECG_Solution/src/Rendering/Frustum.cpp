@@ -1,4 +1,5 @@
 #include "Frustum.h"
+#include <iostream>
 
 #define ANG2RAD 3.14159265358979323846/180.0
 
@@ -69,11 +70,10 @@ bool Frustum::Inside(vec3 point, float radius)
 	for (int i = 0; i < 6; i++) {
 
 		distance = planes[i].distance(point);
-
-		if (distance < -radius)
+		if (distance < radius)
 		{
-			return false;
+			return true;
 		}
 	}
-	return true;
+	return false;
 }

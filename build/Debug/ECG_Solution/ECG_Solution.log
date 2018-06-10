@@ -1,9 +1,11 @@
-﻿  ParticleSystem.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(32): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(48): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\particlesystem.cpp(50): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+﻿  RUnit.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(152): warning C4018: '<': signed/unsigned mismatch
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

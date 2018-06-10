@@ -236,11 +236,10 @@ int main(int argc, char** argv)
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
 
 	world.addChild(&sun_star);
-	sun_star.addChild(&station);	
-	_world->addRigidBody(station._body);
+	//sun_star.addChild(&station);	
+	//_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
-
 	/* --------------------------------------------- */
 	// Light
 	/* --------------------------------------------- */
@@ -355,6 +354,12 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
+	for (unsigned int i = 0; i < 1; i++)
+	{
+		RUnit* n = new RUnit(asteroid_model02, vec3(1,1,1), vec3(0,0,0), vec3(0,0,0), 0, vec3(50,50,50), 0);
+		world.addChild(n);
+		_world->addRigidBody(n->_body);
+	}
 
 	for (unsigned int i = 0; i < 10; i++)
 	{
