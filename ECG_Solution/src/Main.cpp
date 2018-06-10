@@ -222,6 +222,7 @@ int main(int argc, char** argv)
 	Model playerModel("assets/objects/starman_ship/player.obj", shader.get());
 	RPlayer player(&playerModel, &pcamera, shader.get());
 	player._world = _world;
+	enemies._world = _world;
 	//player.addToPhysics();
 
 	/* --------------------------------------------- */

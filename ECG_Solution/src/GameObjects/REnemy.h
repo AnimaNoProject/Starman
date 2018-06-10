@@ -31,9 +31,11 @@ private:
 	void InitRandom();
 public:
 	btRigidBody * _body;
+	btDynamicsWorld* _world;
+
 	REnemy(Model* model, _Shader* shader);
 	REnemy(mat4 default);
-	void takeHint(vec3 position, float deltaTime);
+	bool takeHint(vec3 position, float deltaTime);
 	~REnemy();
 
 	float health = 100;

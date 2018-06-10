@@ -131,7 +131,9 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 
 				vec3 _up(glm::cross(_right, _dir));
 
-				_shots.push_back(new Shots(_shot, normalize(_dir), _posVec));
+				//Shots* shot1 = new Shots(_shot, _dir, _posVec + (10.0f*_dir));
+				//_shots.push_back(shot1);
+				//_world->addRigidBody(shot1->_body);
 				timepassed = 0;
 			}
 		}
@@ -156,16 +158,18 @@ long REnemy::draw()
 	{
 		triangles += this->children.at(i)->draw();
 	}
+	/*
 	for (int i = 0; i < this->_shots.size(); i++)
 	{
 		triangles += _shots.at(i)->draw();
-	}
+	} */
 	return triangles;
 }
 
 void REnemy::addChild(REnemy* unit)
 {
 	this->children.push_back(unit);
+	unit->_world = _world;
 }
 
 void REnemy::update(mat4 transformation, float time)
@@ -183,16 +187,20 @@ void REnemy::update(mat4 transformation, float time)
 	for (int i = this->children.size()-1; i >= 0; i--)
 	{
 		if (children.at(i)->health < 0)
+		{
+			_world->removeRigidBody(children.at(i)->_body);
 			children.erase(children.begin() + i);
+		}
 		else
 			this->children.at(i)->update(transformation, time);
 	}
 
+	/*
 	for (int i = _shots.size() - 1; i >= 0; i--)
 	{
 		if (_shots.at(i)->_toofar)
 			_shots.erase(_shots.begin() + i);
 		else
 			this->_shots.at(i)->update(time);
-	}
+	}*/
 }
