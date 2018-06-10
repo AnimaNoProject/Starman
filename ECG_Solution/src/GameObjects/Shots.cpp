@@ -45,7 +45,6 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 
 	// Motion State
 	btQuaternion rotationQuat;
-	//rotationQuat.setEulerZYX(cross(dirA, dirB));
 
 	btVector3 btDirA = btVector3(dirA.x, dirA.y, dirA.z);
 	btVector3 btDirB = btVector3(dirB.x, dirB.y, dirB.z);
@@ -55,7 +54,7 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 	//
 
 	// Weight
-	btScalar mass = 500;
+	btScalar mass = 1;
 	btVector3 bodyInertia;
 	_shape->calculateLocalInertia(mass, bodyInertia);
 	//
@@ -72,10 +71,9 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 	_body->setLinearVelocity(btVector3(direction.x * 50, direction.y * 50, direction.z * 50));
 
 	//Shots* shotPointer;
-	_collisionData = new CollisionData("Shot");
-	_collisionData->setParentShot(this);
+	_collisionData = new CollisionData(CollisionData::SHOT);
+	_collisionData->_parentShot = this;
 	_body->setUserPointer(_collisionData);
-
 }
 
 long Shots::draw()
@@ -86,18 +84,9 @@ long Shots::draw()
 
 void Shots::update(float deltaTime)
 {
-	/*
-	_position += _direction * (float)(deltaTime * 100.0f);
-	if (distance(_startposition, _position) > 500)
-	{
-		_toofar = true;
-	}
-	*/
-
 	btTransform transform = _body->getWorldTransform();
 	btQuaternion rota = transform.getRotation();
 	_position = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
-
 
 	if (distance(_startposition, _position) > 200)
 	{

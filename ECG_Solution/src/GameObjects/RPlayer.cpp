@@ -60,12 +60,9 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	bodyCI.m_friction = 0.5f;
 	_body = new btRigidBody(bodyCI);
 	_body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-	//_body->setActivationState(DISABLE_DEACTIVATION);
 
-	//_body->setLinearFactor(btVector3(0.0f, 0.0f, 0.0f));
-
-	_collisionData = new CollisionData("RPlayer");
-	_collisionData->setParentPlayer(this);
+	_collisionData = new CollisionData(CollisionData::PLAYER);
+	_collisionData->_parentPlayer = this;
 	_body->setUserPointer(_collisionData);
 
 }
@@ -108,33 +105,6 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	else if (left)
 		_position += _right * (float)(deltaTime * _speed);
 
-	//_body->activate();
-	
-
-	//_body->applyForce(btVector3(0.0f, 0.0f, _speed), btVector3(_position.x, _position.x, _position.z));
-
-	//_body->applyCentralForce(btVector3(_position.x, _position.y, _position.z));
-	
-	/*
-	_body->setLinearFactor(btVector3(_speed, _speed, _speed));
-	_body->setLinearVelocity(btVector3(_dir.x, _dir.y, _dir.z));
-
-	btQuaternion rotationQuat;
-	rotationQuat.setRotation(btVector3(0.0f, 1.0f, 0.0f), btScalar(_yaw));
-
-	
-	btTransform transform;
-	_body->getMotionState()->getWorldTransform(transform);
-	transform.getOrigin() += (btVector3(_position.x, _position.y, _position.z));
-	_body->setWorldTransform(transform);
-	//transform.setOrigin(btVector3(_position.x, _position.x, _position.z));
-	//_body->getMotionState()->setWorldTransform(transform);
-	
-
-	_body->setAngularVelocity(btVector3(0.0f, _yaw, 0.0f));
-	_body->setAngularFactor(btScalar(1));
-	*/
-
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 		
 	_camera->setSpeed(_speed);
@@ -175,8 +145,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 	
 	if (timepassedL > cooldown && shootL)
 	{
-		Shots* leftShot1 = new Shots(_shot, _dir, _position + (8.5f*dir - 3.2f*up + 4.5f*right));
-		Shots* leftShot2 = new Shots(_shot, _dir, _position + (8.5f*dir - 1.5f*up + 4.5f*right));
+		Shots* leftShot1 = new Shots(_shot, _dir, _position + (9.0f*dir - 3.2f*up + 4.5f*right));
+		Shots* leftShot2 = new Shots(_shot, _dir, _position + (9.0f*dir - 1.5f*up + 4.5f*right));
 		_world->addRigidBody(leftShot1->_body);
 		_world->addRigidBody(leftShot2->_body);
 		shots.push_back(leftShot1);
@@ -186,8 +156,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 
 	if (timepassedR > cooldown && shootR)
 	{
-		Shots* rightShot1 = new Shots(_shot, _dir, _position + (8.5f*dir - 3.2f*up - 4.5f*right));
-		Shots* rightShot2 = new Shots(_shot, _dir, _position + (8.5f*dir - 1.5f*up - 4.5f*right));
+		Shots* rightShot1 = new Shots(_shot, _dir, _position + (9.0f*dir - 3.2f*up - 4.5f*right));
+		Shots* rightShot2 = new Shots(_shot, _dir, _position + (9.0f*dir - 1.5f*up - 4.5f*right));
 		_world->addRigidBody(rightShot1->_body);
 		_world->addRigidBody(rightShot2->_body);
 		shots.push_back(rightShot1);

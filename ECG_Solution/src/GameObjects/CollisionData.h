@@ -10,18 +10,12 @@ class RPlayer;
 
 class CollisionData
 {
-private:
-	string _type;
 public:
-	RUnit * _parentRUnit;
+	enum TYPE { SHOT, PLAYER, PICKUP, ASTEROID, ENEMY };
+	RUnit* _parentRUnit;
 	Shots* _parentShot;
 	RPlayer* _parentPlayer;
-	CollisionData(string t);
+	TYPE _type;
+	CollisionData(TYPE type);
 	~CollisionData();
-
-	string getType();
-	
-	void setParentRUnit(RUnit* unit);
-	void setParentShot(Shots* shot);
-	void setParentPlayer(RPlayer* player);
 };

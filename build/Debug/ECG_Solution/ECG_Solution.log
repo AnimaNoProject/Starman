@@ -1,13 +1,16 @@
-﻿  RPlayer.cpp
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: Unerwartete Token nach Präprozessordirektive - Zeilenvorschub erwartet.
-c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
-c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
-c:\users\andi\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: "Argument": Verkürzung von "double" in "const btScalar"
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: "return": Konvertierung von "float" in "int", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(85): warning C4244: "=": Konvertierung von "double" in "int", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(140): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(143): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(150): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(152): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
-c:\users\andi\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(205): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  Main.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
+  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(125): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(198): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(208): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(281): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(291): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(298): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(335): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

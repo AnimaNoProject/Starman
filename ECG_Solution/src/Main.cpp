@@ -233,13 +233,15 @@ int main(int argc, char** argv)
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
 	station_model = new Model("assets/objects/station/station.obj", shader.get());
-	RUnit station(station_model, vec3(25, 0, 0), vec3(0,0,0), vec3(0,0,0), 0, vec3(50, 50, 50), 50000);
+	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 
+	RUnit station(station_model, vec3(400, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(20, 20, 20), 50000);
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
 
 	world.addChild(&sun_star);
-	//sun_star.addChild(&station);	
-	//_world->addRigidBody(station._body);
+
+	sun_star.addChild(&station);	
+	_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
 	/* --------------------------------------------- */
@@ -303,7 +305,7 @@ int main(int argc, char** argv)
 			enemies.update(mat4(1), t_delta);
 
 
-			_world->stepSimulation(t_delta, 10);
+			_world->stepSimulation(t_delta, 1);
 			//bulletDebugDrawer->setViewProj(viewProj);
 			//_world->debugDrawWorld();
 			performCollisionCheck(player);
@@ -370,7 +372,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-	/*
+	
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -397,7 +399,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 	}
-	*/
+	
 }
 
 void initPhysics()
@@ -412,7 +414,6 @@ void initPhysics()
 	_world->setGravity(btVector3(0, 0, 0));
 
 	_world->setDebugDrawer(bulletDebugDrawer);
-
 }
 
 void performCollisionCheck(RPlayer& player)
@@ -434,26 +435,19 @@ void performCollisionCheck(RPlayer& player)
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
 			if (pt.getDistance() < 1.0f)
 			{
-				
-				if (obA_model != NULL && obB_model != NULL)
+				if (obA_model != nullptr && obB_model != nullptr)
 				{
-					cout << "Collision between: " << obA_model->getType() << " and " << obB_model->getType() << endl;
-					
-					if ( (obA_model->getType() == "Shot") && (obB_model->getType() == "RUnit") )
+					if ( (obA_model->_type == CollisionData::SHOT) && (obB_model->_type == CollisionData::ASTEROID) )
 					{
 						obA_model->_parentShot->_collisionFlag = true;
+						obA_model->_parentShot->_toofar = true;
 					}
-
-					else if ((obA_model->getType() == "RUnit") && (obB_model->getType() == "Shot"))
+					else if ((obA_model->_type == CollisionData::SHOT) && (obB_model->_type == CollisionData::ASTEROID))
 					{
 						obB_model->_parentShot->_collisionFlag = true;
+						obA_model->_parentShot->_toofar = true;
 					}
 				}
-				
-			
-				//const btVector3& ptA = pt.getPositionWorldOnA();
-				//const btVector3& ptB = pt.getPositionWorldOnB();
-				//const btVector3& normalOnB = pt.m_normalWorldOnB;
 			}
 		}
 	}
