@@ -4,11 +4,14 @@
 #include "btBulletDynamicsCommon.h"
 #include "../Rendering/Frustum.h"
 #include "../Utility/Random.h"
+#include "CollisionData.h"
+
+class CollisionData;
 
 class RUnit
 {
 private:
-	std::vector<RUnit*> children;
+	CollisionData* _collisionData;
 protected:
 	Model* _model;
 
@@ -19,7 +22,8 @@ protected:
 	vec3 mostDistant;
 	void InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation, float degree, mat4 scale, float weight);
 public:
-	btRigidBody * _body;
+	std::vector<RUnit*> children;
+	btRigidBody* _body;
 	btConvexHullShape* _shape;
 	vector<btScalar> shapeVector;
 

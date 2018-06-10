@@ -41,10 +41,9 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
 	//
 
-
 	// Motion State
 	btQuaternion rotationQuat;
-	rotationQuat.setEulerZYX(0,0,0);
+	rotationQuat.setEulerZYX(0, 0, 0);
 	btVector3 positionbT = btVector3(position.x, position.y, position.z);
 	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotationQuat, positionbT));
 	//
@@ -60,7 +59,15 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	bodyCI.m_restitution = 1.0f;
 	bodyCI.m_friction = 0.5f;
 	_body = new btRigidBody(bodyCI);
-	//
+	_body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+	//_body->setActivationState(DISABLE_DEACTIVATION);
+
+	//_body->setLinearFactor(btVector3(0.0f, 0.0f, 0.0f));
+
+	_collisionData = new CollisionData("RPlayer");
+	_collisionData->setParentPlayer(this);
+	_body->setUserPointer(_collisionData);
+
 }
 
 void RPlayer::addToPhysics()
@@ -101,18 +108,35 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	else if (left)
 		_position += _right * (float)(deltaTime * _speed);
 
+	//_body->activate();
+	
 
+	//_body->applyForce(btVector3(0.0f, 0.0f, _speed), btVector3(_position.x, _position.x, _position.z));
+
+	//_body->applyCentralForce(btVector3(_position.x, _position.y, _position.z));
+	
+	/*
 	_body->setLinearFactor(btVector3(_speed, _speed, _speed));
 	_body->setLinearVelocity(btVector3(_dir.x, _dir.y, _dir.z));
 
 	btQuaternion rotationQuat;
 	rotationQuat.setRotation(btVector3(0.0f, 1.0f, 0.0f), btScalar(_yaw));
 
+	
+	btTransform transform;
+	_body->getMotionState()->getWorldTransform(transform);
+	transform.getOrigin() += (btVector3(_position.x, _position.y, _position.z));
+	_body->setWorldTransform(transform);
+	//transform.setOrigin(btVector3(_position.x, _position.x, _position.z));
+	//_body->getMotionState()->setWorldTransform(transform);
+	
+
 	_body->setAngularVelocity(btVector3(0.0f, _yaw, 0.0f));
 	_body->setAngularFactor(btScalar(1));
+	*/
 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
-	
+		
 	_camera->setSpeed(_speed);
 	_camera->update(x, y, up, down, left, right, deltaTime);
 
@@ -128,9 +152,10 @@ void RPlayer::updateShots(int deltaTime)
 		this->shots.at(i)->update(deltaTime);
 	}
 
+
 	for (int i = shots.size() - 1; i >= 0; i--)
 	{
-		if (shots.at(i)->_toofar)
+		if (shots.at(i)->_toofar || shots.at(i)->_collisionFlag)
 		{
 			_world->removeRigidBody(shots.at(i)->_body);
 			shots.erase(shots.begin() + i);
@@ -147,6 +172,7 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 	vec3 up = normalize(_up);
 	vec3 right = normalize(_right);
 
+	
 	if (timepassedL > cooldown && shootL)
 	{
 		Shots* leftShot1 = new Shots(_shot, _dir, _position + (8.5f*dir - 3.2f*up + 4.5f*right));
@@ -167,6 +193,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 		shots.push_back(rightShot1);
 		shots.push_back(rightShot2);
 		timepassedR = 0;
+		shots.push_back(rightShot2);
+		timepassedL = 0;
 	}
 }
 
@@ -180,20 +208,4 @@ long RPlayer::draw()
 			triangles += this->shots.at(i)->draw();
 	}
 	return triangles;
-}
-
-void RPlayer::collisionCheck()
-{
-	//bool collisionFlag = false;
-	int numManifolds = _world->getDispatcher()->getNumManifolds();
-	for (int i = 0; i < numManifolds; i++)
-	{
-		btPersistentManifold* contactManifold = _world->getDispatcher()->getManifoldByIndexInternal(i);
-		const btCollisionObject* obA = contactManifold->getBody0();
-		const btCollisionObject* obB = contactManifold->getBody1();
-
-		//... here you can check for obA´s and obB´s user pointer again to see if the collision is alien and bullet and in that case initiate deletion.
-	}
-
-	//return collisionFlag;
 }

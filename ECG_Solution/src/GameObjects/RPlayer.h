@@ -4,6 +4,8 @@
 #include "../Rendering/Model.h"
 #include <algorithm>
 #include "Light.h"
+#include "CollisionData.h"
+#include "PlayerConfig.h"
 
 class RPlayer
 {
@@ -11,25 +13,23 @@ private:
 	vec3 _position;
 	Model* _model, *_shot;
 	_Shader* _shader;
-
 	vec3 _right, _up, _dir;
+	CollisionData* _collisionData;
 
 	float timepassedL, timepassedR, _yaw, _pitch;
 
-	const float cooldown = 0.25f;
+	const float cooldown = 0.5f;
 	const float _mouse_speed = 2.0f;
 
 	void shoot(float deltaTime, bool shootL, bool shootR);
-	void collisionCheck();
 	void InitPhysicProperties(vec3 position);
 	void updateShots(int deltaTime);
 public:
 	// Physics related stuff
-	btDynamicsWorld * _world;
-	btRigidBody * _body;
-	btConvexHullShape* _shape;
-	vector<btScalar> shapeVector;
-
+	btDynamicsWorld*			_world;
+	btRigidBody*				_body;
+	btConvexHullShape*			_shape;
+	vector<btScalar>			shapeVector;
 
 	vector<Shots*> shots;
 	Camera* _camera;

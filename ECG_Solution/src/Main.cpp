@@ -41,6 +41,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies);
 void initPhysics();
 void destroyPhysics();
 void handleInput();
+void performCollisionCheck(RPlayer& player);
 
 /* --------------------------------------------- */
 // Global variables
@@ -305,6 +306,7 @@ int main(int argc, char** argv)
 			_world->stepSimulation(t_delta, 10);
 			//bulletDebugDrawer->setViewProj(viewProj);
 			//_world->debugDrawWorld();
+			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
 			particleSystem.Update(t_delta);
 
@@ -317,7 +319,7 @@ int main(int argc, char** argv)
 			triangles += player.draw();
 
 			// Particle System
-			particleSystem.Draw(viewProj);
+			//particleSystem.Draw(viewProj);
 			//
 
 			// Draw Skybox
@@ -362,13 +364,13 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 10; i++)
+	for (unsigned int i = 0; i < 20; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-
+	/*
 	for (unsigned int i = 0; i < 5; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02);
@@ -395,6 +397,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 	}
+	*/
 }
 
 void initPhysics()
@@ -410,6 +413,50 @@ void initPhysics()
 
 	_world->setDebugDrawer(bulletDebugDrawer);
 
+}
+
+void performCollisionCheck(RPlayer& player)
+{
+	int numManifolds = _world->getDispatcher()->getNumManifolds();
+	for (int i = 0; i < numManifolds; i++)
+	{
+		btPersistentManifold* contactManifold = _world->getDispatcher()->getManifoldByIndexInternal(i);
+		const btCollisionObject* obA = contactManifold->getBody0();
+		const btCollisionObject* obB = contactManifold->getBody1();
+
+		CollisionData* obA_model = (CollisionData*)obA->getUserPointer();
+		CollisionData* obB_model = (CollisionData*)obB->getUserPointer();
+
+
+		int numContacts = contactManifold->getNumContacts();
+		for (int j = 0; j < numContacts; j++)
+		{
+			btManifoldPoint& pt = contactManifold->getContactPoint(j);
+			if (pt.getDistance() < 1.0f)
+			{
+				
+				if (obA_model != NULL && obB_model != NULL)
+				{
+					cout << "Collision between: " << obA_model->getType() << " and " << obB_model->getType() << endl;
+					
+					if ( (obA_model->getType() == "Shot") && (obB_model->getType() == "RUnit") )
+					{
+						obA_model->_parentShot->_collisionFlag = true;
+					}
+
+					else if ((obA_model->getType() == "RUnit") && (obB_model->getType() == "Shot"))
+					{
+						obB_model->_parentShot->_collisionFlag = true;
+					}
+				}
+				
+			
+				//const btVector3& ptA = pt.getPositionWorldOnA();
+				//const btVector3& ptB = pt.getPositionWorldOnB();
+				//const btVector3& normalOnB = pt.m_normalWorldOnB;
+			}
+		}
+	}
 }
 
 void destroyPhysics()
