@@ -29,7 +29,7 @@ struct Plane
 		aux1 = v1 - v2;
 		aux2 = v3 - v2;
 
-		normal = normalize(aux2 * aux1);
+		normal = normalize(cross(aux2, aux1));
 		point = v2;
 		d = -(normal.x * point.x + normal.y * point.y + normal.z * point.z);
 	};

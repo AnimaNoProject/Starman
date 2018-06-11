@@ -28,9 +28,9 @@ void Frustum::Update(vec3 eye, vec3 dir, vec3 up, bool on)
 
 	Z = normalize(eye - dir);
 
-	X = normalize(up * Z);
+	X = normalize(cross(up,Z));
 
-	Y = Z * X;
+	Y = cross(Z,X);
 
 	nc = eye - Z * _nearZ;
 	fc = eye - Z * _farZ;
@@ -42,22 +42,22 @@ void Frustum::Update(vec3 eye, vec3 dir, vec3 up, bool on)
 
 	aux = (nc + Y * nh) - eye;
 	aux = normalize(aux);
-	normal = aux * X;
+	normal = cross(aux, X);
 	planes[TOP].setUp(normal, nc + Y * nh);
 
 	aux = (nc - Y * nh) - eye;
 	aux = normalize(aux);
-	normal = X * aux;
+	normal = cross(X, aux);
 	planes[BOTTOM].setUp(normal, nc - Y * nh);
 
 	aux = (nc - X * nw) - eye;
 	aux = normalize(aux);
-	normal = aux * Y;
+	normal = cross(aux, Y);
 	planes[LEFT].setUp(normal, nc - X * nw);
 
 	aux = (nc + X * nw) - eye;
 	aux = normalize(aux);
-	normal = Y * aux;
+	normal = cross(Y, aux);
 	planes[RIGHT].setUp(normal, nc + X * nw);
 }
 
@@ -68,7 +68,6 @@ bool Frustum::Inside(vec3 point, float radius)
 
 	float distance = 0;
 	for (int i = 0; i < 6; i++) {
-
 		distance = planes[i].distance(point);
 		if (distance < -radius)
 		{
