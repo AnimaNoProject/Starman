@@ -74,9 +74,6 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 			}
 		}
 	}
-
-	radius = farthest;
-
 	//
 
 	// Motion State

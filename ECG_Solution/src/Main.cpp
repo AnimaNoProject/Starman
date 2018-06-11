@@ -310,7 +310,7 @@ int main(int argc, char** argv)
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
 			
-			particleSystem.calculate(t_delta);
+			//particleSystem.calculate(t_delta);
 
 
 			enemies.takeHint(player.getPosition(), t_delta);
@@ -325,7 +325,7 @@ int main(int argc, char** argv)
 			triangles += player.draw();
 
 			// Particle System
-			particleSystem.draw(viewProj);
+			//particleSystem.draw(viewProj);
 
 			// Draw Skybox
 			skybox->Draw(_debug_camera ? camera._viewMatrix, camera._projMatrix : pcamera._viewMatrix, pcamera._projMatrix);
