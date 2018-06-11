@@ -233,7 +233,7 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	station_model = new Model("assets/objects/station/station.obj", shader.get());
+	station_model = new Model("assets/objects/station_lightmap_compulsory/station.obj", shader.get());
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 
 	RUnit station(station_model, vec3(400, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(20, 20, 20), 50000);
