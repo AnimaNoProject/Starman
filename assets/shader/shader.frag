@@ -8,7 +8,7 @@ in VertexData {
 	vec2 texture_coord;
 } vert;
 
-uniform sampler2D texture_diff;
+uniform sampler2D texture_diffuse1;
 uniform float brightness;
 uniform vec3 camera_world;
 
@@ -71,7 +71,7 @@ void main()
 	vec3 n = normalize(vert.normal_world);
 	vec3 v = normalize(camera_world - vert.position_world);
 	
-	vec3 texColor = texture(texture_diff, vert.texture_coord).rgb;
+	vec3 texColor = texture(texture_diffuse1, vert.texture_coord).rgb;
 	color = vec4(texColor * Ka * brightness, 1); // ambient
 
 	// sun

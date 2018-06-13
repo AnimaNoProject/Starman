@@ -8,8 +8,8 @@ in VertexData {
 	vec2 texture_coord;
 } vert;
 
-uniform sampler2D texture_diff;		// Lightmap will be stored as diffuse texture
-uniform sampler2D texture_specular;
+uniform sampler2D texture_diffuse1;		
+uniform sampler2D texture_specular1;  // Lightmap will be stored as diffuse texture with number 2
 
 uniform float brightness;
 uniform vec3 camera_world;
@@ -74,13 +74,13 @@ void main()
 	vec3 v = normalize(camera_world - vert.position_world);
 	
 	
-	vec3 base_texture = texture2D(texture_specular, vert.texture_coord).rgb;
-	vec3 lightmap = texture2D(texture_diff, vert.texture_coord).rgb;
+	vec3 base_texture = texture2D(texture_diffuse1, vert.texture_coord).rgb;
+	vec3 lightmap = texture2D(texture_specular1, vert.texture_coord).rgb;
 	
 	vec3 model_texture = base_texture * lightmap;
 	
 	color = vec4(model_texture * Ka * brightness, 1); // ambient
-
+	
 	// sun
 	color.rgb += phong(n, -sun.direction, v, sun.color * model_texture * brightness, Kd, sun.color, Ks, shyniness, false, vec3(0));
 }
