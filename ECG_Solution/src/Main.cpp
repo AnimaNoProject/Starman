@@ -251,7 +251,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Post-Processor
 	/* --------------------------------------------- */
-	postprocessor = new PostProcessing(_window_width, _window_height);
+	postprocessor = new PostProcessing(_window_width, _window_height, nearZ, farZ);
 	postprocessor->Init();
 
 	/* --------------------------------------------- */
@@ -334,7 +334,7 @@ int main(int argc, char** argv)
 
 			// Render HUD
 			hud.render(t_delta, _debug_hud, player._health, player._real_speed, triangles);
-			
+
 			// Poll events and swap buffers
 			glfwPollEvents();
 			glfwSwapBuffers(_window);

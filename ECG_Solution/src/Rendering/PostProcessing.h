@@ -6,14 +6,14 @@
 class PostProcessing
 {
 private:
-	GLuint framebuffer, textureColorbuffer, rbo, quadVAO, quadVBO, textureDepthBuffer;
+	GLuint framebuffer, textureColor, rbo, quadVAO, quadVBO, textureDepth;
 	unsigned int _width, _height;
+	float _near, _far;
 	std::shared_ptr<_Shader> shader;
 public:
-	PostProcessing(int width, int height);
+	PostProcessing(int width, int height, float near, float far);
 	~PostProcessing();
 	bool Init();
 	void use();
 	void draw();
 };
-

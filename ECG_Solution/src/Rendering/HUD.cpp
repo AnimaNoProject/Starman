@@ -93,7 +93,7 @@ bool HUD::initialize()
 
 	_shader->use();
 	_shader->setUniform("projection", _projection);
-	_shader->setUniform("textColor", vec4(1.0f, 1.0f, 1.0f, 0.4f));
+	_shader->setUniform("textColor", vec4(1.0f, 1.0f, 1.0f, 0.9f));
 
 	// initialization success!
 	return true;
@@ -139,8 +139,8 @@ void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, uns
 	_shader->use();
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_FUNC_ADD);
-
+	//glBlendEquation(GL_FUNC_ADD);
+	glBlendEquation(GL_FUNC_SUBTRACT);
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vao);
 
