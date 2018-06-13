@@ -9,7 +9,7 @@ in VertexData {
 } vert;
 
 uniform sampler2D texture_diffuse1;		
-uniform sampler2D texture_specular1;  // Lightmap will be stored as diffuse texture with number 2
+uniform sampler2D texture_specular1;  // Lightmap will be stored as specular texture
 
 uniform float brightness;
 uniform vec3 camera_world;
