@@ -1,13 +1,2 @@
-﻿  RUnit.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(137): warning C4018: '<': signed/unsigned mismatch
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\runit.cpp(159): warning C4018: '<': signed/unsigned mismatch
-  Frustum.cpp
-  Generating Code...
-  ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
+﻿  Mesh.cpp
+  ECG_Solution.vcxproj -> C:\Users\Andi\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
