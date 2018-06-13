@@ -74,18 +74,15 @@ void main()
 	vec3 v = normalize(camera_world - vert.position_world);
 	
 	
-	//vec3 base_texture = texture2D(texture_specular, vert.texture_coord).rgb;
-	//vec3 lightmap = texture2D(texture_diff, vert.texture_coord).rgb;
-
-	//vec3 texColor = base_texture * lightmap;
+	vec3 base_texture = texture2D(texture_specular, vert.texture_coord).rgb;
+	vec3 lightmap = texture2D(texture_diff, vert.texture_coord).rgb;
 	
-	vec3 texColor = texture2D(texture_diff, vert.texture_coord).rgb;
+	vec3 model_texture = base_texture * lightmap;
 	
-	//vec3 texColor = texture(texture_specular, vert.texture_coord).rgb * texture(texture_diff, vert.texture_coord).rgb;
-	color = vec4(texColor * Ka * brightness, 1); // ambient
+	color = vec4(model_texture * Ka * brightness, 1); // ambient
 
 	// sun
-	color.rgb += phong(n, -sun.direction, v, sun.color * texColor * brightness, Kd, sun.color, Ks, shyniness, false, vec3(0));
+	color.rgb += phong(n, -sun.direction, v, sun.color * model_texture * brightness, Kd, sun.color, Ks, shyniness, false, vec3(0));
 }
 
 
