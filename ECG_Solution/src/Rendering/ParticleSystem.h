@@ -17,12 +17,12 @@ private:
 	GLuint temp_buffer;
 	GLuint vaos[2];
 	unsigned int index = 0;
-	float particle_count;
-	float _maxParticle;
+	unsigned int particle_count;
+	unsigned int _maxParticle;
 
 public:
 	ParticleSystem(int maxParticle);
 	~ParticleSystem();
 	void calculate(float deltaTime);
-	void draw(mat4 viewProj);
+	void draw(mat4 view, mat4 proj);
 };

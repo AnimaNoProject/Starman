@@ -2,7 +2,7 @@
 
 in layout (location = 0) vec4 position; 
 
-uniform mat4 viewProj;
+uniform mat4 view;
 
 out vData
 {
@@ -11,6 +11,6 @@ out vData
 
 void main()
 {
-	gl_Position = viewProj * vec4(position.xyz, 1.0);
+	gl_Position = view * vec4(position.xyz, 1.0);
 	vertex.TTL1 = position.w;
 }

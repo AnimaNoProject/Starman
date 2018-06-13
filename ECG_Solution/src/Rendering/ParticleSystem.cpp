@@ -40,8 +40,8 @@ ParticleSystem::ParticleSystem(int maxParticle)
 
 	positions.push_back(vec4(0, 0, 0, TTL));
 	positions.push_back(vec4(2, 0, 1, TTL));
-	velocities.push_back(vec4(0, 0, 0, 0));
-	velocities.push_back(vec4(0, 0, 0, 0));
+	velocities.push_back(vec4(0, 1, 0, 0));
+	velocities.push_back(vec4(0, 1, 0, 0));
 
 	particle_count = positions.size();
 
@@ -73,9 +73,9 @@ ParticleSystem::~ParticleSystem()
 void ParticleSystem::calculate(float deltaTime)
 {
 	computeShader->use();
-	computeShader->setUniform("DeltaTime", deltaTime);
+	computeShader->setUniform("DeltaT", deltaTime);
 	computeShader->setUniform("LastCount", particle_count);
-	computeShader->setUniform("MaximumCount", 1000.0f);
+	computeShader->setUniform("MaximumCount", 1000);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo_pos[index]);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo_vel[index]);
@@ -101,7 +101,7 @@ void ParticleSystem::calculate(float deltaTime)
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 }
 
-void ParticleSystem::draw(mat4 viewProj)
+void ParticleSystem::draw(mat4 view, mat4 proj)
 {
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
@@ -109,7 +109,8 @@ void ParticleSystem::draw(mat4 viewProj)
 	glBlendEquation(GL_MAX);
 	drawShader->use();
 
-	drawShader->setUniform("viewProj", viewProj);
+	drawShader->setUniform("view", view);
+	drawShader->setUniform("proj", proj);
 
 	glBindVertexArray(vaos[index]);
 	glDrawArrays(GL_POINTS, 0, particle_count);
