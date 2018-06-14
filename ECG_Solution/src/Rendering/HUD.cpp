@@ -139,9 +139,8 @@ void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, uns
 	_shader->use();
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glBlendEquation(GL_FUNC_ADD);
-	glBlendEquation(GL_FUNC_SUBTRACT);
-	glActiveTexture(GL_TEXTURE0);
+	glBlendEquation(GL_FUNC_ADD);
+	//glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vao);
 
 	sprintf(buffer, "Health: %i", healtpoints);

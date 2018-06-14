@@ -23,7 +23,7 @@ ParticleSystem::ParticleSystem(int maxParticle)
 
 	glGenBuffers(1, &atomicCounter);
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounter);
-	glBufferData(GL_ATOMIC_COUNTER_BUFFER,sizeof(GLuint),NULL,GL_DYNAMIC_DRAW);
+	glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(GLuint), NULL, GL_DYNAMIC_DRAW);
 
 	GLuint value = 0;
 	glBufferSubData(GL_ATOMIC_COUNTER_BUFFER, 0,sizeof(GLuint), &value);
@@ -47,6 +47,7 @@ ParticleSystem::ParticleSystem(int maxParticle)
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_pos[0]);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(positions[0]), &positions[0]);
+
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_vel[0]);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(velocities[0]), &velocities[0]);
 
@@ -76,6 +77,19 @@ void ParticleSystem::calculate(float deltaTime)
 	computeShader->setUniform("DeltaT", deltaTime);
 	computeShader->setUniform("LastCount", particle_count);
 	computeShader->setUniform("MaximumCount", 1000);
+
+	const double spawnRatePerSecond = 2;
+	double particles_to_spawn = 0;
+	particles_to_spawn += spawnRatePerSecond * deltaTime;
+	GLuint spawnCount = 0;
+
+	if (particles_to_spawn > 0)
+	{
+		spawnCount += (GLuint)particles_to_spawn;
+		particles_to_spawn -= spawnCount;
+	}
+
+	computeShader->setUniform("spawnCount", spawnCount);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo_pos[index]);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo_vel[index]);
@@ -107,12 +121,13 @@ void ParticleSystem::draw(mat4 view, mat4 proj)
 	glDepthMask(GL_FALSE);
 	glBlendFunc(GL_SRC_COLOR, GL_SRC_COLOR);
 	glBlendEquation(GL_MAX);
+
 	drawShader->use();
 
 	drawShader->setUniform("view", view);
 	drawShader->setUniform("proj", proj);
 
-	glBindVertexArray(vaos[index]);
+	glBindVertexArray(vaos[!index]);
 	glDrawArrays(GL_POINTS, 0, particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);

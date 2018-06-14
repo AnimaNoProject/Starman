@@ -16,7 +16,7 @@ private:
 	GLuint atomicCounter;
 	GLuint temp_buffer;
 	GLuint vaos[2];
-	unsigned int index = 0;
+	unsigned int index = 1;
 	unsigned int particle_count;
 	unsigned int _maxParticle;
 

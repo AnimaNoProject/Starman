@@ -308,7 +308,7 @@ int main(int argc, char** argv)
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
 			
-			//particleSystem.calculate(t_delta);
+			particleSystem.calculate(t_delta);
 
 
 			enemies.takeHint(player.getPosition(), t_delta);

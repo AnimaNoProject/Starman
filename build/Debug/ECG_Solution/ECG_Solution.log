@@ -1,21 +1,2 @@
-﻿  Main.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
-  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(125): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(196): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(206): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(279): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(289): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(296): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(336): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-  HUD.cpp
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
-  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.cpp(73): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
-  Generating Code...
+﻿  ParticleSystem.cpp
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
