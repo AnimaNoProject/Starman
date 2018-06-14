@@ -137,6 +137,7 @@ void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, uns
 {
 	char buffer[1000];
 	_shader->use();
+	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendEquation(GL_FUNC_ADD);
@@ -160,5 +161,6 @@ void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, uns
 
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }

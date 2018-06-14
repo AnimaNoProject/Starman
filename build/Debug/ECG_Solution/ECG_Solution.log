@@ -1,2 +1,5 @@
-﻿  ParticleSystem.cpp
+﻿  HUD.cpp
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
+  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.cpp(73): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
