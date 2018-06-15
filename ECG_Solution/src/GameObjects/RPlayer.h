@@ -34,7 +34,6 @@ public:
 	vector<Shots*> shots;
 	Camera* _camera;
 	vec3 getPosition() { return _position; }
-	SpotLight* spotLight;
 
 	RPlayer();
 	RPlayer(Model* model, Camera* camera, _Shader* shader);
@@ -44,7 +43,6 @@ public:
 	int _speed, _health;
 
 	void move(float x, float y, bool up, bool down, bool left, bool right, bool shootR, bool shootL, float deltaTime);
-	void addToPhysics();
 	long draw();
 
 };

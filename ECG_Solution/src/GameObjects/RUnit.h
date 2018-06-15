@@ -8,12 +8,15 @@
 
 class CollisionData;
 
+enum TYPE;
+
 class RUnit
 {
 private:
 	CollisionData* _collisionData;
 protected:
 	Model* _model;
+	TYPE _type;
 
 	vec3 _translation, _rotation, _middle;
 	mat4 _scale, _position, _transformation;
@@ -26,9 +29,10 @@ public:
 	btRigidBody* _body;
 	btConvexHullShape* _shape;
 	vector<btScalar> shapeVector;
+	bool _getDeleted = false;
 
-	RUnit(Model* model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight);
-	RUnit(Model* model);
+	RUnit(Model* model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight, TYPE type);
+	RUnit(Model* model, TYPE type);
 
 	void InitRandom();
 

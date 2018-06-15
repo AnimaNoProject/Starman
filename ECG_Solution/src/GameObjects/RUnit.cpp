@@ -1,15 +1,17 @@
 #include "RUnit.h"
-RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight)
+RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight, TYPE type)
 {
 	_model = model;
 	_scale = glm::scale(mat4(1), scale);
 	_scaleFactor = scale.x;
+	_type = type;
 	// Init Physics
 	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
 }
 
-RUnit::RUnit(Model * model)
+RUnit::RUnit(Model * model, TYPE type)
 {
+	_type = type;
 	_model = model;
 	InitRandom();
 }
@@ -95,7 +97,7 @@ void RUnit::InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation,
 	bodyCI.m_friction = 0.005f;
 	_body = new btRigidBody(bodyCI);
 	//
-	_collisionData = new CollisionData(ASTEROID);
+	_collisionData = new CollisionData(_type);
 	_collisionData->_parentRUnit = this;
 	_body->setUserPointer(_collisionData);
 
@@ -156,8 +158,15 @@ void RUnit::update(mat4 transformation, float time)
 		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
 	}
 
-	for (int i = 0; i < this->children.size(); i++)
+	for (int i = this->children.size() - 1; i >= 0; i--)
 	{
-		this->children.at(i)->update(transformation, time);
+		if (this->children.at(i)->_getDeleted)
+		{
+			this->children.erase(children.begin() + i);
+		}
+		else
+		{
+			this->children.at(i)->update(transformation, time);
+		}
 	}
 }

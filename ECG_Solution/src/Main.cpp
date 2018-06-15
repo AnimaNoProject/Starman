@@ -58,14 +58,14 @@ static bool _down = false;
 static bool _shootL = false;
 static bool _shootR = false;
 static bool _debug_camera = false;
-static bool _debug_hud = false;
+static bool _debug_hud = true;
 static double _fps;
 static float _brightness;
 static bool _cell_shading = true;
-static bool _post_processing = false;
+static bool _post_processing = true;
 static PostProcessing* postprocessor;
 static double x, y;
-static bool _frustum_culling = false;
+static bool _frustum_culling = true;
 
 static Model* asteroid_model01;
 static Model* asteroid_model02;
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
 	RPlayer player(&playerModel, &pcamera, shader.get());
 	player._world = _world;
 	enemies._world = _world;
-	//player.addToPhysics();
+	_world->addRigidBody(player._body);
 
 	/* --------------------------------------------- */
 	// World Objects
@@ -234,8 +234,8 @@ int main(int argc, char** argv)
 	station_model = new Model("assets/objects/station_lightmap_compulsory/station.obj", shader.get());
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 
-	RUnit station(station_model, vec3(400, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(20, 20, 20), 50000);
-	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000);
+	RUnit station(station_model, vec3(400, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(20, 20, 20), 50000, ASTEROID);
+	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000, ASTEROID);
 
 	world.addChild(&sun_star);
 
@@ -269,6 +269,8 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Frustum* frustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
+
+	glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 	mat4 viewProj;
 	{
 		while (!glfwWindowShouldClose(_window)) {
@@ -299,18 +301,12 @@ int main(int argc, char** argv)
 				viewProj =  player._camera->getViewProjectionMatrix();
 			}
 
-
-
-
 			_world->stepSimulation(t_delta, 1);
 			//bulletDebugDrawer->setViewProj(viewProj);
 			//_world->debugDrawWorld();
 			performCollisionCheck(player);
-			world.update(mat4(1), t_now);
-			
+			world.update(mat4(1), t_now);	
 			particleSystem.calculate(t_delta);
-
-
 			enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
 
@@ -363,28 +359,28 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 	
 	for (unsigned int i = 0; i < 20; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model01);
+		RUnit* n = new RUnit(asteroid_model01, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
 	for (unsigned int i = 0; i < 50; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model02);
+		RUnit* n = new RUnit(asteroid_model02, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
 	for (unsigned int i = 0; i < 50; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model03);
+		RUnit* n = new RUnit(asteroid_model03, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
 	for (unsigned int i = 0; i < 50; i++)
 	{
-		RUnit* n = new RUnit(pickup_model);
+		RUnit* n = new RUnit(pickup_model, PICKUP);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
@@ -461,11 +457,27 @@ void performCollisionCheck(RPlayer& player)
 					// PICKUP PICKUP
 					else if ((obA_model->_type == PLAYER) && (obB_model->_type == PICKUP))
 					{
-
+						obA_model->_parentPlayer->_health += 10;
+						obB_model->_parentRUnit->_getDeleted = true;
+						_world->removeRigidBody(obB_model->_parentRUnit->_body);
 					}
 					else if ((obA_model->_type == PICKUP) && (obB_model->_type == PLAYER))
 					{
+						obB_model->_parentPlayer->_health += 10;
+						obA_model->_parentRUnit->_getDeleted = true;
+						_world->removeRigidBody(obA_model->_parentRUnit->_body);
+					}
+					//
 
+
+					// PLAYER ASTEROID
+					else if ((obA_model->_type == PLAYER) && (obB_model->_type == ASTEROID))
+					{
+						obA_model->_parentPlayer->_real_speed = 0;
+					}
+					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == PLAYER))
+					{
+						obB_model->_parentPlayer->_real_speed = 0;
 					}
 					//
 				}
@@ -495,7 +507,7 @@ void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 	// shader
 	shader->use();
 	shader->setUniform("viewProj", camera.getViewProjectionMatrix());
-	shader->setUniform("camera_world", camera.getPosition());
+	shader->setUniform("camera_world", camera._position);
 	shader->setUniform("brightness", _brightness);
 
 	shader->setUniform("sun.color", sun.color);

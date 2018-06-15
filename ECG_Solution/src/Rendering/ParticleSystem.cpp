@@ -76,7 +76,7 @@ void ParticleSystem::calculate(float deltaTime)
 	computeShader->use();
 	computeShader->setUniform("DeltaT", deltaTime);
 	computeShader->setUniform("LastCount", particle_count);
-	computeShader->setUniform("MaximumCount", 1000);
+	computeShader->setUniform("MaximumCount", 1000u);
 
 	const double spawnRatePerSecond = 2;
 	double particles_to_spawn = 0;
@@ -108,6 +108,7 @@ void ParticleSystem::calculate(float deltaTime)
 	GLuint *counterValue = (GLuint*)glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
 	particle_count = counterValue[0];
+
 	counterValue[0] = 0;
 
 	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
@@ -120,6 +121,7 @@ void ParticleSystem::draw(mat4 view, mat4 proj)
 	glEnable(GL_BLEND);
 	glDepthMask(GL_FALSE);
 	glBlendFunc(GL_SRC_COLOR, GL_SRC_COLOR);
+	glDisable(GL_CULL_FACE);
 	glBlendEquation(GL_MAX);
 
 	drawShader->use();
@@ -133,5 +135,6 @@ void ParticleSystem::draw(mat4 view, mat4 proj)
 	glUseProgram(0);
 
 	glDisable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
 	glDepthMask(GL_TRUE);
 }

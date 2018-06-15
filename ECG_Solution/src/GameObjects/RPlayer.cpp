@@ -4,7 +4,7 @@ RPlayer::RPlayer()
 {
 }
 
-RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _real_speed(0), _health(100)
+RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _real_speed(0), _health(100), _yaw(0.0f), _pitch(0.0f)
 {
 	_model = model;
 	_model->transform(translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)));
@@ -13,7 +13,6 @@ RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _re
 	_position = vec3(0.0f, 0.0f, 5.0f);
 	_shot = new Model("assets/objects/starman_ship/shots.obj", _shader);
 	timepassedR = timepassedL = 0;
-	spotLight = new SpotLight(vec3(0.8f, 0.5f, 0.3f), vec3(0.0f, -1.5f, 10.5f), vec3(1.0f, 0.8f, 0.2f), vec3(0.0f, 0.0f, -1.0f), 25.0f);
 	InitPhysicProperties(_position);
 }
 
@@ -23,19 +22,16 @@ RPlayer::~RPlayer()
 
 void RPlayer::InitPhysicProperties(vec3 position)
 {
-	float numberOfVertices = 0;
-	vec3 average(0, 0, 0);
-
 	// convex hull shape
 	for (unsigned int i = 0; i < _model->meshes.size(); i++)
 	{
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
-			vec4 temp = vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0);
-			temp = translate(mat4(1), _position) * translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)) * mat4(1) * temp;
-			shapeVector.push_back(temp.x);
-			shapeVector.push_back(temp.y);
-			shapeVector.push_back(temp.z);
+			vec4 tempPos = vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0);
+			tempPos = translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)) * tempPos;
+			shapeVector.push_back(tempPos.x);
+			shapeVector.push_back(tempPos.y);
+			shapeVector.push_back(tempPos.z);
 		}
 	}
 	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
@@ -59,24 +55,18 @@ void RPlayer::InitPhysicProperties(vec3 position)
 	bodyCI.m_restitution = 1.0f;
 	bodyCI.m_friction = 0.5f;
 	_body = new btRigidBody(bodyCI);
-	//_body->setCollisionFlags(_body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
 	_collisionData = new CollisionData(PLAYER);
 	_collisionData->_parentPlayer = this;
 	_body->setUserPointer(_collisionData);
 }
 
-void RPlayer::addToPhysics()
-{
-	_world->addRigidBody(_body);
-}
-
 void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, bool shootL, bool shootR, float deltaTime)
 {
 	if (up)
-		(_real_speed >= 25) ? _real_speed = 25 : _real_speed += 5 * deltaTime;
+		(_real_speed >= 50) ? _real_speed = 50 : _real_speed += 5 * deltaTime;
 	else if (down)
-		(_real_speed <= -25) ? _real_speed = -25 : _real_speed -= 5 * deltaTime;
+		(_real_speed <= -50) ? _real_speed = -50 : _real_speed -= 5 * deltaTime;
 
 	_speed = (floor((_real_speed * 2) + 0.5) / 2);
 
@@ -106,12 +96,21 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 		
-	_camera->setSpeed(_speed);
+	_camera->_speed = _speed;
 	_camera->update(x, y, up, down, left, right, deltaTime);
 
 	updateShots(deltaTime);
 	if(shootL || shootR)
 		shoot(deltaTime, shootL, shootR);
+
+	// UPDATE WORLDTRANSFORM
+	btTransform transform = btTransform();
+	btQuaternion rotation = btQuaternion();
+	rotation.setEuler(_yaw, -_pitch, 0.0f);
+	transform.setRotation(rotation);
+	transform.setOrigin(btVector3(_position.x, _position.y, _position.z));
+	_body->setWorldTransform(transform);
+	//
 }
 
 void RPlayer::updateShots(int deltaTime)

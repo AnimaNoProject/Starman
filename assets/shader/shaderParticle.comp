@@ -21,6 +21,11 @@ uniform uint MaximumCount;
 uniform float DeltaT;
 uniform uint spawnCount; 
 
+float rand(vec2 co)
+{
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 void addParticleToOutputList(vec3 pos, vec3 vel, float TTL)
 {
 	uint nr = atomicCounterIncrement(Count);
@@ -33,11 +38,13 @@ void addParticleToOutputList(vec3 pos, vec3 vel, float TTL)
 	Velocity_Out[nr] = vec4(vel, 0);
 }
 
-void spawnParticle()
+void spawnParticle(vec2 pos)
 {
 	for(uint i = 0; i < spawnCount; i++)
 	{
-		addParticleToOutputList(vec3(0,0,0), vec3(1,1,1), 10);
+		vec3 newPos = vec3(rand(pos));
+		vec3 newVel = vec3(rand(pos));
+		addParticleToOutputList(newPos, newVel, 10);
 	}
 }
 
@@ -58,5 +65,5 @@ void main(void)
 		addParticleToOutputList(position, velocity, TTL);
 	}
 
-	spawnParticle();
+	spawnParticle(position.xy);
 }
