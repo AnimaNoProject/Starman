@@ -238,7 +238,7 @@ int main(int argc, char** argv)
 
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 
-	RUnit station(station_model, vec3(400, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(20, 20, 20), 50000, ASTEROID);
+	RUnit station(station_model, vec3(500, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(30, 30, 30), 50000, ASTEROID);
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000, ASTEROID);
 
 	world.addChild(&sun_star);
@@ -312,6 +312,7 @@ int main(int argc, char** argv)
 			particleSystem.calculate(t_delta);
 			enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
+			station.update(mat4(1), t_now);
 
 			// Render
 			triangles = 0;
