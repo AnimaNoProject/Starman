@@ -1,18 +1,13 @@
-﻿  Main.cpp
+﻿  RPlayer.cpp
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\shots.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 c:\users\thorsten\documents\github\cgue18-starman\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\utility\random.h(8): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): warning C4005: 'GLEW_STATIC': macro redefinition
-  c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\rendering\hud.h(6): note: command-line arguments:  see previous definition of 'GLEW_STATIC'
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(125): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(197): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(207): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(284): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(294): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(301): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(352): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-  ParticleSystem.cpp
-  Generating Code...
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(71): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(99): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(102): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(118): warning C4018: '<': signed/unsigned mismatch
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\gameobjects\rplayer.cpp(173): warning C4018: '<': signed/unsigned mismatch
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe

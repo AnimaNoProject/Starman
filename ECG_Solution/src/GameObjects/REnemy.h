@@ -40,7 +40,7 @@ public:
 
 	float health = 100;
 
-	virtual long draw();
+	virtual long draw(Frustum* frustum);
 	void addChild(REnemy* unit);
 	virtual void update(mat4 transformation, float time);
 };

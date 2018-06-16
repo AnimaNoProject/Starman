@@ -89,8 +89,7 @@ void ParticleSystem::calculate(float deltaTime)
 		particles_to_spawn -= spawnCount;
 	}
 
-	cout << spawnCount << endl;
-	computeShader->setUniform("spawnCount", spawnCount);
+	computeShader->setUniform("spawnCount", (GLuint)spawnRatePerSecond);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo_pos[index]);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo_vel[index]);

@@ -90,9 +90,9 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	_position += _dir * (float)(deltaTime * _speed);
 
 	if (right)
-		_position -= _right * (float)(deltaTime * _speed);
-	else if (left)
 		_position += _right * (float)(deltaTime * _speed);
+	else if (left)
+		_position -= _right * (float)(deltaTime * _speed);
 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 		

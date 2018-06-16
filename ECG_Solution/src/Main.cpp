@@ -310,7 +310,7 @@ int main(int argc, char** argv)
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);	
 			particleSystem.calculate(t_delta);
-			enemies.takeHint(player.getPosition(), t_delta);
+			//enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
 			station.update(mat4(1), t_now);
 
@@ -321,7 +321,7 @@ int main(int argc, char** argv)
 
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 			triangles += world.draw(frustum);
-			triangles += enemies.draw();
+			triangles += enemies.draw(frustum);
 			triangles += player.draw();
 
 			//

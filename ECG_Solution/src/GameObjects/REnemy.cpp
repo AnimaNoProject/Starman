@@ -146,17 +146,25 @@ REnemy::~REnemy()
 }
 
 
-long REnemy::draw()
+long REnemy::draw(Frustum* frustum)
 {
 	unsigned int triangles = 0;
 	if (_model != nullptr)
 	{
 		_model->setTransformMatrix(_transformation);
-		triangles += _model->Draw();
+
+		vec4 middle = _transformation * vec4(_middle, 1);
+		vec3 temp_dist = _transformation * vec4(mostDistant, 1);
+		vec3 temp_middle = vec3(middle.x, middle.y, middle.z);
+
+		float temp_radius = distance(temp_middle, temp_dist);
+
+		if (frustum->Inside(temp_middle, temp_radius))
+			triangles += _model->Draw();
 	}
 	for (int i = 0; i < this->children.size(); i++)
 	{
-		triangles += this->children.at(i)->draw();
+		triangles += this->children.at(i)->draw(frustum);
 	}
 	/*
 	for (int i = 0; i < this->_shots.size(); i++)
@@ -186,13 +194,13 @@ void REnemy::update(mat4 transformation, float time)
 
 	for (int i = this->children.size()-1; i >= 0; i--)
 	{
+		this->children.at(i)->update(transformation, time);
+
 		if (children.at(i)->health < 0)
 		{
 			_world->removeRigidBody(children.at(i)->_body);
 			children.erase(children.begin() + i);
 		}
-		else
-			this->children.at(i)->update(transformation, time);
 	}
 
 	/*
