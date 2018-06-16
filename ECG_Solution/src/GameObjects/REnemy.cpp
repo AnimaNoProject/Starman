@@ -15,7 +15,7 @@ void REnemy::InitRandom()
 	vec3 position(Random::randomNumber(-501, 501), Random::randomNumber(-501, 501), Random::randomNumber(-501, 501));
 	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
 	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
-	float scaleFactor = Random::randomNumber(6, 6);
+	float scaleFactor = Random::randomNumber(8, 8);
 	float degree = Random::randomNumber(1, 180);
 	float weight = scaleFactor * 100;
 	_scaleFactor = scaleFactor;

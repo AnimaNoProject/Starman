@@ -14,6 +14,11 @@ RUnit::RUnit(Model * model, TYPE type)
 	_type = type;
 	_model = model;
 	InitRandom();
+
+	if (type == PICKUP)
+	{
+		spinner = new RUnit(model, vec3(2,2,2), vec3(0,0,0), vec3(1, 0, 0) , 33, vec3(2, 2, 2), 5000, ASTEROID);
+	}
 }
 
 void RUnit::InitRandom()
@@ -138,7 +143,24 @@ long RUnit::draw(Frustum* frustum)
 	}
 	for (int i = 0; i < this->children.size(); i++)
 		triangle += this->children.at(i)->draw(frustum);
+
+	if (_type == PICKUP)
+	{
+		spinner->drawNoPhysics(_transformation, _time);
+	}
+
 	return triangle;
+}
+
+void RUnit::updateNoPhysics(mat4 transformation, float time)
+{
+	mat4 ownTransform = translate(glm::mat4(1), vec3(5.0, 0.0, 0.0)) * (glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f), glm::vec3(0, 1, 0)));
+	_model->transform(transformation * ownTransform);
+}
+
+void RUnit::drawNoPhysics(mat4 transformation, float time)
+{
+	_model->Draw();
 }
 
 void RUnit::addChild(RUnit* unit)
@@ -148,6 +170,7 @@ void RUnit::addChild(RUnit* unit)
 
 void RUnit::update(mat4 transformation, float time)
 {
+	_time = time;
 	if (_model != nullptr)
 	{
 		btTransform transform = _body->getWorldTransform();
@@ -156,6 +179,10 @@ void RUnit::update(mat4 transformation, float time)
 		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
 		_degree = rota.getAngle();
 		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
+	}
+
+	if (_type == PICKUP) {
+		spinner->updateNoPhysics(_transformation, time);
 	}
 
 	for (int i = this->children.size() - 1; i >= 0; i--)

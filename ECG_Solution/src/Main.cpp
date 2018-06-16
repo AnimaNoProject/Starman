@@ -376,7 +376,7 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-
+	/*
 	for (unsigned int i = 0; i < 50; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01, ASTEROID);
@@ -396,7 +396,8 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		RUnit* n = new RUnit(asteroid_model03, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
-	}
+	}*/
+
 
 	for (unsigned int i = 0; i < 50; i++)
 	{
@@ -404,14 +405,15 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-	
+
+	/*
 	for (unsigned int i = 0; i < 50; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}
-
+	*/
 }
 
 void initPhysics()
