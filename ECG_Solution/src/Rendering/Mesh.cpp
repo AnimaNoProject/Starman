@@ -62,11 +62,13 @@ long Mesh::Draw() {
 
 		// Set the sampler to the correct texture unit
 		glUniform1i(glGetUniformLocation(_shader->getShader(), (name + number).c_str()), i);
+
 		// Last step --> bind texture
 		glBindTexture(GL_TEXTURE_2D, _textures[i].id);
 	}
 
-	mat4 accumModel = _transformMatrix * _modelMatrix;
+	mat4 accumModel = _transformMatrix * _modelMatrix;	
+
 	_shader->setUniform("model", accumModel);
 	_shader->setUniform("normals", mat3(transpose(inverse(accumModel))));
 

@@ -176,6 +176,7 @@ int main(int argc, char** argv)
 	// Shader
 	/* --------------------------------------------- */
 	std::shared_ptr<_Shader> shader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/shader.frag");
+	std::shared_ptr<_Shader> lightMapShader = std::make_shared<_Shader>("assets/shader/shader.vert", "assets/shader/lightmapShader.frag");
 	std::shared_ptr<_Shader> hud_shader = std::make_shared<_Shader>("assets/shader/shaderHUD.vert", "assets/shader/shaderHUD.frag");
 
 	/* --------------------------------------------- */
@@ -231,7 +232,10 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	station_model = new Model("assets/objects/station_lightmap_compulsory/station.obj", shader.get());
+	//station_model = new Model("assets/objects/station_lightmap_compulsory/station.obj", lightMapShader.get());
+
+	station_model = new Model("assets/objects/station_separate_lightmap/station.obj", lightMapShader.get());
+
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
 
 	RUnit station(station_model, vec3(400, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(20, 20, 20), 50000, ASTEROID);
@@ -239,7 +243,6 @@ int main(int argc, char** argv)
 
 	world.addChild(&sun_star);
 
-	sun_star.addChild(&station);	
 	_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
@@ -317,6 +320,7 @@ int main(int argc, char** argv)
 			triangles += world.draw(frustum);
 			triangles += enemies.draw();
 			triangles += player.draw();
+			triangles += station.draw(frustum);
 
 			// Particle System
 			particleSystem.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
