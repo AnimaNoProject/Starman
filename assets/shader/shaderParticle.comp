@@ -23,7 +23,7 @@ uniform uint spawnCount;
 
 float rand(vec2 co)
 {
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+    return fract(sin(dot(co.xy ,vec2(100*DeltaT,78.233))) * 43758.5453);
 }
 
 void addParticleToOutputList(vec3 pos, vec3 vel, float TTL)
@@ -44,7 +44,7 @@ void spawnParticle(vec2 pos)
 	{
 		vec3 newPos = vec3(rand(pos));
 		vec3 newVel = vec3(rand(pos));
-		addParticleToOutputList(newPos, newVel, 10);
+		addParticleToOutputList(newPos, newVel, 100);
 	}
 }
 
@@ -65,5 +65,8 @@ void main(void)
 		addParticleToOutputList(position, velocity, TTL);
 	}
 
-	spawnParticle(position.xy);
+	if(idx == 0)
+	{
+		spawnParticle(position.xy);
+	}
 }

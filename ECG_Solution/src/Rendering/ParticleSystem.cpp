@@ -34,7 +34,7 @@ ParticleSystem::ParticleSystem(int maxParticle)
 	glBufferData(GL_COPY_WRITE_BUFFER, sizeof(GLuint), NULL, GL_DYNAMIC_READ);
 	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
 
-	const int TTL = 10;
+	const int TTL = 1000;
 	std::vector<glm::vec4> positions;
 	std::vector<glm::vec4> velocities;
 
@@ -129,7 +129,7 @@ void ParticleSystem::draw(mat4 view, mat4 proj)
 	drawShader->setUniform("view", view);
 	drawShader->setUniform("proj", proj);
 
-	glBindVertexArray(vaos[!index]);
+	glBindVertexArray(vaos[index]);
 	glDrawArrays(GL_POINTS, 0, particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);

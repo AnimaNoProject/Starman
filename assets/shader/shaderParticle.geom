@@ -9,9 +9,12 @@ in vData { float TTL1; } vertex[];
 
 flat out float TTL0;
 
+//flat out vec4 pos;
+
 void main(void)
 {
 	vec4 position = gl_in[0].gl_Position;
+	//pos = position;
 
 	gl_Position =  proj * (position + vec4(-1, -1, 0, 0));
 	TTL0 = vertex[0].TTL1;

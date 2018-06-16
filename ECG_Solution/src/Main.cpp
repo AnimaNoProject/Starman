@@ -375,7 +375,7 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-	
+	/*
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01, ASTEROID);
@@ -410,6 +410,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}
+	*/
 }
 
 void initPhysics()
