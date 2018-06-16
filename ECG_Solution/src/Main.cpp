@@ -316,12 +316,27 @@ int main(int argc, char** argv)
 
 			// Render
 			triangles = 0;
-			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
+			glEnable(GL_DEPTH_TEST);
 
+
+			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 			triangles += world.draw(frustum);
 			triangles += enemies.draw();
 			triangles += player.draw();
+
+			//
+			lightMapShader.get()->use();
+			lightMapShader.get()->setUniform("viewProj", viewProj);
+			lightMapShader.get()->setUniform("camera_world", _debug_camera ? camera._position : pcamera._position);
+			lightMapShader.get()->setUniform("brightness", _brightness);
+
+			lightMapShader.get()->setUniform("sun.color", sun.color);
+			lightMapShader.get()->setUniform("sun.direction", sun.direction);
+
+			lightMapShader.get()->setUniform("cellshading", _cell_shading);
 			triangles += station.draw(frustum);
+			//
+
 
 			// Particle System
 			particleSystem.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
@@ -502,8 +517,6 @@ void destroyPhysics()
 
 void setPerFrameUniforms(_Shader* shader, Camera& camera, DirectionalLight& sun)
 {
-	glEnable(GL_DEPTH_TEST);
-
 	if (_post_processing)
 	{
 		postprocessor->use();

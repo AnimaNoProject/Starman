@@ -38,6 +38,9 @@ long Mesh::Draw() {
 	unsigned int specularNr = 1;
 	unsigned int normalNr = 1;
 	unsigned int heightNr = 1;
+
+	_shader->use();
+
 	for (unsigned int i = 0; i < _textures.size(); i++)
 	{
 		// Activate proper texture unit before binding

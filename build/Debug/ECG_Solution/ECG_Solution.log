@@ -12,5 +12,5 @@ c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(207)
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(284): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(294): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(301): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(337): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\thorsten\documents\github\cgue18-starman\ecg_solution\src\main.cpp(352): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
   ECG_Solution.vcxproj -> C:\Users\Thorsten\Documents\GitHub\cgue18-starman\bin\Debug\ECG_Solution.exe
