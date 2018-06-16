@@ -140,11 +140,10 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 	vec3 up = normalize(_up);
 	vec3 right = normalize(_right);
 
-	
 	if (timepassedL > cooldown && shootL)
 	{
-		Shots* leftShot1 = new Shots(_shot, _dir, _position + (10.0f*dir - 3.2f*up + 4.5f*right));
-		Shots* leftShot2 = new Shots(_shot, _dir, _position + (10.0f*dir - 1.5f*up + 4.5f*right));
+		Shots* leftShot1 = new Shots(_shot, dir, _position + (10.0f*dir - 3.2f*up + 4.5f*right));
+		Shots* leftShot2 = new Shots(_shot, dir, _position + (10.0f*dir - 1.5f*up + 4.5f*right));
 		_world->addRigidBody(leftShot1->_body);
 		_world->addRigidBody(leftShot2->_body);
 		shots.push_back(leftShot1);
@@ -154,15 +153,13 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 
 	if (timepassedR > cooldown && shootR)
 	{
-		Shots* rightShot1 = new Shots(_shot, _dir, _position + (10.0f*dir - 3.2f*up - 4.5f*right));
-		Shots* rightShot2 = new Shots(_shot, _dir, _position + (10.0f*dir - 1.5f*up - 4.5f*right));
+		Shots* rightShot1 = new Shots(_shot, dir, _position + (10.0f*dir - 3.2f*up - 4.5f*right));
+		Shots* rightShot2 = new Shots(_shot, dir, _position + (10.0f*dir - 1.5f*up - 4.5f*right));
 		_world->addRigidBody(rightShot1->_body);
 		_world->addRigidBody(rightShot2->_body);
 		shots.push_back(rightShot1);
 		shots.push_back(rightShot2);
 		timepassedR = 0;
-		shots.push_back(rightShot2);
-		timepassedL = 0;
 	}
 }
 

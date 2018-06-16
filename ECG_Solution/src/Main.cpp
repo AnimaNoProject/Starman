@@ -232,8 +232,6 @@ int main(int argc, char** argv)
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	//station_model = new Model("assets/objects/station_lightmap_compulsory/station.obj", lightMapShader.get());
-
 	station_model = new Model("assets/objects/station_separate_lightmap/station.obj", lightMapShader.get());
 
 	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
@@ -310,14 +308,15 @@ int main(int argc, char** argv)
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);	
 			particleSystem.calculate(t_delta);
+
 			//enemies.takeHint(player.getPosition(), t_delta);
+
 			enemies.update(mat4(1), t_delta);
 			station.update(mat4(1), t_now);
 
 			// Render
 			triangles = 0;
 			glEnable(GL_DEPTH_TEST);
-
 
 			setPerFrameUniforms(shader.get(), _debug_camera ? camera : pcamera, sun);
 			triangles += world.draw(frustum);
@@ -377,35 +376,35 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
 	
-	for (unsigned int i = 0; i < 20; i++)
+	for (unsigned int i = 0; i < 10; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 50; i++)
+	for (unsigned int i = 0; i < 15; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 50; i++)
+	for (unsigned int i = 0; i < 15; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model03, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 50; i++)
+	for (unsigned int i = 0; i < 10; i++)
 	{
 		RUnit* n = new RUnit(pickup_model, PICKUP);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 	
-	for (unsigned int i = 0; i < 50; i++)
+	for (unsigned int i = 0; i < 10; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);

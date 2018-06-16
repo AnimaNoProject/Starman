@@ -115,10 +115,11 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 
 	if (_model != nullptr)
 	{
-		if(distance(position, _posVec) < 7000)
+		timepassed += deltaTime;
+
+		if(distance(position, _posVec) < 500)
 		{
-			timepassed += deltaTime;
-			if (timepassed > cooldown)
+			if (timepassed > 40)
 			{
 
 				vec3 _dir(position - _posVec);
@@ -131,13 +132,12 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 
 				vec3 _up(glm::cross(_right, _dir));
 
-				//Shots* shot1 = new Shots(_shot, _dir, _posVec + (10.0f*_dir));
-				//_shots.push_back(shot1);
-				//_world->addRigidBody(shot1->_body);
+				Shots* shot = new Shots(_shot, _dir, _posVec + (20.0f*_dir));
+				_shots.push_back(shot);
+				_world->addRigidBody(shot->_body);
 				timepassed = 0;
 			}
 		}
-		
 	}
 }
 
@@ -145,6 +145,15 @@ REnemy::~REnemy()
 {
 }
 
+
+void REnemy::deleteMe()
+{
+	for (int i = _shots.size() - 1; i >= 0; i--)
+	{
+		_world->removeRigidBody(_shots.at(i)->_body);
+		_shots.erase(_shots.begin() + i);
+	}
+}
 
 long REnemy::draw(Frustum* frustum)
 {
@@ -166,18 +175,19 @@ long REnemy::draw(Frustum* frustum)
 	{
 		triangles += this->children.at(i)->draw(frustum);
 	}
-	/*
+	
 	for (int i = 0; i < this->_shots.size(); i++)
 	{
 		triangles += _shots.at(i)->draw();
-	} */
+	}
+
 	return triangles;
 }
 
 void REnemy::addChild(REnemy* unit)
 {
-	this->children.push_back(unit);
 	//unit->_world = _world;
+	this->children.push_back(unit);
 }
 
 void REnemy::update(mat4 transformation, float time)
@@ -187,6 +197,7 @@ void REnemy::update(mat4 transformation, float time)
 		btTransform transform = _body->getWorldTransform();
 		btQuaternion rota = transform.getRotation();
 		_translation = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+		_posVec = _translation;
 		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
 		_degree = rota.getAngle();
 		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
@@ -198,6 +209,7 @@ void REnemy::update(mat4 transformation, float time)
 
 		if (children.at(i)->health < 0)
 		{
+			children.at(i)->deleteMe();
 			_world->removeRigidBody(children.at(i)->_body);
 			children.erase(children.begin() + i);
 		}
@@ -207,8 +219,13 @@ void REnemy::update(mat4 transformation, float time)
 	for (int i = _shots.size() - 1; i >= 0; i--)
 	{
 		if (_shots.at(i)->_toofar)
+		{
+			_world->removeRigidBody(_shots.at(i)->_body);
 			_shots.erase(_shots.begin() + i);
+		}
 		else
+		{
 			this->_shots.at(i)->update(time);
+		}
 	}*/
 }

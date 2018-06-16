@@ -39,7 +39,7 @@ public:
 	~REnemy();
 
 	float health;
-
+	void deleteMe();
 	virtual long draw(Frustum* frustum);
 	void addChild(REnemy* unit);
 	virtual void update(mat4 transformation, float time);

@@ -89,7 +89,7 @@ void Shots::update(float deltaTime)
 	btQuaternion rota = transform.getRotation();
 	_position = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
 
-	if (distance(_startposition, _position) > 200)
+	if (distance(_startposition, _position) > 400)
 	{
 		_toofar = true;
 	}
