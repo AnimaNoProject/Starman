@@ -11,6 +11,6 @@ out vData
 
 void main()
 {
-	gl_Position = view * vec4(position.xyz, 1.0);
+	gl_Position = view * mat4(1) * vec4(position.xyz, 1.0);
 	vertex.TTL1 = position.w;
 }

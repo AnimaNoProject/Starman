@@ -19,7 +19,7 @@ private:
 	unsigned int index = 1;
 	unsigned int particle_count;
 	unsigned int _maxParticle;
-
+	double particles_to_spawn = 0;
 public:
 	ParticleSystem(int maxParticle);
 	~ParticleSystem();
