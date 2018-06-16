@@ -2,9 +2,10 @@
 #include "Mesh.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "assimp/stb_image.h"
+#include "ProceduralTexture.h"
 
-Model::Model(char *path, _Shader* shader) : _shader(shader) {
-	loadModel(path);
+Model::Model(char *path, _Shader* shader, bool randomTexture) : _shader(shader) {
+	loadModel(path, randomTexture);
 }
 
 long Model::Draw()
@@ -15,7 +16,7 @@ long Model::Draw()
 	return triangles;
 }
 
-void Model::loadModel(string path)
+void Model::loadModel(string path, bool randomTexture)
 {
 	// Read file using ASSIMP importer
 	Assimp::Importer importer;
@@ -30,25 +31,25 @@ void Model::loadModel(string path)
 	directory = path.substr(0, path.find_last_of('/'));
 
 	// Process ASSIMP's root node recursively
-	processNode(scene->mRootNode, scene);
+	processNode(scene->mRootNode, scene, randomTexture);
 }
 
-void Model::processNode(aiNode *node, const aiScene *scene)
+void Model::processNode(aiNode *node, const aiScene *scene, bool randomTexture)
 {
 	// Process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(processMesh(mesh, scene));
+		meshes.push_back(processMesh(mesh, scene, randomTexture));
 	}
 	// After all meshes are processed, go ahead and process children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		processNode(node->mChildren[i], scene);
+		processNode(node->mChildren[i], scene, randomTexture);
 	}
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, bool randomTexture)
 {
 	// All relevant data we need to fill
 	vector<Vertex> vertices;
@@ -96,22 +97,64 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	// Final Step --> process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-	// Last but not least --> load according material textures
-	// Diffuse maps
-	vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	// Specular maps
-	vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-	// Normal maps
-	std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-	// Height maps
-	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-	// Light maps
-	std::vector<Texture> lightMaps = loadMaterialTextures(material, aiTextureType_LIGHTMAP, "texture_light");
-	textures.insert(textures.end(), lightMaps.begin(), lightMaps.end());
+	if (!randomTexture)
+	{
+		// Last but not least --> load according material textures
+		// Diffuse maps
+		vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		// Specular maps
+		vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+		// Normal maps
+		std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		// Height maps
+		std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+		// Light maps
+		std::vector<Texture> lightMaps = loadMaterialTextures(material, aiTextureType_LIGHTMAP, "texture_light");
+		textures.insert(textures.end(), lightMaps.begin(), lightMaps.end());
+	}
+	else
+	{
+		GLuint texID;
+		Texture temp;
+		ProceduralTexture prodTex(rand());
+		glm::vec3* data = new glm::vec3[1024 * 1024];
+
+		for (int i = 0; i < 1024; i++)
+		{
+			for (int j = 0; j < 1024; j++)
+			{
+				double value = 15 * prodTex.noise((double)j / (double)1024, (double)i / (double)1024, 0.7);
+				value = value - floor(value);
+				data[1024 * i + j] = glm::vec3(value, 0, 0);
+			}
+		}
+
+		glGenTextures(1, &texID);
+		glBindTexture(GL_TEXTURE_2D, texID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_FLOAT, &data[0]);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		delete(data);
+
+		temp.id = texID;
+		temp.type = aiTextureType_DIFFUSE;
+		temp.path = "";
+		temp.Ka = 0.1;
+		temp.Kd = 0.8;
+		temp.Ks = 0.9;
+		temp.Alpha = 32;
+
+		textures.push_back(temp);
+	}
 
 	// Return the complete generated mesh object
 	return Mesh(vertices, indices, textures, this->_shader);

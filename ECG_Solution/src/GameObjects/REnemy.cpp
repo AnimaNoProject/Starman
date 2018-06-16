@@ -5,7 +5,7 @@ REnemy::REnemy(Model* model, _Shader* shader) : health(100)
 {
 	_model = model;
 	_shader = shader;
-	_shot = new Model("assets/objects/drone/shots.obj", _shader);
+	_shot = new Model("assets/objects/drone/shots.obj", _shader, false);
 	InitRandom();
 }
 

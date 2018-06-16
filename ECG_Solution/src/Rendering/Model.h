@@ -26,7 +26,7 @@ public:
 	vector<Texture> textures_loaded; // Model data
 	string directory; // Directory where the model is stored
 
-	Model(char *path, _Shader* shader); // Constructor
+	Model(char *path, _Shader* shader, bool randomTexture); // Constructor
 	long Draw(); // Draw function
 	void setTransformMatrix(mat4 transformMatrix);
 	void resetModelMatrix();
@@ -37,9 +37,9 @@ private:
 	//string directory; // Directory where the model is stored
 
 	// Basic function for processing model
-	void loadModel(string path);
-	void processNode(aiNode *node, const aiScene *scene);
-	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+	void loadModel(string path, bool randomTexture);
+	void processNode(aiNode *node, const aiScene *scene, bool randomTexture);
+	Mesh processMesh(aiMesh *mesh, const aiScene *scene, bool randomTexture);
 	vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName);
 	// unsigned int for globally loaded textures. We first check if the texture has already been loaded, because loading texture is pretty expensive
 	unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);

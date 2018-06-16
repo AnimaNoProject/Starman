@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Player
 	/* --------------------------------------------- */
-	Model playerModel("assets/objects/starman_ship/player.obj", shader.get());
+	Model playerModel("assets/objects/starman_ship/player.obj", shader.get(), false);
 	RPlayer player(&playerModel, &pcamera, shader.get());
 	player._world = _world;
 	enemies._world = _world;
@@ -227,14 +227,14 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// World Objects
 	/* --------------------------------------------- */
-	asteroid_model01 = new Model("assets/objects/asteroid/asteroid01.obj", shader.get());
-	asteroid_model02 = new Model("assets/objects/asteroid/asteroid02.obj", shader.get());
-	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get());
-	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get());
-	sun_model = new Model("assets/objects/sun/sun.obj", shader.get());
-	station_model = new Model("assets/objects/station_separate_lightmap/station.obj", lightMapShader.get());
+	asteroid_model01 = new Model("assets/objects/asteroid/asteroid01.obj", shader.get(), true);
+	asteroid_model02 = new Model("assets/objects/asteroid/asteroid02.obj", shader.get(), true);
+	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get(), true);
+	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get(), false);
+	sun_model = new Model("assets/objects/sun/sun.obj", shader.get(), false);
+	station_model = new Model("assets/objects/station_separate_lightmap/station.obj", lightMapShader.get(), false);
 
-	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get());
+	enemy_model = new Model("assets/objects/drone/drone.obj", shader.get(), false);
 
 	RUnit station(station_model, vec3(500, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(30, 30, 30), 50000, ASTEROID);
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000, ASTEROID);
@@ -335,7 +335,6 @@ int main(int argc, char** argv)
 			lightMapShader.get()->setUniform("cellshading", _cell_shading);
 			triangles += station.draw(frustum);
 			//
-
 
 			// Particle System
 			particleSystem.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
