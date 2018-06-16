@@ -23,6 +23,7 @@
 #include "Rendering/Frustum.h"
 #include <iostream>
 #include "Rendering\DebugDrawer.h"
+#include "Rendering\ProceduralTexture.h"
 
 using namespace glm;
 using namespace std;
@@ -230,6 +231,7 @@ int main(int argc, char** argv)
 	asteroid_model01 = new Model("assets/objects/asteroid/asteroid01.obj", shader.get(), true);
 	asteroid_model02 = new Model("assets/objects/asteroid/asteroid02.obj", shader.get(), true);
 	asteroid_model03 = new Model("assets/objects/asteroid/asteroid03.obj", shader.get(), true);
+
 	pickup_model = new Model("assets/objects/pickups/pickup.obj", shader.get(), false);
 	sun_model = new Model("assets/objects/sun/sun.obj", shader.get(), false);
 	station_model = new Model("assets/objects/station_separate_lightmap/station.obj", lightMapShader.get(), false);
@@ -374,42 +376,42 @@ int main(int argc, char** argv)
 void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 {
 	srand(12348);
-	/*
-	for (unsigned int i = 0; i < 10; i++)
+
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model01, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 15; i++)
+	for (unsigned int i = 0; i < 55; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model02, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 15; i++)
+	for (unsigned int i = 0; i < 55; i++)
 	{
 		RUnit* n = new RUnit(asteroid_model03, ASTEROID);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 10; i++)
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		RUnit* n = new RUnit(pickup_model, PICKUP);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 	
-	for (unsigned int i = 0; i < 10; i++)
+	for (unsigned int i = 0; i < 50; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}
-	*/
+
 }
 
 void initPhysics()

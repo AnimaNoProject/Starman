@@ -129,7 +129,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, bool randomTexture)
 			{
 				double value = 15 * prodTex.noise((double)j / (double)1024, (double)i / (double)1024, 0.7);
 				value = value - floor(value);
-				data[1024 * i + j] = glm::vec3(value, 0, 0);
+				data[1024 * i + j] = glm::vec3(value, value, value);
 			}
 		}
 
