@@ -38,7 +38,7 @@ public:
 	void takeHint(vec3 position, float deltaTime);
 	~REnemy();
 
-	float health = 100;
+	float health;
 
 	virtual long draw(Frustum* frustum);
 	void addChild(REnemy* unit);

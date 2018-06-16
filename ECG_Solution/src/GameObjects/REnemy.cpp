@@ -1,22 +1,22 @@
 #include "REnemy.h"
 
 
-REnemy::REnemy(Model* model, _Shader* shader)
+REnemy::REnemy(Model* model, _Shader* shader) : health(100)
 {
 	_model = model;
-	InitRandom();
 	_shader = shader;
 	_shot = new Model("assets/objects/drone/shots.obj", _shader);
+	InitRandom();
 }
 
 void REnemy::InitRandom()
 {
 	// Generate Random Properties
-	vec3 position(Random::randomNumber(-101, 100), Random::randomNumber(-100, 100), Random::randomNumber(-100, 100));
-	vec3 translation(0,0,0);
-	vec3 rotation(0,0,0);
-	float scaleFactor = Random::randomNumber(3, 3);
-	float degree = Random::randomNumber(1, 45);
+	vec3 position(Random::randomNumber(-501, 501), Random::randomNumber(-501, 501), Random::randomNumber(-501, 501));
+	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
+	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
+	float scaleFactor = Random::randomNumber(6, 6);
+	float degree = Random::randomNumber(1, 180);
 	float weight = scaleFactor * 100;
 	_scaleFactor = scaleFactor;
 	//
