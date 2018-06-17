@@ -10,10 +10,10 @@
 class RPlayer
 {
 private:
-	vec3 _position;
+
 	Model* _model, *_shot;
 	_Shader* _shader;
-	vec3 _right, _up, _dir;
+	vec3 _right, _up, _middle;
 	CollisionData* _collisionData;
 
 	float timepassedL, timepassedR, _yaw, _pitch;
@@ -30,10 +30,9 @@ public:
 	btRigidBody*				_body;
 	btConvexHullShape*			_shape;
 	vector<btScalar>			shapeVector;
-
+	vec3 _position, _particleSpawn, _dir;
 	vector<Shots*> shots;
 	Camera* _camera;
-	vec3 getPosition() { return _position; }
 
 	RPlayer();
 	RPlayer(Model* model, Camera* camera, _Shader* shader);

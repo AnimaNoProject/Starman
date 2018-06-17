@@ -148,7 +148,7 @@ void RUnit::addChild(RUnit* unit)
 
 void RUnit::update(mat4 transformation, float time)
 {
-	if (_model != nullptr)
+	if (_model != nullptr && !_getDeleted)
 	{
 		btTransform transform = _body->getWorldTransform();
 		btQuaternion rota = transform.getRotation();

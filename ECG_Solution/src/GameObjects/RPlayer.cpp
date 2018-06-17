@@ -22,6 +22,14 @@ RPlayer::~RPlayer()
 
 void RPlayer::InitPhysicProperties(vec3 position)
 {
+	float numberOfVertices = 0;
+	vec3 average(0, 0, 0);
+
+	for (unsigned int i = 0; i < _model->meshes.size(); i++)
+	{
+		numberOfVertices += _model->meshes.at(i)._vertices.size();
+	}
+
 	// convex hull shape
 	for (unsigned int i = 0; i < _model->meshes.size(); i++)
 	{
@@ -32,8 +40,13 @@ void RPlayer::InitPhysicProperties(vec3 position)
 			shapeVector.push_back(tempPos.x);
 			shapeVector.push_back(tempPos.y);
 			shapeVector.push_back(tempPos.z);
+
+			average += vec3(tempPos * (1 / numberOfVertices));
 		}
 	}
+
+	_middle = average;
+
 	_shape = new btConvexHullShape(&shapeVector[0], shapeVector.size() / 3, 3 * sizeof(btScalar));
 	//
 
@@ -96,6 +109,8 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 		
+	_particleSpawn = translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)) * vec4(_middle, 1);
+
 	_camera->_speed = _speed;
 	_camera->update(x, y, up, down, left, right, deltaTime);
 

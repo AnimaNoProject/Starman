@@ -13,16 +13,18 @@ private:
 	_Shader * drawShader;
 	GLuint ssbo_pos[2];
 	GLuint ssbo_vel[2];
+	GLuint vaos[2];
 	GLuint atomicCounter;
 	GLuint temp_buffer;
-	GLuint vaos[2];
-	unsigned int index = 1;
-	unsigned int particle_count;
-	unsigned int _maxParticle;
-	double particles_to_spawn = 0;
+	unsigned int index = 0;
+	GLuint particle_count;
+	GLfloat pp;
+	GLuint _maxParticle;
+
 public:
 	ParticleSystem(int maxParticle);
+
 	~ParticleSystem();
-	void calculate(float deltaTime);
-	void draw(mat4 view, mat4 proj);
+	void calculate(const glm::vec3& pos, const glm::vec3& dir, float deltaTime);
+	void draw(const mat4& view, const mat4& proj);
 };

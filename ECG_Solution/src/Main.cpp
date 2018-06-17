@@ -299,22 +299,18 @@ int main(int argc, char** argv)
 			else
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
-
 				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
 				viewProj =  player._camera->getViewProjectionMatrix();
 			}
 
 			_world->stepSimulation(t_delta, 1);
-			//bulletDebugDrawer->setViewProj(viewProj);
-			//_world->debugDrawWorld();
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);	
-			particleSystem.calculate(t_delta);
-
+			particleSystem.calculate(player._particleSpawn, player._dir, t_delta);
 			//enemies.takeHint(player.getPosition(), t_delta);
-
 			enemies.update(mat4(1), t_delta);
 			station.update(mat4(1), t_now);
+			//
 
 			// Render
 			triangles = 0;
@@ -325,7 +321,6 @@ int main(int argc, char** argv)
 			triangles += enemies.draw(frustum);
 			triangles += player.draw();
 
-			//
 			lightMapShader.get()->use();
 			lightMapShader.get()->setUniform("viewProj", viewProj);
 			lightMapShader.get()->setUniform("camera_world", _debug_camera ? camera._position : pcamera._position);
@@ -484,9 +479,9 @@ void performCollisionCheck(RPlayer& player)
 					}
 					else if ((obA_model->_type == PICKUP) && (obB_model->_type == PLAYER))
 					{
-						obB_model->_parentPlayer->_health += 10;
-						obA_model->_parentRUnit->_getDeleted = true;
-						_world->removeRigidBody(obA_model->_parentRUnit->_body);
+						//obB_model->_parentPlayer->_health += 10;
+						//obA_model->_parentRUnit->_getDeleted = true;
+						//_world->removeRigidBody(obA_model->_parentRUnit->_body);
 					}
 					//
 
