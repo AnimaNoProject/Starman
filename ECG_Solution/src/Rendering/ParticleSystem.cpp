@@ -1,5 +1,6 @@
 #include "ParticleSystem.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "ProceduralTexture.h"
 
 ParticleSystem::ParticleSystem(int maxParticle)
 {
@@ -66,6 +67,28 @@ ParticleSystem::ParticleSystem(int maxParticle)
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), 0);
 	glBindVertexArray(0);
+
+
+	// Load texture
+
+	int height(420);
+	int numComponents(4);
+	unsigned char *data = stbi_load("assets/objects/explosion.png", &height, &height, &numComponents, STBI_rgb_alpha);
+
+	// Bind Texture and set texture parameters
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 420, 420, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	stbi_image_free(data);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -105,26 +128,24 @@ void ParticleSystem::calculate(const glm::vec3& pos, const glm::vec3& dir, float
 
 void ParticleSystem::draw(const mat4& view, const mat4& proj)
 {
-	/*
 	glEnable(GL_BLEND);
-	glDepthMask(GL_FALSE);
-	glBlendFunc(GL_SRC_COLOR, GL_SRC_COLOR);
-	glBlendEquation(GL_MAX);
-	*/
+	//glDepthMask(GL_FALSE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
 
 	drawShader->use();
-
+	//drawShader->setUniform("tex0", texID);
 	drawShader->setUniform("view", view);
 	drawShader->setUniform("proj", proj);
 	drawShader->setUniform("model", mat4(1));
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texID);
 	glBindVertexArray(vaos[index]);
 	glDrawArrays(GL_POINTS, 0, particle_count);
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	/*
 	glDisable(GL_BLEND);
-	glDepthMask(GL_TRUE);
-	*/
+	//glDepthMask(GL_TRUE);
 }

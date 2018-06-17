@@ -22,13 +22,11 @@ layout(std430, binding = 3) buffer Vel2
 	vec4 Velocity_Out[];
 };
 
-
 uniform uint LastCount;
 uniform uint MaximumCount;
 uniform float DeltaT;
 uniform vec3 P;
 uniform vec3 Dir;
-
 
 void main(void)
 {
@@ -38,10 +36,8 @@ void main(void)
 	float TTL = Position_In[idx].w;
 	if(TTL <= 0)
 	{
-		//Position_In[idx] = vec4(P, 5.0);
-		//Velocity_In[idx] = vec4(-Dir, 0.0);
 		Position_Out[idx] = vec4(P, 5.0);
-		Velocity_Out[idx] = vec4(-Dir, 0.0);
+		Velocity_Out[idx] = vec4(-Dir + DeltaT, 0.0);
 	}
 	else
 	{

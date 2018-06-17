@@ -5,6 +5,12 @@
 #include <random>
 #include <vector>
 #include <ctime>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <memory>
+#include "stb_image.h"
 
 class ParticleSystem
 {
@@ -20,7 +26,7 @@ private:
 	GLuint particle_count;
 	GLfloat pp;
 	GLuint _maxParticle;
-
+	GLuint texID;
 public:
 	ParticleSystem(int maxParticle);
 
