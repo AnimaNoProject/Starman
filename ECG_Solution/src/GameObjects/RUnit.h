@@ -26,7 +26,7 @@ protected:
 	void InitPhysicProperties(vec3 position, vec3 translation, vec3 rotation, float degree, mat4 scale, float weight);
 public:
 	std::vector<RUnit*> children;
-	RUnit* spinner;
+	Model* spinner;
 	btRigidBody* _body;
 	btConvexHullShape* _shape;
 	vector<btScalar> shapeVector;
@@ -34,7 +34,7 @@ public:
 	float _time;
 
 	RUnit(Model* model, vec3 position, vec3 translation, vec3 rotation, float degree, vec3 scale, float weight, TYPE type);
-	RUnit(Model* model, TYPE type);
+	RUnit(Model* model, TYPE type, _Shader* shader);
 
 	void InitRandom();
 
@@ -43,8 +43,6 @@ public:
 
 	void addChild(RUnit* unit);
 	virtual long draw(Frustum* frustum);
-	void updateNoPhysics(mat4 transformation, float time);
-	void drawNoPhysics(mat4 transformation, float time);
 	virtual void update(mat4 transformation, float time);
 };
 

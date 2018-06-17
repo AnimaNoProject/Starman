@@ -69,7 +69,7 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 
 	// Translation & Rotation
 	_body->setLinearFactor(btVector3(1, 1, 1));
-	_body->setLinearVelocity(btVector3(direction.x * 80, direction.y * 80, direction.z * 80));
+	_body->setLinearVelocity(btVector3(direction.x * 100, direction.y * 100, direction.z * 100));
 
 	//Shots* shotPointer;
 	_collisionData = new CollisionData(SHOT);
