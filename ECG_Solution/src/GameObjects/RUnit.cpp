@@ -9,11 +9,17 @@ RUnit::RUnit(Model * model, vec3 position, vec3 translation, vec3 rotation, floa
 	InitPhysicProperties(position, translation, rotation, degree, _scale, weight);
 }
 
-RUnit::RUnit(Model * model, TYPE type)
+RUnit::RUnit(Model * model, TYPE type, _Shader* shader)
 {
 	_type = type;
 	_model = model;
 	InitRandom();
+
+	if (type == PICKUP)
+	{
+		spinner = new Model("assets/objects/pickups/pickup.obj", shader, false);
+		spinner->transform(scale(glm::mat4(1), vec3(0.5, 0.5, 0.5)));
+	}
 }
 
 void RUnit::InitRandom()
@@ -22,7 +28,17 @@ void RUnit::InitRandom()
 	vec3 position(Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001), Random::randomNumber(-5001, 5001));
 	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
 	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
-	float scaleFactor = Random::randomNumber(1, 225);
+	float scaleFactor;
+
+	if (_type == PICKUP)
+	{
+		scaleFactor = Random::randomNumber(50, 50);
+	}
+	else 
+	{
+		scaleFactor = Random::randomNumber(1, 225);
+	}
+
 	float degree = Random::randomNumber(1, 45);
 	float weight = scaleFactor * 100;
 	_scaleFactor = scaleFactor;
@@ -134,10 +150,18 @@ long RUnit::draw(Frustum* frustum)
 		float temp_radius = distance(temp_middle, temp_dist);
 
 		if (frustum->Inside(temp_middle, temp_radius))
+		{
 			triangle += _model->Draw();
+			if (_type == PICKUP)
+			{
+				spinner->Draw();
+			}
+		}
 	}
 	for (int i = 0; i < this->children.size(); i++)
 		triangle += this->children.at(i)->draw(frustum);
+
+
 	return triangle;
 }
 
@@ -156,6 +180,11 @@ void RUnit::update(mat4 transformation, float time)
 		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
 		_degree = rota.getAngle();
 		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
+	}
+
+	if (_type == PICKUP) {
+		mat4 ownTransform = _transformation * translate(glm::mat4(1), vec3(2.0, 0.0, 0.0)) * glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f), glm::vec3(1, 0, 0));
+		spinner->setTransformMatrix(ownTransform);
 	}
 
 	for (int i = this->children.size() - 1; i >= 0; i--)

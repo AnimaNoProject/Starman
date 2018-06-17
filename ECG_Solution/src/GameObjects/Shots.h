@@ -14,7 +14,7 @@ private:
 	vec3 _direction;
 	vec3 _startposition;
 	mat4 _rotation;
-	const unsigned int damage = 2;
+	const unsigned int damage = 10;
 	CollisionData* _collisionData;
 
 	void InitPhysicProperties(vec3 position, vec3 translation, vec3 dirA, vec3 dirB, float angle);

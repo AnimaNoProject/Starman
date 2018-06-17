@@ -374,39 +374,39 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 
 	for (unsigned int i = 0; i < 50; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model01, ASTEROID);
+		RUnit* n = new RUnit(asteroid_model01, ASTEROID, shader);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
 	for (unsigned int i = 0; i < 55; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model02, ASTEROID);
+		RUnit* n = new RUnit(asteroid_model02, ASTEROID, shader);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
 
 	for (unsigned int i = 0; i < 55; i++)
 	{
-		RUnit* n = new RUnit(asteroid_model03, ASTEROID);
+		RUnit* n = new RUnit(asteroid_model03, ASTEROID, shader);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
+
 
 	for (unsigned int i = 0; i < 50; i++)
 	{
-		RUnit* n = new RUnit(pickup_model, PICKUP);
+		RUnit* n = new RUnit(pickup_model, PICKUP, shader);
 		world.addChild(n);
 		_world->addRigidBody(n->_body);
 	}
-	
+
 	for (unsigned int i = 0; i < 50; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}
-
 }
 
 void initPhysics()
