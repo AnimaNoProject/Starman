@@ -93,7 +93,7 @@ bool HUD::initialize()
 
 	_shader->use();
 	_shader->setUniform("projection", _projection);
-	_shader->setUniform("textColor", vec4(1.0f, 1.0f, 1.0f, 0.9f));
+
 
 	// initialization success!
 	return true;
@@ -101,6 +101,7 @@ bool HUD::initialize()
 
 void HUD::renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
 {
+	_shader->setUniform("textColor", vec4(color, 0.8f));
 	// Iterate through text
 	std::string::const_iterator c;
 	for (c = text.begin(); c != text.end(); c++)
@@ -133,6 +134,44 @@ void HUD::renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm:
 	}
 }
 
+void HUD::renderLossScreen()
+{
+	char buffer[1000];
+	_shader->use();
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
+	glBindVertexArray(vao);
+
+	sprintf(buffer, "You Lost!");
+	renderText(buffer, _width / 2 - 500, _height / 2, 2.f, glm::vec3(0.8f, 0.0f, 0.0f));
+
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+}
+
+void HUD::renderWinScreen()
+{
+	char buffer[1000];
+	_shader->use();
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
+	glBindVertexArray(vao);
+
+	sprintf(buffer, "WINNER!");
+	renderText(buffer, _width / 2 - 500, _height / 2, 2.f, glm::vec3(0.8f, 0.0f, 0.0f));
+
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+}
+
 void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, unsigned int speed, long triangles)
 {
 	char buffer[1000];
@@ -141,7 +180,6 @@ void HUD::render(float deltaTime, bool debug_mode, unsigned int healtpoints, uns
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendEquation(GL_FUNC_ADD);
-	//glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vao);
 
 	sprintf(buffer, "Health: %i", healtpoints);

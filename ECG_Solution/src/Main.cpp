@@ -184,7 +184,6 @@ int main(int argc, char** argv)
 	// World
 	/* --------------------------------------------- */
 	RUnit world = RUnit();
-	REnemy enemies(mat4(1));
 
 	/* --------------------------------------------- */
 	// Cameras
@@ -222,7 +221,6 @@ int main(int argc, char** argv)
 	Model playerModel("assets/objects/starman_ship/player.obj", shader.get(), false);
 	RPlayer player(&playerModel, &pcamera, shader.get());
 	player._world = _world;
-	enemies._world = _world;
 	_world->addRigidBody(player._body);
 
 	/* --------------------------------------------- */
@@ -240,6 +238,8 @@ int main(int argc, char** argv)
 
 	RUnit station(station_model, vec3(500, 0, 0), vec3(0,0,0), vec3(1,1,1), 0, vec3(30, 30, 30), 50000, ASTEROID);
 	RUnit sun_star(sun_model, vec3(5000.0f, 1000.0f, -5000.0f), vec3(0, 0, 0), vec3(0, 0, 0), 0, vec3(100.0f, 100.0f, 100.0f), 500000, ASTEROID);
+	REnemy enemies(mat4(1));
+	enemies._world = _world;
 
 	world.addChild(&sun_star);
 
@@ -276,8 +276,7 @@ int main(int argc, char** argv)
 	glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 	mat4 viewProj;
 	{
-		while (!glfwWindowShouldClose(_window)) {
-
+		while (!glfwWindowShouldClose(_window) && enemies.children.size() > 0 && player._health > 0) {
 			// Clear backbuffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -287,7 +286,7 @@ int main(int argc, char** argv)
 			t_start = t_now;
 
 			handleInput();
-			
+
 			// Update
 			if (_debug_camera)
 			{
@@ -300,12 +299,12 @@ int main(int argc, char** argv)
 			{
 				player.move(_window_width / 2 - x, _window_height / 2 - y, _up, _down, _left, _right, _shootR, _shootL, t_delta);
 				frustum->Update(pcamera._eye, pcamera._center, pcamera._up, _frustum_culling);
-				viewProj =  player._camera->getViewProjectionMatrix();
+				viewProj = player._camera->getViewProjectionMatrix();
 			}
 
 			_world->stepSimulation(t_delta, 1);
 			performCollisionCheck(player);
-			world.update(mat4(1), t_now);	
+			world.update(mat4(1), t_now);
 			particleSystem.calculate(player._particleSpawn, player._dir, t_delta);
 			enemies.update(mat4(1), t_delta);
 			//enemies.takeHint(player._particleSpawn, t_delta);
@@ -351,6 +350,18 @@ int main(int argc, char** argv)
 			glfwPollEvents();
 			glfwSwapBuffers(_window);
 			//
+		}
+
+		if (player._health > 0)
+			hud.renderWinScreen();
+		else
+			hud.renderLossScreen();
+
+		glfwSwapBuffers(_window);
+
+		while (!glfwWindowShouldClose(_window))
+		{
+			glfwPollEvents();
 		}
 	}
 
@@ -402,10 +413,9 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 1; i++)
+	for (unsigned int i = 0; i < 20; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
-		e->_world = _world;
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}
@@ -492,10 +502,11 @@ void performCollisionCheck(RPlayer& player)
 					else if ((obA_model->_type == PLAYER) && (obB_model->_type == ASTEROID))
 					{
 						obA_model->_parentPlayer->_real_speed = 0;
+						obA_model->_parentPlayer->_health -= 50;
 					}
 					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == PLAYER))
 					{
-						obB_model->_parentPlayer->_real_speed = 0;
+						//obB_model->_parentPlayer->_real_speed = 0;
 					}
 					//
 				}

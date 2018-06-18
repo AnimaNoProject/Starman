@@ -35,6 +35,8 @@ public:
 	HUD(_Shader* shader, float height, float width);
 	~HUD();
 	bool initialize();
+	void renderWinScreen();
+	void renderLossScreen();
 	void renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	void render(float deltaTime, bool debug_mode, unsigned int healtpoints, unsigned int speed, long triangles);
 };

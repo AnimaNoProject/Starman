@@ -15,7 +15,7 @@ private:
 	Model* _shot;
 	Model* _model;
 
-	std::vector<REnemy*> children;
+
 	std::vector<Shots*> _shots;
 	vector<btScalar> shapeVector;
 
@@ -33,6 +33,7 @@ public:
 	btRigidBody * _body;
 	btDynamicsWorld* _world;
 
+	std::vector<REnemy*> children;
 	REnemy(Model* model, _Shader* shader);
 	REnemy(mat4 default);
 	void takeHint(vec3 position, float deltaTime);
