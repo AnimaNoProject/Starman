@@ -27,6 +27,7 @@ private:
 	GLfloat pp;
 	GLuint _maxParticle;
 	GLuint texID;
+	double particles_to_spawn;
 public:
 	ParticleSystem(int maxParticle);
 

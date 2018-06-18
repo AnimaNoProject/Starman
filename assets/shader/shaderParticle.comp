@@ -22,11 +22,28 @@ layout(std430, binding = 3) buffer Vel2
 	vec4 Velocity_Out[];
 };
 
+layout (binding = 4, offset = 0) uniform atomic_uint Count;
+
 uniform uint LastCount;
 uniform uint MaximumCount;
 uniform float DeltaT;
 uniform vec3 P;
 uniform vec3 Dir;
+uniform uint SpawnCount;
+
+void addParticleToOutput(vec3 pos, vec3 vel, float TTL)
+{
+	uint nr = atomicCounterIncrement(Count);
+
+	if(nr >= MaximumCount)
+	{
+		atomicCounterDecrement(Count);
+		return;
+	}
+
+	Position_Out[nr] = vec4(pos, TTL);
+	Velocity_Out[nr] = vec4(vel, 0);
+}
 
 void main(void)
 {
@@ -34,10 +51,10 @@ void main(void)
 	if(idx >= LastCount) return;
 	
 	float TTL = Position_In[idx].w;
+
 	if(TTL <= 0)
 	{
-		Position_Out[idx] = vec4(P, 5.0);
-		Velocity_Out[idx] = vec4(-Dir + DeltaT, 0.0);
+		addParticleToOutput(P, -Dir, 2.0);
 	}
 	else
 	{
@@ -46,8 +63,15 @@ void main(void)
 		
 		position += velocity * DeltaT;
 		TTL = TTL - DeltaT;
-		
-		Position_Out[idx] = vec4(position, TTL);
-		Velocity_Out[idx] = vec4(velocity, 0.0);
+
+		addParticleToOutput(position, velocity, TTL);
+	}
+
+	if(idx == 0)
+	{
+		for(int i = 0; i < SpawnCount; i++)
+		{
+			addParticleToOutput(P, -Dir, 2.0);
+		}
 	}
 }

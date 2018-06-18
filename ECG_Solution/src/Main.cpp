@@ -272,7 +272,7 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	Frustum* frustum = new Frustum(fov, (float)_window_width / _window_height, nearZ, farZ);
 
-
+	bool first = true;
 	glfwSetCursorPos(_window, _window_width / 2, _window_height / 2);
 	mat4 viewProj;
 	{
@@ -307,8 +307,8 @@ int main(int argc, char** argv)
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);	
 			particleSystem.calculate(player._particleSpawn, player._dir, t_delta);
-			//enemies.takeHint(player.getPosition(), t_delta);
 			enemies.update(mat4(1), t_delta);
+			//enemies.takeHint(player._particleSpawn, t_delta);
 			station.update(mat4(1), t_now);
 			//
 
@@ -401,9 +401,10 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 50; i++)
+	for (unsigned int i = 0; i < 1; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
+		e->_world = _world;
 		enemies.addChild(e);
 		_world->addRigidBody(e->_body);
 	}

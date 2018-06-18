@@ -6,15 +6,19 @@ REnemy::REnemy(Model* model, _Shader* shader) : health(100)
 	_model = model;
 	_shader = shader;
 	_shot = new Model("assets/objects/drone/shots.obj", _shader, false);
+	timepassed = 0;
 	InitRandom();
 }
 
 void REnemy::InitRandom()
 {
 	// Generate Random Properties
-	vec3 position(Random::randomNumber(-501, 501), Random::randomNumber(-501, 501), Random::randomNumber(-501, 501));
-	vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
-	vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
+	//vec3 position(Random::randomNumber(-501, 501), Random::randomNumber(-501, 501), Random::randomNumber(-501, 501));
+	//vec3 translation(Random::randomNumber(-10, 10), Random::randomNumber(-10, 10), Random::randomNumber(-10, 10));
+	//vec3 rotation(Random::randomNumber(0, 1), Random::randomNumber(0, 1), Random::randomNumber(0, 1));
+	vec3 position(0, 0, 0);
+	vec3 translation(0, 0, 0);
+	vec3 rotation(0, 0, 0);
 	float scaleFactor = Random::randomNumber(8, 8);
 	float degree = Random::randomNumber(1, 180);
 	float weight = scaleFactor * 100;
@@ -116,13 +120,15 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 	if (_model != nullptr)
 	{
 		timepassed += deltaTime;
-
-		if(distance(position, _posVec) < 500)
+		vec4 temp_middle = vec4(_middle, 1);
+		temp_middle = _transformation * temp_middle;
+		vec3 tempPos = temp_middle;
+		if(distance(tempPos, position) < 1000)
 		{
-			if (timepassed > 40)
+			if (timepassed > 15)
 			{
 
-				vec3 _dir(position - _posVec);
+				vec3 _dir(position - tempPos);
 
 				vec3 _right(
 					sin(0 - pi<float>() / 2),
@@ -131,8 +137,7 @@ void REnemy::takeHint(vec3 position, float deltaTime)
 				);
 
 				vec3 _up(glm::cross(_right, _dir));
-
-				Shots* shot = new Shots(_shot, _dir, _posVec + (20.0f*_dir));
+				Shots* shot = new Shots(_shot, _dir, tempPos + (15.0f*_dir));
 				_shots.push_back(shot);
 				_world->addRigidBody(shot->_body);
 				timepassed = 0;
@@ -215,7 +220,6 @@ void REnemy::update(mat4 transformation, float time)
 		}
 	}
 
-	/*
 	for (int i = _shots.size() - 1; i >= 0; i--)
 	{
 		if (_shots.at(i)->_toofar)
@@ -227,5 +231,5 @@ void REnemy::update(mat4 transformation, float time)
 		{
 			this->_shots.at(i)->update(time);
 		}
-	}*/
+	}
 }

@@ -13,6 +13,4 @@ void main()
 
 	vec4 texColor = texture(tex0, uv);
 	FragColor = texColor;
-
-	//FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }	

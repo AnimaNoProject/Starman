@@ -55,7 +55,7 @@ void Shots::InitPhysicProperties(vec3 position, vec3 direction, vec3 dirA, vec3 
 	//
 
 	// Weight
-	btScalar mass = 1;
+	btScalar mass = 5;
 	btVector3 bodyInertia;
 	_shape->calculateLocalInertia(mass, bodyInertia);
 	//
