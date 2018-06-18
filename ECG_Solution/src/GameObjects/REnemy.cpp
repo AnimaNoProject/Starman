@@ -109,18 +109,13 @@ REnemy::REnemy(mat4 default)
 
 void REnemy::takeHint(vec3 position, float deltaTime)
 {
-	for (int i = 0; i < this->children.size(); i++)
-	{
-		this->children.at(i)->takeHint(position, deltaTime);
-	}
-
 	if (_model != nullptr)
 	{
 		timepassed += deltaTime;
 		vec4 temp_middle = vec4(_middle, 1);
 		temp_middle = _transformation * temp_middle;
 		vec3 tempPos = temp_middle;
-		if(distance(tempPos, position) < 1000)
+		if (distance(tempPos, position) < 1000)
 		{
 			if (timepassed > 15)
 			{
@@ -172,15 +167,16 @@ long REnemy::draw(Frustum* frustum)
 
 		if (frustum->Inside(temp_middle, temp_radius))
 			triangles += _model->Draw();
+
+		for (int i = 0; i < this->_shots.size(); i++)
+		{
+			triangles += _shots.at(i)->draw();
+		}
 	}
+
 	for (int i = 0; i < this->children.size(); i++)
 	{
 		triangles += this->children.at(i)->draw(frustum);
-	}
-	
-	for (int i = 0; i < this->_shots.size(); i++)
-	{
-		triangles += _shots.at(i)->draw();
 	}
 
 	return triangles;
@@ -188,7 +184,7 @@ long REnemy::draw(Frustum* frustum)
 
 void REnemy::addChild(REnemy* unit)
 {
-	//unit->_world = _world;
+	unit->_world = _world;
 	this->children.push_back(unit);
 }
 
@@ -211,22 +207,23 @@ void REnemy::update(mat4 transformation, float time)
 
 		if (children.at(i)->health < 0)
 		{
-			children.at(i)->deleteMe();
 			_world->removeRigidBody(children.at(i)->_body);
+			children.at(i)->deleteMe();
 			children.erase(children.begin() + i);
 		}
 	}
 
+	for (int i = 0; i < _shots.size(); i)
+	{
+		this->_shots.at(i)->update(time);
+	}
+
 	for (int i = _shots.size() - 1; i >= 0; i--)
 	{
-		if (_shots.at(i)->_toofar)
+		if (_shots.at(i)->_toofar || _shots.at(i)->_collisionFlag)
 		{
 			_world->removeRigidBody(_shots.at(i)->_body);
 			_shots.erase(_shots.begin() + i);
-		}
-		else
-		{
-			this->_shots.at(i)->update(time);
 		}
 	}
 }

@@ -413,7 +413,7 @@ void initializeWorld(RUnit& world, _Shader* shader, REnemy& enemies)
 		_world->addRigidBody(n->_body);
 	}
 
-	for (unsigned int i = 0; i < 20; i++)
+	for (unsigned int i = 0; i < 10; i++)
 	{
 		REnemy* e = new REnemy(enemy_model, shader);
 		enemies.addChild(e);
@@ -502,7 +502,7 @@ void performCollisionCheck(RPlayer& player)
 					else if ((obA_model->_type == PLAYER) && (obB_model->_type == ASTEROID))
 					{
 						obA_model->_parentPlayer->_real_speed = 0;
-						obA_model->_parentPlayer->_health -= 50;
+						obA_model->_parentPlayer->_health = 0;
 					}
 					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == PLAYER))
 					{

@@ -36,17 +36,16 @@ ParticleSystem::ParticleSystem(int maxParticle) : particles_to_spawn(0)
 	glBufferData(GL_COPY_WRITE_BUFFER, sizeof(GLuint), NULL, GL_DYNAMIC_READ);
 	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
 
-	const int TTL = 5;
+	const int TTL = 1;
 	std::vector<glm::vec4> positions;
 	std::vector<glm::vec4> velocities;
 
-	positions.push_back(vec4(-5000, 0, 0, TTL));
-	positions.push_back(vec4(-5000, 0, 0, TTL));
+	positions.push_back(vec4(-5000, 0, 1, TTL));
+	positions.push_back(vec4(-5000, 0, 1, TTL));
 	velocities.push_back(vec4(0, 0, 10, 0));
 	velocities.push_back(vec4(0, 0, 10, 0));
 
 	particle_count = positions.size();
-	//pp = static_cast<float>(particle_count);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo_pos[0]);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, particle_count * sizeof(glm::vec4), positions.data());
@@ -70,7 +69,7 @@ ParticleSystem::ParticleSystem(int maxParticle) : particles_to_spawn(0)
 
 
 	// Load texture
-	int height(420);
+	int height(512);
 	int numComponents(4);
 	unsigned char *data = stbi_load("assets/objects/explosion.png", &height, &height, &numComponents, STBI_rgb_alpha);
 

@@ -24,7 +24,6 @@ private:
 	GLuint temp_buffer;
 	unsigned int index = 0;
 	GLuint particle_count;
-	GLfloat pp;
 	GLuint _maxParticle;
 	GLuint texID;
 	double particles_to_spawn;
