@@ -333,12 +333,13 @@ int main(int argc, char** argv)
 			triangles += station.draw(frustum);
 			//
 
-			// Particle System
-			particleSystem.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
-
 			// Draw Skybox
 			skybox->Draw(_debug_camera ? camera._viewMatrix, camera._projMatrix : pcamera._viewMatrix, pcamera._projMatrix);
 			//
+
+			// Particle System
+			particleSystem.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
+
 
 			if (_post_processing)
 				postprocessor->draw();

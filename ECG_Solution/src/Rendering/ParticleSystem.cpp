@@ -147,8 +147,9 @@ void ParticleSystem::calculate(const glm::vec3& pos, const glm::vec3& dir, float
 void ParticleSystem::draw(const mat4& view, const mat4& proj)
 {
 	glEnable(GL_BLEND);
+	glDepthMask(GL_FALSE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_FUNC_ADD);
+	glBlendEquation(GL_MAX);
 
 	drawShader->use();
 	drawShader->setUniform("view", view);
@@ -163,4 +164,5 @@ void ParticleSystem::draw(const mat4& view, const mat4& proj)
 	glUseProgram(0);
 
 	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
 }
