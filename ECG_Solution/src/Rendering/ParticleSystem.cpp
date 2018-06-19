@@ -98,9 +98,9 @@ ParticleSystem::~ParticleSystem()
 	glDeleteVertexArrays(2, vaos);
 }
 
-void ParticleSystem::calculate(const glm::vec3& pos, const glm::vec3& dir, float deltaTime)
+void ParticleSystem::calculate(const glm::vec3& pos, const glm::vec3& dir, const float& spawnRatePerSecond, float deltaTime)
 {
-	const double spawnRatePerSecond = 5;
+	//const double spawnRatePerSecond = 15;
 	particles_to_spawn += (spawnRatePerSecond * deltaTime);
 
 	GLuint spawnCount = 0;

@@ -41,33 +41,6 @@ struct SpotLight {
 	vec3 coneDirection;
 };
 
-uniform float MAX_LIGHTS;
-uniform PointLight[20] lights;
-
-const float levels = 4.0;
-
-vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC, float specularF, float alpha, bool attenuate, vec3 attenuation) {
-	float d = length(l);
-	l = normalize(l);
-	float att = 1.0;	
-	if(attenuate) 
-		att = 1.0f / (attenuation.x + d * attenuation.y + d * d * attenuation.z);
-	float intensity = max(0, dot(n, l));
-	if(cellshading)
-	{
-		float level = floor(intensity * levels);
-		intensity = level / levels;
-	}
-	vec3 r = reflect(-l, n);
-	float intensity_spec = pow(max(0, dot(r, v)), alpha);
-	if(cellshading)
-	{
-		float level = floor(intensity_spec * levels);
-		intensity_spec = level / levels;
-	}
-	return (diffuseF * diffuseC * intensity + specularF * specularC * intensity_spec) * att; 
-}
-
 void main()
 {    
 	vec3 n = normalize(vert.normal_world);
@@ -79,10 +52,7 @@ void main()
 	
 	vec3 model_texture = base_texture * lightmap;
 	
-	color = vec4(model_texture * Ka * brightness, 1); // ambient
-	
-	// sun
-	color.rgb += phong(n, -sun.direction, v, sun.color * model_texture * brightness, Kd, sun.color, Ks, shyniness, false, vec3(0));
+	color = vec4(model_texture * brightness, 1); // ambient
 }
 
 

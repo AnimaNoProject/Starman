@@ -14,7 +14,7 @@ flat out float TTL0;
 
 void main(void)
 {
-	float scale = 0.5;
+	float scale = 0.1;
 	vec4 position = gl_in[0].gl_Position;
 
 	gl_Position =  proj * (position + vec4(-1, -1, 0, 0) * scale);

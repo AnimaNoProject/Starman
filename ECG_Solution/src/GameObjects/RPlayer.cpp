@@ -7,7 +7,7 @@ RPlayer::RPlayer()
 RPlayer::RPlayer(Model* model, Camera* camera, _Shader* shader) : _speed(0), _real_speed(0), _health(100), _yaw(0.0f), _pitch(0.0f)
 {
 	_model = model;
-	_model->transform(translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)));
+	_model->transform(translate(mat4(1), vec3(0.0f, -1.5f, 8.5f)) * scale(mat4(1), vec3(0.5, 0.5, 0.5)));
 	_camera = camera;
 	_shader = shader;
 	_position = vec3(0.0f, 0.0f, 5.0f);
@@ -36,7 +36,7 @@ void RPlayer::InitPhysicProperties(vec3 position)
 		for (unsigned int j = 0; j < _model->meshes.at(i)._vertices.size(); j++)
 		{
 			vec4 tempPos = vec4(_model->meshes.at(i)._vertices.at(j).Position, 1.0);
-			tempPos = translate(mat4(1), vec3(0.0f, -1.5f, 5.5f)) * tempPos;
+			tempPos = translate(mat4(1), vec3(0.0f, -1.5f, 10.5f)) * scale(mat4(1), vec3(0.5, 0.5, 0.5)) * tempPos;
 			shapeVector.push_back(tempPos.x);
 			shapeVector.push_back(tempPos.y);
 			shapeVector.push_back(tempPos.z);
@@ -110,6 +110,9 @@ void RPlayer::move(float x, float y, bool up, bool down, bool left, bool right, 
 	_model->setTransformMatrix(translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)));
 		
 	_particleSpawn = translate(_position) * rotate(_yaw, vec3(0.0f, 1.0f, 0.0f)) * rotate(-_pitch, vec3(1.0f, 0.0f, 0.0f)) * vec4(_middle, 1);
+	_particleSpawnL = translate(mat4(1), -0.5f * _right + (2.0f * -_dir)) * vec4(_particleSpawn,1);
+	_particleSpawnR = translate(mat4(1), (0.5f * _right) + (2.0f * -_dir)) * vec4(_particleSpawn, 1);
+
 
 	_camera->_speed = _speed;
 	_camera->update(x, y, up, down, left, right, deltaTime);
@@ -157,8 +160,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 
 	if (timepassedL > cooldown && shootL)
 	{
-		Shots* leftShot1 = new Shots(_shot, dir, _position + (10.0f*dir - 3.2f*up + 4.5f*right));
-		Shots* leftShot2 = new Shots(_shot, dir, _position + (10.0f*dir - 1.5f*up + 4.5f*right));
+		Shots* leftShot1 = new Shots(_shot, dir, _position + (15.0f*dir - 3.3f*up + 2.8f*right));
+		Shots* leftShot2 = new Shots(_shot, dir, _position + (15.0f*dir - 2.0f*up + 2.8f*right));
 		_world->addRigidBody(leftShot1->_body);
 		_world->addRigidBody(leftShot2->_body);
 		shots.push_back(leftShot1);
@@ -168,8 +171,8 @@ void RPlayer::shoot(float deltaTime, bool shootL, bool shootR)
 
 	if (timepassedR > cooldown && shootR)
 	{
-		Shots* rightShot1 = new Shots(_shot, dir, _position + (10.0f*dir - 3.2f*up - 4.5f*right));
-		Shots* rightShot2 = new Shots(_shot, dir, _position + (10.0f*dir - 1.5f*up - 4.5f*right));
+		Shots* rightShot1 = new Shots(_shot, dir, _position + (15.0f*dir - 3.3f*up - 2.8f*right));
+		Shots* rightShot2 = new Shots(_shot, dir, _position + (15.0f*dir - 2.0f*up - 2.8f*right));
 		_world->addRigidBody(rightShot1->_body);
 		_world->addRigidBody(rightShot2->_body);
 		shots.push_back(rightShot1);

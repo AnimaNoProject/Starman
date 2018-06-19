@@ -30,7 +30,7 @@ public:
 	btRigidBody*				_body;
 	btConvexHullShape*			_shape;
 	vector<btScalar>			shapeVector;
-	vec3 _position, _particleSpawn, _dir;
+	vec3 _position, _particleSpawn, _particleSpawnR, _particleSpawnL, _dir;
 	vector<Shots*> shots;
 	Camera* _camera;
 

@@ -260,8 +260,8 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Particle-System
 	/* --------------------------------------------- */
-	ParticleSystem particleSystem(1000);
-
+	ParticleSystem particleSystemL(500);
+	ParticleSystem particleSystemR(500);
 	/* --------------------------------------------- */
 	// Skybox
 	/* --------------------------------------------- */
@@ -305,7 +305,8 @@ int main(int argc, char** argv)
 			_world->stepSimulation(t_delta, 1);
 			performCollisionCheck(player);
 			world.update(mat4(1), t_now);
-			particleSystem.calculate(player._particleSpawn, player._dir, t_delta);
+			particleSystemL.calculate(player._particleSpawnL, player._dir, abs(player._speed), t_delta);
+			particleSystemR.calculate(player._particleSpawnR, player._dir, abs(player._speed), t_delta);
 			enemies.update(mat4(1), t_delta);
 			//enemies.takeHint(player._particleSpawn, t_delta);
 			station.update(mat4(1), t_now);
@@ -324,11 +325,6 @@ int main(int argc, char** argv)
 			lightMapShader.get()->setUniform("viewProj", viewProj);
 			lightMapShader.get()->setUniform("camera_world", _debug_camera ? camera._position : pcamera._position);
 			lightMapShader.get()->setUniform("brightness", _brightness);
-
-			lightMapShader.get()->setUniform("sun.color", sun.color);
-			lightMapShader.get()->setUniform("sun.direction", sun.direction);
-
-			lightMapShader.get()->setUniform("cellshading", _cell_shading);
 			triangles += station.draw(frustum);
 			//
 
@@ -337,8 +333,8 @@ int main(int argc, char** argv)
 			//
 
 			// Particle System
-			particleSystem.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
-
+			particleSystemL.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
+			particleSystemR.draw(_debug_camera ? camera._viewMatrix : pcamera._viewMatrix, _debug_camera ? camera._projMatrix : pcamera._projMatrix);
 
 			if (_post_processing)
 				postprocessor->draw();

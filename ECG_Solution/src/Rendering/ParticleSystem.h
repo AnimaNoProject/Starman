@@ -31,6 +31,6 @@ public:
 	ParticleSystem(int maxParticle);
 
 	~ParticleSystem();
-	void calculate(const glm::vec3& pos, const glm::vec3& dir, float deltaTime);
+	void calculate(const glm::vec3& pos, const glm::vec3& dir, const float& spawnRatePerSecond, float deltaTime);
 	void draw(const mat4& view, const mat4& proj);
 };

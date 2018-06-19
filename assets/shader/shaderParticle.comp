@@ -31,6 +31,13 @@ uniform vec3 P;
 uniform vec3 Dir;
 uniform uint SpawnCount;
 
+const float dirMod = 20;
+const float posMod = 2;
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 void addParticleToOutput(vec3 pos, vec3 vel, float TTL)
 {
 	uint nr = atomicCounterIncrement(Count);
@@ -51,10 +58,20 @@ void main(void)
 	if(idx >= LastCount) return;
 	
 	float TTL = Position_In[idx].w;
+	vec3 newPos;
+	vec3 newDir;
 
 	if(TTL <= 0)
 	{
-		addParticleToOutput(P, -Dir, 2.0);
+		newPos = Position_In[idx].xyz;
+		newDir = -Dir;
+		float x = rand(newPos.xy);
+		float y = rand(newPos.xy);
+		float z = rand(newPos.yz);
+		newDir.x += x - (dirMod * floor(x/dirMod));
+		newDir.y += y - (dirMod * floor(y/dirMod));
+		newDir.z += z - (dirMod * floor(z/dirMod));
+		addParticleToOutput(P, newDir, 10.0);
 	}
 	else
 	{
@@ -67,11 +84,16 @@ void main(void)
 		addParticleToOutput(position, velocity, TTL);
 	}
 
-	if(idx == 0)
+	if(idx < SpawnCount)
 	{
-		for(int i = 0; i < SpawnCount; i++)
-		{
-			addParticleToOutput(P, -Dir, 2.0);
-		}
+		newPos = Position_In[idx].xyz;
+		newDir = -Dir;
+		float x = rand(newPos.xy);
+		float y = rand(newPos.xy);
+		float z = rand(newPos.yz);
+		newDir.x += x - (dirMod * floor(x/dirMod));
+		newDir.y += y - (dirMod * floor(y/dirMod));
+		newDir.z += z - (dirMod * floor(z/dirMod));
+		addParticleToOutput(P, newDir, 10.0);
 	}
 }
