@@ -42,7 +42,7 @@ struct SpotLight {
 uniform float MAX_LIGHTS;
 uniform PointLight[20] lights;
 
-const float levels = 10.0;
+const float levels = 8.0;
 
 vec3 phong(vec3 n, vec3 l, vec3 v, vec3 diffuseC, float diffuseF, vec3 specularC, float specularF, float alpha, bool attenuate, vec3 attenuation) {
 	float d = length(l);
