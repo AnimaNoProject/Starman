@@ -242,7 +242,6 @@ int main(int argc, char** argv)
 	enemies._world = _world;
 
 	world.addChild(&sun_star);
-
 	_world->addRigidBody(station._body);
 
 	initializeWorld(sun_star, shader.get(), enemies);
