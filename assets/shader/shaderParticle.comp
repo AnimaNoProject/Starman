@@ -71,7 +71,7 @@ void main(void)
 		newDir.x += x - (dirMod * floor(x/dirMod));
 		newDir.y += y - (dirMod * floor(y/dirMod));
 		newDir.z += z - (dirMod * floor(z/dirMod));
-		addParticleToOutput(P, newDir, 10.0);
+		addParticleToOutput(P, newDir, 7.0);
 	}
 	else
 	{
@@ -94,6 +94,6 @@ void main(void)
 		newDir.x += x - (dirMod * floor(x/dirMod));
 		newDir.y += y - (dirMod * floor(y/dirMod));
 		newDir.z += z - (dirMod * floor(z/dirMod));
-		addParticleToOutput(P, newDir, 10.0);
+		addParticleToOutput(P, newDir, 7.0);
 	}
 }

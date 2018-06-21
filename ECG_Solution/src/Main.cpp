@@ -259,8 +259,8 @@ int main(int argc, char** argv)
 	/* --------------------------------------------- */
 	// Particle-System
 	/* --------------------------------------------- */
-	ParticleSystem particleSystemL(500);
-	ParticleSystem particleSystemR(500);
+	ParticleSystem particleSystemL(250);
+	ParticleSystem particleSystemR(250);
 	/* --------------------------------------------- */
 	// Skybox
 	/* --------------------------------------------- */
@@ -467,12 +467,12 @@ void performCollisionCheck(RPlayer& player)
 					// SHOT DOES DAMAGE
 					else if ((obA_model->_type == ENEMY) && (obB_model->_type == SHOT))
 					{
-						obA_model->_parentEnemy->health -= 10;
+						obA_model->_parentEnemy->health -= 20;
 						obB_model->_parentShot->_collisionFlag = true;
 					}
 					else if ((obA_model->_type == SHOT) && (obB_model->_type == ENEMY))
 					{
-						obB_model->_parentEnemy->health -= 10;
+						obB_model->_parentEnemy->health -= 20;
 						obA_model->_parentShot->_collisionFlag = true;
 					}
 					//
@@ -504,6 +504,17 @@ void performCollisionCheck(RPlayer& player)
 						//obB_model->_parentPlayer->_real_speed = 0;
 					}
 					//
+
+					else if ((obA_model->_type == PLAYER) && (obB_model->_type == ENEMY))
+					{
+						obA_model->_parentPlayer->_real_speed = 0;
+						obA_model->_parentPlayer->_health -= 20;
+						obB_model->_parentEnemy->health = -10;
+					}
+					else if ((obA_model->_type == ENEMY) && (obB_model->_type == PLAYER))
+					{
+						//obB_model->_parentPlayer->_real_speed = 0;
+					}
 				}
 			}
 		}
