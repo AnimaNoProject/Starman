@@ -496,8 +496,8 @@ void performCollisionCheck(RPlayer& player)
 					// PLAYER ASTEROID
 					else if ((obA_model->_type == PLAYER) && (obB_model->_type == ASTEROID))
 					{
-						obA_model->_parentPlayer->_real_speed = 0;
 						obA_model->_parentPlayer->_health = 0;
+						obA_model->_parentPlayer->_real_speed = 0;
 					}
 					else if ((obA_model->_type == ASTEROID) && (obB_model->_type == PLAYER))
 					{
@@ -507,7 +507,7 @@ void performCollisionCheck(RPlayer& player)
 
 					else if ((obA_model->_type == PLAYER) && (obB_model->_type == ENEMY))
 					{
-						obA_model->_parentPlayer->_real_speed = 0;
+						obA_model->_parentPlayer->_real_speed = obA_model->_parentPlayer->_real_speed / 2;
 						obA_model->_parentPlayer->_health -= 20;
 						obB_model->_parentEnemy->health = -10;
 					}
