@@ -179,11 +179,18 @@ void RUnit::update(mat4 transformation, float time)
 		_translation = vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
 		_rotation = vec3(rota.getX(), rota.getY(), rota.getZ());
 		_degree = rota.getAngle();
-		_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
+		if (_type == PICKUP)
+		{
+			_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * glm::rotate(glm::mat4(1.0f), time * glm::radians(15.0f), glm::vec3(0, 1, 0)) * rotate(mat4(1), _degree, _rotation) * _scale;
+		} 
+		else
+		{
+			_transformation = translate(mat4(1), vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z())) * rotate(mat4(1), _degree, _rotation) * _scale;
+		}
 	}
 
 	if (_type == PICKUP) {
-		mat4 ownTransform = _transformation * glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f), glm::vec3(0, 1, 0)) * translate(glm::mat4(1), vec3(2.0, 0.0, 0.0)) * glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f), glm::vec3(0, 1, 0));
+		mat4 ownTransform = _transformation * translate(glm::mat4(1), vec3(2.0, 0.0, 0.0)) * glm::rotate(glm::mat4(1.0f), time * glm::radians(30.0f), glm::vec3(1, 0, 0));
 		spinner->setTransformMatrix(ownTransform);
 	}
 
